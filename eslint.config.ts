@@ -1,92 +1,79 @@
 import js from '@eslint/js';
-import ts from 'typescript-eslint';
-import html from '@html-eslint/eslint-plugin';
-import css from 'eslint-plugin-css';
-import json from 'eslint-plugin-json';
-import jsonc from 'eslint-plugin-jsonc';
-import markdown from 'eslint-plugin-markdown';
+import tseslint from 'typescript-eslint';
+import htmlPlugin from '@html-eslint/eslint-plugin';
+import htmlParser from '@html-eslint/parser';
+import jsonPlugin from 'eslint-plugin-json';
+import jsoncPlugin from 'eslint-plugin-jsonc';
+import jsoncParser from 'jsonc-eslint-parser';
+import markdownPlugin from 'eslint-plugin-markdown';
 
 export default [
-  // JavaScript and TypeScript files
+  // JavaScript files
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ...js.configs.recommended,
   },
-  {
+  // TypeScript files
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
-    languageOptions: {
-      parser: ts.parser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
-    },
-    plugins: {
-      '@typescript-eslint': ts.plugin,
-    },
-    rules: {
-      ...ts.configs.recommended.rules,
-    },
-  },
+  })),
   // HTML files
   {
     files: ['**/*.html'],
     plugins: {
-      '@html-eslint': html,
+      '@html-eslint': htmlPlugin,
     },
     languageOptions: {
-      parser: html.parser,
+      parser: htmlParser,
     },
     rules: {
-      ...html.configs.recommended.rules,
+      '@html-eslint/require-doctype': 'error',
+      '@html-eslint/no-duplicate-attrs': 'error',
+      '@html-eslint/no-inline-styles': 'warn',
     },
   },
-  // CSS files
+  // CSS files - Note: ESLint doesn't natively support CSS, this requires stylelint or postcss
   {
     files: ['**/*.css'],
-    plugins: {
-      css: css,
-    },
     rules: {
-      'css/no-invalid-properties': 'error',
-      'css/no-duplicate-properties': 'error',
+      // Basic rules - consider using stylelint for comprehensive CSS linting
     },
   },
   // JSON files
   {
     files: ['**/*.json'],
+    ignores: ['package-lock.json'],
     plugins: {
-      json: json,
-    },
-    languageOptions: {
-      parser: json.parser,
+      json: jsonPlugin,
     },
     rules: {
-      'json/no-duplicate-keys': 'error',
-      'json/no-empty-keys': 'error',
+      'json/*': ['error', 'allowComments'],
     },
   },
   // JSONC files (JSON with comments)
   {
-    files: ['**/*.jsonc'],
+    files: ['**/*.jsonc', 'tsconfig.json'],
     plugins: {
-      jsonc: jsonc,
+      jsonc: jsoncPlugin,
     },
     languageOptions: {
-      parser: jsonc.parser,
+      parser: jsoncParser,
     },
     rules: {
-      ...jsonc.configs.recommended.rules,
+      'jsonc/no-comments': 'off',
+      'jsonc/comma-dangle': ['error', 'never'],
     },
   },
   // Markdown files
   {
     files: ['**/*.md'],
     plugins: {
-      markdown: markdown,
+      markdown: markdownPlugin,
     },
     processor: 'markdown/markdown',
   },
+  // JavaScript code blocks in Markdown
   {
     files: ['**/*.md/*.js', '**/*.md/*.javascript'],
     languageOptions: {
@@ -97,6 +84,8 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
+      'no-console': 'off',
+      'no-unused-vars': 'off',
     },
   },
 ];
