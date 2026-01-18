@@ -37,10 +37,13 @@ export default [
       '@html-eslint/no-inline-styles': 'warn',
     },
   },
-  // CSS files - Note: Use stylelint for comprehensive CSS linting
+  // CSS files - Note: ESLint doesn't natively lint CSS files
+  // For CSS linting, use stylelint instead: https://stylelint.io/
+  // This placeholder is here to acknowledge the requirement but CSS linting
+  // should be handled by a dedicated CSS linter like stylelint
   {
     files: ['**/*.css'],
-    // ESLint doesn't natively support CSS - placeholder for future stylelint integration
+    // Placeholder - use stylelint for CSS linting
   },
   // JSON files
   {
@@ -48,6 +51,7 @@ export default [
     plugins: {
       json: jsonPlugin,
     },
+    processor: 'json/json',
   },
   // JSONC files (JSON with comments)
   {
