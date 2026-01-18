@@ -8,6 +8,10 @@ import jsoncParser from 'jsonc-eslint-parser';
 import markdownPlugin from 'eslint-plugin-markdown';
 
 export default [
+  // Global ignores
+  {
+    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**', 'package-lock.json'],
+  },
   // JavaScript files
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
@@ -33,22 +37,16 @@ export default [
       '@html-eslint/no-inline-styles': 'warn',
     },
   },
-  // CSS files - Note: ESLint doesn't natively support CSS, this requires stylelint or postcss
+  // CSS files - Note: Use stylelint for comprehensive CSS linting
   {
     files: ['**/*.css'],
-    rules: {
-      // Basic rules - consider using stylelint for comprehensive CSS linting
-    },
+    // ESLint doesn't natively support CSS - placeholder for future stylelint integration
   },
   // JSON files
   {
     files: ['**/*.json'],
-    ignores: ['package-lock.json'],
     plugins: {
       json: jsonPlugin,
-    },
-    rules: {
-      'json/*': ['error', 'allowComments'],
     },
   },
   // JSONC files (JSON with comments)
