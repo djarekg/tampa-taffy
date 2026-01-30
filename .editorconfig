@@ -1,0 +1,33 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,mjs,ts}]
+quote_type = single
+
+[*.{css,html,js,mjs,md,ts,yml}]
+indent_size = 2
+max_line_length = 100
+tab_width = 2
+
+[*.{html,js,mjs,md,ts}]
+block_comment_start = /**
+block_comment = *
+block_comment_end = */
+
+[*.{css,html}]
+quote_type = double
+
+[*.css]
+block_comment_start = /*
+block_comment = *
+block_comment_end = */
+
+[*.json]
+max_line_length = 80
+

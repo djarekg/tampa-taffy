@@ -1,0 +1,159 @@
+{
+  "folders": [
+    {
+      "path": ".vscode",
+    },
+    {
+      "path": ".",
+      "name": "root",
+    },
+    {
+      "path": "packages",
+    },
+    {
+      "path": "apps",
+    },
+  ],
+  "settings": {
+    "bun.runtime": "${userHome}\\.bun\\bin\\bun",
+    "bun.debugTerminal.enabled": true,
+    "bun.debugTerminal.stopOnEntry": false,
+    "npm.packageManager": "bun",
+
+    // Maximum number of requests for the chat agent - Prevents AI agents from stopping mid-session
+    "chat.agent.maxRequests": 999,
+
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": false,
+    "editor.lightbulb.enabled": "on",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit",
+    },
+    "editor.rulers": [100],
+    "editor.overviewRulerBorder": true,
+    "editor.experimentalWhitespaceRendering": "font",
+    "editor.renderWhitespace": "none",
+    "editor.insertSpaces": true,
+
+    "debug.javascript.unmapMissingSources": true,
+
+    "explorer.fileNesting.enabled": true,
+
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "prettier.trailingComma": "none",
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "prettier.trailingComma": "none",
+    },
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma",
+      "editor.formatOnSave": true,
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[yaml]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[xml]": {
+      "editor.defaultFormatter": "redhat.vscode-xml",
+      "editor.formatOnSave": true,
+    },
+
+    // "typescript.experimental.useTsgo": true,
+    // "typescript.format.semicolons": "insert",
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "javascript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+
+    // TypeScript (Native Preview) > Use Tsgo
+    "typescript.experimental.useTsgo": true,
+    "typescript.tsdk": "root/node_modules/@typescript/native-preview/lib",
+    "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview/lib",
+    // "typescript.tsdk": "root/node_modules/typescript/lib",
+
+    "typescript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.reportStyleChecksAsWarnings": false,
+    "typescript.autoClosingTags": true,
+    // "typescript.preferences.autoImportFileExcludePatterns": [],
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "typescript.suggest.autoImports": true,
+    "typescript.suggest.completeFunctionCalls": true,
+
+    "html.autoClosingTags": true,
+    "html.format.indentInnerHtml": true,
+    "html.format.maxPreserveNewLines": 1,
+
+    "files.exclude": {
+      "**/.cache": true,
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/node_modules": true,
+      "**/.output": true,
+    },
+    "search.exclude": {
+      "**/.next": true,
+      "**/.output": true,
+      "**/node_modules": true,
+      "**/prisma/generated": true,
+      "bun.lock": true,
+    },
+
+    // Ensure enough terminal history is preserved when running tests.
+    "terminal.integrated.scrollback": 10000,
+
+    "workbench.editor.labelFormat": "medium",
+
+    "explorer.fileNesting.patterns": {
+      "*.ts": "${capture}.js",
+      "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+      "tsconfig.json": "tsconfig.*.json",
+      "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+    },
+
+    // Lit Plugin Settings
+    "lit-plugin.strict": true,
+
+    "html.customData": ["./node_modules/@m3e/button/dist/html-custom-data.json"],
+    "css.customData": ["./node_modules/@m3e/button/dist/css-custom-data.json"],
+  },
+  "extensions": {
+    "recommendations": [
+      "Prisma.prisma",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "oven.bun-vscode",
+      "runem.lit-plugin",
+      "typescriptteam.native-preview",
+      "qwtel.sqlite-viewer",
+    ],
+  },
+}

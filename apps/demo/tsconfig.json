@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@tt/components": ["../../packages/components/src/*"],
+      "@tt/core": ["../../packages/core/src/*"],
+      "@tt/db": ["../../packages/db/src/*"]
+    }
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@tt/components",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./styles/index.css": {
+      "import": "./src/styles/index.css"
+    },
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@material/web": "^2.4.1",
+    "@tt/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20260119.1",
+    "lit": "^3.3.1"
+  }
+}

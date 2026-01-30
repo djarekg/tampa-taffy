@@ -1,0 +1,21 @@
+{
+  "name": "@tt/core",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@lit-labs/signals": "^0.2.0",
+    "@lit/context": "^1.1.6"
+  },
+  "peerDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20260119.1",
+    "lit": "^3.3.1"
+  }
+}

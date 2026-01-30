@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.node.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "types": ["bun"],
+    "paths": {
+      "#app/*": ["./*"],
+      "#app/generated/prisma/client": ["./generated/prisma/client.ts"],
+      "#prisma/seed/*": ["../prisma/seed/*"],
+      "@tt/core/*": ["../core/src/*"]
+    }
+  },
+  "include": ["src/**/*", "prisma/seed/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

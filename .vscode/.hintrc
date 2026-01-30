@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "axe/aria": [
+      "default",
+      {
+        "aria-valid-attr-value": "off"
+      }
+    ],
+    "no-inline-styles": "off",
+    "no-scrollbar-color": "off",
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "@starting-style"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // {
+    //   "name": "Launch Next.js (full stack)",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "cwd": "${workspaceFolder}\\apps\\demo",
+    //   "program": "${workspaceFolder}\\apps\\demo\\node_modules\\next\\dist\\bin\\next",
+    //   "runtimeArgs": ["--inspect"],
+    //   "serverReadyAction": {
+    //     "action": "debugWithEdge",
+    //     "killOnServerStop": true,
+    //     "pattern": "- Local:.+(https?://.+)",
+    //     "uriFormat": "%s",
+    //     "webRoot": "${workspaceFolder}\\apps\\demo"
+    //   }
+    // },
+    // {
+    //   "name": "Launch App (edge)",
+    //   "type": "node-terminal",
+    //   "request": "launch",
+    //   "cwd": "${workspaceFolder}\\apps\\demo",
+    //   "command": "bun run dev",
+    //   "serverReadyAction": {
+    //     "action": "debugWithEdge",
+    //     "killOnServerStop": true,
+    //     "pattern": "- Local:.+(https?://.+)",
+    //     "uriFormat": "%s",
+    //     "webRoot": "${workspaceFolder}\\apps\\demo"
+    //   }
+    // },
+    {
+      "name": "Launch App (edge)",
+      // "type": "bun",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}\\apps\\demo",
+      // "program": "${workspaceFolder}\\apps\\demo\\node_modules\\vite\\bin\\vite.js",
+      // "args": ["dev"],
+      "command": "bun run dev",
+      "serverReadyAction": {
+        "action": "debugWithEdge",
+        "killOnServerStop": true,
+        // "pattern": "Local:.*(http?://.+)",
+        "pattern": "Local:\\s+(http?://\\S+)",
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}\\apps\\demo"
+      }
+    },
+    {
+      "name": "Launch demo:serve",
+      "cwd": "${workspaceFolder}/apps/demo",
+      "request": "launch",
+      "type": "node-terminal",
+      // "noDebug": false,
+      "command": "bun run dev",
+      "skipFiles": ["**/<node_internals>/**", "**/node_modules/**", "!**/node_modules/@hui/**"],
+      "sourceMaps": true,
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "presentation": {
+        "hidden": false,
+        "group": "3",
+        "order": 1
+      }
+    },
+    {
+      "name": "Launch demo:client (edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3006/",
+      "webRoot": "${workspaceFolder}/apps/demo/src",
+      "userDataDir": "${workspaceFolder}/.out/edge/apps",
+      "internalConsoleOptions": "openOnSessionStart",
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/apps/demo",
+      "smartStep": true,
+      "presentation": {
+        "hidden": false,
+        "group": "3",
+        "order": 2
+      }
+    },
+    {
+      "name": "Launch demo:client (chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3006/",
+      "webRoot": "${workspaceFolder}/apps/demo/src",
+      "userDataDir": "${workspaceFolder}/.out/chrome/apps",
+      "internalConsoleOptions": "openOnSessionStart",
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/apps/demo",
+      "smartStep": true,
+      "presentation": {
+        "hidden": false,
+        "group": "3",
+        "order": 2
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug demo (edge)",
+      "configurations": ["Launch api", "Launch demo:serve", "Launch demo:client (edge)"],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "1",
+        "order": 1
+      }
+    },
+    {
+      "name": "Debug demo (chrome)",
+      "configurations": ["Launch api", "Launch demo:serve", "Launch demo:client (chrome)"],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "1",
+        "order": 1
+      }
+    }
+  ]
+}
