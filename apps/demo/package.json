@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
-    "@lit-labs/ssr": "^4.0.0",
     "@lit/context": "^1.1.6",
     "@lit/reactive-element": "^2.1.2",
     "@lit/task": "^1.0.3",
