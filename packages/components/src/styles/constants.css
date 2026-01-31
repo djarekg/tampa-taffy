@@ -1,0 +1,21 @@
+:root {
+  /* colors */
+  --tt-color-primary: #bb5fff;
+  --tt-color-secondary: #297eff;
+
+  /* fonts */
+  --tt-font-family: Roboto, sans-serif;
+  --tt-font-family-mono: "Roboto Mono", monospace;
+}
+
+[color-theme="dark"] {
+  color-scheme: dark;
+  --tt-color-text: rgba(255, 255, 255, 0.87);
+  --tt-color-background: #242424;
+}
+
+[color-theme="light"] {
+  color-scheme: light;
+  --tt-color-text: rgba(0, 0, 0, 0.87);
+  --tt-color-background: #ffffff;
+}

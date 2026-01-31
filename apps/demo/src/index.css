@@ -1,8 +1,4 @@
 :host {
-  --hui-table-row-hover-color: #fff;
-  --hui-table-row-hover-background-color: rgba(0, 0, 0, 0.2);
-  --hui-table-background-color: var(--hui-palette-surface-a0);
-
   display: block;
   block-size: 100%;
   inline-size: 100%;
@@ -10,4 +6,8 @@
 
 *:not(:defined) {
   display: none;
+}
+
+.title {
+  color: var(--tt-color-primary);
 }

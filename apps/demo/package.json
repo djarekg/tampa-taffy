@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "typecheck": "bunx tsgo -p tsconfig.json --noEmit",
-    "build": "bun run typecheck && vite build",
-    "preview": "vite preview"
+    "build": "bun run typecheck && bunx --bun vite build",
+    "preview": "bunx --bun vite preview"
   },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",

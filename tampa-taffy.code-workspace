@@ -43,9 +43,6 @@
 
     "explorer.fileNesting.enabled": true,
 
-    "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
-
     "[css]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
       "editor.formatOnSave": true,
@@ -88,7 +85,7 @@
     // "typescript.experimental.useTsgo": true,
     // "typescript.format.semicolons": "insert",
     "javascript.preferences.importModuleSpecifier": "non-relative",
-    "javascript.preferences.importModuleSpecifierEnding": "minimal",
+    "javascript.preferences.importModuleSpecifierEnding": "js",
     "typescript.preferences.importModuleSpecifier": "non-relative",
 
     // TypeScript (Native Preview) > Use Tsgo
@@ -97,7 +94,7 @@
     "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview/lib",
     // "typescript.tsdk": "root/node_modules/typescript/lib",
 
-    "typescript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.importModuleSpecifierEnding": "js",
     "typescript.reportStyleChecksAsWarnings": false,
     "typescript.autoClosingTags": true,
     // "typescript.preferences.autoImportFileExcludePatterns": [],
@@ -108,6 +105,9 @@
     "html.autoClosingTags": true,
     "html.format.indentInnerHtml": true,
     "html.format.maxPreserveNewLines": 1,
+
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
 
     "files.exclude": {
       "**/.cache": true,
