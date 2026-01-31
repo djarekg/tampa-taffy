@@ -8,11 +8,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['@lit/reactive-element', 'lit', '@libsql/client'],
+    exclude: ['@prisma/client'],
   },
   resolve: {
     alias: {
-      // '^@libsql\/client$': '@libsql/client/http',
-      '@libsql/client': '@libsql/client/web',
       '@': resolve(__dirname, './src'),
       '@tt/components': resolve(__dirname, '../../packages/components/src'),
       '@tt/core': resolve(__dirname, '../../packages/core/src'),
@@ -29,8 +28,6 @@ export default defineConfig({
     ],
   },
   ssr: {
-    resolve: {
-      externalConditions: ['workerd', 'worker'], // Example for Cloudflare Workers
-    },
+    external: ['@prisma/client'],
   },
 });

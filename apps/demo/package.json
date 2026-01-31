@@ -4,13 +4,14 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "bunx --bun vite",
     "typecheck": "bunx tsgo -p tsconfig.json --noEmit",
     "build": "bun run typecheck && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
+    "@lit-labs/ssr": "^4.0.0",
     "@lit/context": "^1.1.6",
     "@lit/reactive-element": "^2.1.2",
     "@lit/task": "^1.0.3",
@@ -23,9 +24,6 @@
     "lit-html": "^3.3.2"
   },
   "devDependencies": {
-    "vite": "npm:rolldown-vite@7.2.5"
-  },
-  "overrides": {
-    "vite": "npm:rolldown-vite@7.2.5"
+    "vite": "8.0.0-beta.11"
   }
 }

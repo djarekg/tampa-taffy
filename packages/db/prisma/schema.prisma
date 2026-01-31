@@ -11,186 +11,186 @@ datasource db {
 generator client {
   provider     = "prisma-client"
   output       = "../src/generated/prisma"
-  // engineType   = "client" // No Rust
-  moduleFormat = "esm"
+  // engineType = "client" // No Rust
+  moduleFormat = "cjs"
   runtime      = "bun"
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  PERFERNOTTOSAY
-}
+// enum Gender {
+//   MALE
+//   FEMALE
+//   PERFERNOTTOSAY
+// }
 
-enum Role {
-  ADMIN
-  USER
-  SALES
-  ACCOUNTING
-}
+// enum Role {
+//   ADMIN
+//   USER
+//   SALES
+//   ACCOUNTING
+// }
 
-enum Size {
-  XSMALL
-  SMALL
-  MEDIUM
-  LARGE
-  XLARGE
-  XXLARGE
-  XXXLARGE
-  ONESIZE
-}
+// enum Size {
+//   XSMALL
+//   SMALL
+//   MEDIUM
+//   LARGE
+//   XLARGE
+//   XXLARGE
+//   XXXLARGE
+//   ONESIZE
+// }
 
-enum Color {
-  BLACK
-  BLUE
-  BROWN
-  CAMO
-  CYAN
-  GRAY
-  GREEN
-  MAGENTA
-  ORANGE
-  PINK
-  PURPLE
-  RED
-  WHITE
-  YELLOW
-}
+// enum Color {
+//   BLACK
+//   BLUE
+//   BROWN
+//   CAMO
+//   CYAN
+//   GRAY
+//   GREEN
+//   MAGENTA
+//   ORANGE
+//   PINK
+//   PURPLE
+//   RED
+//   WHITE
+//   YELLOW
+// }
 
-enum ProductType {
-  DRESS
-  HAT
-  HOODIE
-  JACKET
-  PANTS
-  SHIRT
-  SHOES
-  SHORTS
-  SOCKS
-  SWEATER
-  UNDERWEAR
-}
+// enum ProductType {
+//   DRESS
+//   HAT
+//   HOODIE
+//   JACKET
+//   PANTS
+//   SHIRT
+//   SHOES
+//   SHORTS
+//   SOCKS
+//   SWEATER
+//   UNDERWEAR
+// }
 
 model State {
-  id              String            @id @default(uuid())
-  name            String
-  code            String
-  user            User[]
-  customer        Customer[]
-  customerContact CustomerContact[]
+  id   String @id @default(uuid())
+  name String
+  code String
+  // user User[]
+  // customer        Customer[]
+  // customerContact CustomerContact[]
 }
 
-model User {
-  id             String          @id @default(uuid())
-  firstName      String
-  lastName       String
-  gender         Gender
-  email          String          @unique
-  streetAddress  String
-  streetAddress2 String?
-  city           String
-  stateId        String
-  zip            String
-  phone          String
-  jobTitle       String
-  imageId        Int
-  isActive       Boolean         @default(false)
-  dateCreated    DateTime        @default(now())
-  dateUpdated    DateTime?       @updatedAt
-  state          State           @relation(fields: [stateId], references: [id])
-  productSales   ProductSale[]
-  userCredential UserCredential?
-}
+// model User {
+//   id             String    @id @default(uuid())
+//   firstName      String
+//   lastName       String
+//   // gender         Gender
+//   email          String    @unique
+//   streetAddress  String
+//   streetAddress2 String?
+//   city           String
+//   stateId        String
+//   zip            String
+//   phone          String
+//   jobTitle       String
+//   imageId        Int
+//   isActive       Boolean   @default(false)
+//   dateCreated    DateTime  @default(now())
+//   dateUpdated    DateTime? @updatedAt
+//   state          State     @relation(fields: [stateId], references: [id])
+//   productSales   ProductSale[]
+//   userCredential UserCredential?
+// }
 
-model UserCredential {
-  id       String @id @default(uuid())
-  userId   String @unique
-  password String
-  role     Role
-  User     User   @relation(fields: [userId], references: [id])
-}
+// model UserCredential {
+//   id       String @id @default(uuid())
+//   userId   String @unique
+//   password String
+//   role     Role
+//   User     User   @relation(fields: [userId], references: [id])
+// }
 
-model Customer {
-  id              String            @id @default(uuid())
-  name            String
-  streetAddress   String
-  streetAddress2  String?
-  city            String
-  stateId         String
-  zip             String
-  phone           String
-  isActive        Boolean           @default(false)
-  dateCreated     DateTime          @default(now())
-  dateUpdated     DateTime?         @updatedAt
-  CustomerContact CustomerContact[]
-  state           State             @relation(fields: [stateId], references: [id])
-  productSales    ProductSale[]
-}
+// model Customer {
+//   id              String            @id @default(uuid())
+//   name            String
+//   streetAddress   String
+//   streetAddress2  String?
+//   city            String
+//   stateId         String
+//   zip             String
+//   phone           String
+//   isActive        Boolean           @default(false)
+//   dateCreated     DateTime          @default(now())
+//   dateUpdated     DateTime?         @updatedAt
+//   CustomerContact CustomerContact[]
+//   state           State             @relation(fields: [stateId], references: [id])
+//   productSales    ProductSale[]
+// }
 
-model CustomerContact {
-  id             String    @id @default(uuid())
-  customerId     String
-  firstName      String
-  lastName       String
-  email          String
-  streetAddress  String
-  streetAddress2 String?
-  city           String
-  stateId        String
-  zip            String
-  phone          String
-  imageId        Int
-  isActive       Boolean   @default(false)
-  dateCreated    DateTime  @default(now())
-  dateUpdated    DateTime? @updatedAt
-  customer       Customer  @relation(fields: [customerId], references: [id])
-  state          State     @relation(fields: [stateId], references: [id])
-}
+// model CustomerContact {
+//   id             String    @id @default(uuid())
+//   customerId     String
+//   firstName      String
+//   lastName       String
+//   email          String
+//   streetAddress  String
+//   streetAddress2 String?
+//   city           String
+//   stateId        String
+//   zip            String
+//   phone          String
+//   imageId        Int
+//   isActive       Boolean   @default(false)
+//   dateCreated    DateTime  @default(now())
+//   dateUpdated    DateTime? @updatedAt
+//   customer       Customer  @relation(fields: [customerId], references: [id])
+//   state          State     @relation(fields: [stateId], references: [id])
+// }
 
-model Product {
-  id               String             @id @default(uuid())
-  name             String
-  description      String
-  price            String
-  genderId         String
-  productType      ProductType
-  isActive         Boolean            @default(false)
-  dateCreated      DateTime           @default(now())
-  dateUpdated      DateTime           @updatedAt
-  productInventory ProductInventory[]
-  productSales     ProductSale[]
-  productColor     ProductColor[]
-}
+// model Product {
+//   id               String             @id @default(uuid())
+//   name             String
+//   description      String
+//   price            String
+//   genderId         String
+//   productType      ProductType
+//   isActive         Boolean            @default(false)
+//   dateCreated      DateTime           @default(now())
+//   dateUpdated      DateTime           @updatedAt
+//   productInventory ProductInventory[]
+//   productSales     ProductSale[]
+//   productColor     ProductColor[]
+// }
 
-model ProductColor {
-  id          String    @id @default(uuid())
-  productId   String
-  color       Color
-  dateCreated DateTime  @default(now())
-  dateUpdated DateTime? @updatedAt
-  product     Product   @relation(fields: [productId], references: [id])
-}
+// model ProductColor {
+//   id          String    @id @default(uuid())
+//   productId   String
+//   color       Color
+//   dateCreated DateTime  @default(now())
+//   dateUpdated DateTime? @updatedAt
+//   product     Product   @relation(fields: [productId], references: [id])
+// }
 
-model ProductInventory {
-  id          String    @id @default(uuid())
-  productId   String
-  size        Size
-  quantity    Int
-  dateCreated DateTime  @default(now())
-  dateUpdated DateTime? @updatedAt
-  product     Product   @relation(fields: [productId], references: [id])
-}
+// model ProductInventory {
+//   id          String    @id @default(uuid())
+//   productId   String
+//   size        Size
+//   quantity    Int
+//   dateCreated DateTime  @default(now())
+//   dateUpdated DateTime? @updatedAt
+//   product     Product   @relation(fields: [productId], references: [id])
+// }
 
-model ProductSale {
-  id          String    @id @default(uuid())
-  productId   String
-  customerId  String
-  userId      String
-  quantity    Int
-  price       Decimal
-  dateCreated DateTime  @default(now())
-  dateUpdated DateTime? @updatedAt
-  product     Product   @relation(fields: [productId], references: [id])
-  customer    Customer  @relation(fields: [customerId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
-}
+// model ProductSale {
+//   id          String    @id @default(uuid())
+//   productId   String
+//   customerId  String
+//   userId      String
+//   quantity    Int
+//   price       Decimal
+//   dateCreated DateTime  @default(now())
+//   dateUpdated DateTime? @updatedAt
+//   product     Product   @relation(fields: [productId], references: [id])
+//   customer    Customer  @relation(fields: [customerId], references: [id])
+//   user        User      @relation(fields: [userId], references: [id])
+// }

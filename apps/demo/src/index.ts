@@ -2,29 +2,29 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import styles from './index.css?inline';
 import { Task } from '@lit/task';
-import { getUsers } from '@/api/user';
+import { getStates } from '@/api/state';
 
 @customElement('app-index')
 export class Index extends LitElement {
   static override styles = [unsafeCSS(styles)];
 
-  #getUsers = new Task(
+  #getStates = new Task(
     this,
-    async () => await getUsers(),
+    async () => await getStates(),
     () => []
   );
 
   render() {
     return html`
-      ${this.#getUsers.render({
+      ${this.#getStates.render({
         pending: () => html`
-          <p>Loading users...</p>
+          <p>Loading states...</p>
         `,
-        complete: users => html`
+        complete: states => html`
           <ul>
-            ${users.map(
-              user => html`
-                <li>${user.firstName} (${user.lastName})</li>
+            ${states.map(
+              state => html`
+                <li>${state.id} (${state.code})</li>
               `
             )}
           </ul>
