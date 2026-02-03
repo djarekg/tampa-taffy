@@ -1,13 +1,15 @@
 import { ApiError } from './api-error.ts';
-import type { PlainObject } from '../types/plain-object.ts';
+import type { PlainObject } from '@/types/plain-object.ts';
 
-export type ApiOptions = {
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
+
+type ApiOptions = {
   /**
    * Optional headers to include with the request.
    * Keys are header names and values are header values, e.g. { 'Authorization': 'Bearer ...' }.
    * If you set 'Content-Type' to undefined explicitly the implementation will remove the default.
    */
-  headers?: Record<string, string>;
+  headers?: Record<string, string | undefined>;
   /**
    * Optional query parameters to append to the URL.
    * Keys with `undefined` or `null` values are omitted from the query string.
@@ -26,6 +28,9 @@ export type ApiOptions = {
    */
   retry?: number;
 };
+
+const DEFAULT_RETRY_ATTEMPTS = 3;
+const RETRY_BACKOFF_BASE_MS = 3000;
 
 /**
  * Convert object query parameters to query string.
@@ -47,12 +52,32 @@ const buildQueryString = (query?: PlainObject) => {
   return pairs.length ? `?${pairs.join('&')}` : '';
 };
 
+const buildUrl = (baseUrl: string, path: string, query?: PlainObject) =>
+  `${baseUrl}${path}${buildQueryString(query)}`;
+
+const normalizeRetryAttempts = (retry?: number) =>
+  typeof retry === 'number' && retry >= 0 ? Math.floor(retry) : DEFAULT_RETRY_ATTEMPTS;
+
+const createAbortError = () => {
+  // DOMException exists in browsers and Bun; provide a fallback for other runtimes.
+  const DOMExceptionCtor = (globalThis as any).DOMException as
+    | (new (message?: string, name?: string) => Error)
+    | undefined;
+  return DOMExceptionCtor ? new DOMExceptionCtor('Aborted', 'AbortError') : new Error('Aborted');
+};
+
+const throwIfAborted = (signal?: AbortSignal) => {
+  if (signal?.aborted) {
+    throw createAbortError();
+  }
+};
+
 /**
  * JSON reviver function for handling DTO during JSON.parse.
  */
-const jsonReviver = (_key: string, value: string) => {
+const jsonReviver = (_key: string, value: unknown) => {
   // Test for date format and convert to Date type
-  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) {
     return new Date(value);
   }
 
@@ -78,6 +103,31 @@ const safeParseResponse = async (res: Response): Promise<unknown> => {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const sleepWithAbort = async (ms: number, signal?: AbortSignal) => {
+  if (!signal) {
+    await sleep(ms);
+    return;
+  }
+
+  throwIfAborted(signal);
+
+  let onAbort: (() => void) | undefined;
+
+  try {
+    await Promise.race([
+      sleep(ms),
+      new Promise<never>((_resolve, reject) => {
+        onAbort = () => reject(createAbortError());
+        signal.addEventListener('abort', onAbort);
+      }),
+    ]);
+  } finally {
+    if (onAbort) {
+      signal.removeEventListener('abort', onAbort);
+    }
+  }
+};
+
 /**
  * Heuristic to determine if an error represents a connection-refused / network-level failure.
  * Covers Node-style error codes (ERR_CONNECTION_REFUSED, ECONNREFUSED) and common browser messages ("Failed to fetch").
@@ -86,7 +136,7 @@ const isConnectionRefusedError = (err: unknown): boolean => {
   if (!err) {
     return false;
   }
-  const anyErr = err as { code: string; message: string };
+  const anyErr = err as { code?: unknown; message?: unknown };
 
   if (typeof anyErr === 'object' && anyErr !== null) {
     // Node.js style error code
@@ -113,6 +163,53 @@ const isConnectionRefusedError = (err: unknown): boolean => {
   return false;
 };
 
+const buildHeaders = (headers?: ApiOptions['headers']) => {
+  const merged: Record<string, string> = {
+    // default to JSON; callers can override
+    'Content-Type': 'application/json',
+  };
+
+  if (headers) {
+    for (const [key, value] of Object.entries(headers)) {
+      if (value === undefined) {
+        continue;
+      }
+      merged[key] = value;
+    }
+
+    // If caller explicitly set Content-Type to undefined, remove it
+    if (headers['Content-Type'] === undefined) {
+      delete merged['Content-Type'];
+    }
+  }
+
+  return merged;
+};
+
+const canHaveBody = (method: HttpMethod) => method !== 'GET' && method !== 'HEAD';
+
+const resolveRequestBody = (
+  method: HttpMethod,
+  headers: Record<string, string>,
+  body?: unknown
+) => {
+  if (!canHaveBody(method)) {
+    return undefined;
+  }
+  if (body === undefined || body === null) {
+    return undefined;
+  }
+
+  const contentType = headers['Content-Type'] ?? '';
+  if (contentType.includes('application/json')) {
+    return JSON.stringify(body);
+  }
+
+  // Non-JSON body; caller is responsible for passing a supported BodyInit.
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return body as any;
+};
+
 export default function api(baseUrl?: string) {
   // Libraries generally shouldn't read build-tool-specific env (e.g. Vite's import.meta.env).
   // Let the consuming app pass it in: api(import.meta.env.VITE_API_URL)
@@ -123,57 +220,24 @@ export default function api(baseUrl?: string) {
   }
 
   const request = async <T = unknown>(
-    method: string,
+    method: HttpMethod,
     path: string,
     body?: unknown,
     options: ApiOptions = {}
-    // eslint-disable-next-line complexity
   ): Promise<T> => {
-    const url = `${baseUrl}${path}${buildQueryString(options.query)}`;
-    const headers: Record<string, string> = {
-      // default to JSON; callers can override
-      'Content-Type': 'application/json',
-      ...(options.headers ?? {}),
-    };
+    const url = buildUrl(baseUrl, path, options.query);
+    const headers = buildHeaders(options.headers);
+    const maxRetryAttempts = normalizeRetryAttempts(options.retry);
+    const fetchOptionsBase: RequestInit = { method, headers, signal: options.signal };
 
-    // If caller explicitly set Content-Type to undefined, remove it
-    if (options.headers && options.headers['Content-Type'] === undefined) {
-      delete headers['Content-Type'];
+    const requestBody = resolveRequestBody(method, headers, body);
+    if (requestBody !== undefined) {
+      fetchOptionsBase.body = requestBody;
     }
 
-    const fetchOptionsBase: RequestInit = {
-      method,
-      headers,
-      signal: options.signal,
-    };
-
-    if (body !== undefined && body !== null) {
-      // Only attach body for methods that allow it
-      if (method !== 'GET' && method !== 'HEAD') {
-        // If Content-Type is JSON (default), stringify. Otherwise allow raw body.
-        const ct = headers['Content-Type'] || '';
-        if (ct.includes('application/json')) {
-          fetchOptionsBase.body = JSON.stringify(body);
-        } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          fetchOptionsBase.body = body as any;
-        }
-      }
-    }
-
-    const maxRetries =
-      typeof options.retry === 'number' && options.retry >= 0 ? Math.floor(options.retry) : 3;
-    let attempt = 0;
-
-    // Attempt loop: only retry on connection-refused style network errors
-    while (true) {
-      attempt++;
-      // respect abort signal before each attempt
-      if (options.signal?.aborted) {
-        // Let fetch produce the abort error, but here we throw an AbortError to be explicit
-        throw new DOMException('Aborted', 'AbortError');
-      }
-
+    // Attempt loop: only retry on connection-refused style network errors.
+    for (let attempt = 1; ; attempt++) {
+      throwIfAborted(options.signal);
       try {
         // Clone fetch options per attempt (to avoid reusing mutated objects)
         const fetchOptions: RequestInit = { ...fetchOptionsBase };
@@ -188,7 +252,7 @@ export default function api(baseUrl?: string) {
         return parsed as T;
       } catch (err: unknown) {
         // If the error is a connection-refused type and we have retry budget, retry.
-        const shouldRetry = isConnectionRefusedError(err) && attempt <= maxRetries;
+        const shouldRetry = isConnectionRefusedError(err) && attempt <= maxRetryAttempts;
 
         if (!shouldRetry) {
           // No retry: rethrow the error
@@ -196,31 +260,10 @@ export default function api(baseUrl?: string) {
         }
 
         // Retry: wait a short backoff before retrying. Respect abort signal while waiting.
-        const backoffMs = 3000 * Math.pow(2, attempt - 1); // 100, 200, 400, ...
-
-        // Wait but bail early if aborted during wait
-        await Promise.race([
-          sleep(backoffMs),
-          new Promise((_r, reject) => {
-            const sig = options.signal;
-            if (!sig) {
-              return;
-            }
-            if (sig.aborted) {
-              reject(new DOMException('Aborted', 'AbortError'));
-            }
-            const onAbort = () => {
-              reject(new DOMException('Aborted', 'AbortError'));
-              sig.removeEventListener('abort', onAbort);
-            };
-            sig.addEventListener('abort', onAbort);
-          }),
-        ]);
+        const backoffMs = RETRY_BACKOFF_BASE_MS * Math.pow(2, attempt - 1); // 3000, 6000, 12000, ...
+        await sleepWithAbort(backoffMs, options.signal);
 
         console.log(`fetch attempt (${attempt}) ${url}`);
-
-        // loop to retry
-        continue;
       }
     }
   };
