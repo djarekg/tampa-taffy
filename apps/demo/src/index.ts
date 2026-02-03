@@ -2,18 +2,38 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import styles from './index.css?inline';
 import './layout/header.js';
+import { UIRouterLit } from 'lit-ui-router';
+import { pushStateLocationPlugin } from '@uirouter/core';
+import routes from './routes';
 
 @customElement('app-index')
 export class Index extends LitElement {
   static override styles = [unsafeCSS(styles)];
 
+  #router = new UIRouterLit();
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#router.plugin(pushStateLocationPlugin);
+    routes.forEach(route => this.#router.stateRegistry.register(route));
+    this.#router.urlService.rules.initial({ state: 'home' });
+    this.#router.transitionService.onBefore({ to: '*' }, trans => {
+      console.log(trans.to());
+      return true;
+    });
+
+    this.#router.start();
+  }
+
   render() {
     return html`
-      <app-header></app-header>
-      <main>
-        <h2 class="tt-color-brand-gradient">Demo Application</h2>
-        <p>This is a demo application showcasing the Tampa Taffy design system.</p/section>
-      </main>
+      <ui-router .uiRouter=${this.#router}>
+        <app-header></app-header>
+        <main>
+          <ui-view></ui-view>
+        </main>
+      </ui-router>
     `;
   }
 }
