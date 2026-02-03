@@ -8,7 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "clean": " bunx rimraf bun.lock node_modules packages/components/node_modules packages/core/node_modules packages/db/node_modules apps/demo/node_modules",
+    "clean": " bunx rimraf bun.lock node_modules packages/components/node_modules packages/core/node_modules packages/db/node_modules apps/api/node_modules apps/demo/node_modules",
     "setup": "bun run clean && bun install"
   },
   "devDependencies": {

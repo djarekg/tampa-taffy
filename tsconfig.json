@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "composite": false
+    "strict": true,
+    "composite": false,
+    "forceConsistentCasingInFileNames": true
   },
   "files": [],
   "references": [
+    {
+      "path": "./apps/api"
+    },
     {
       "path": "./apps/demo"
     },

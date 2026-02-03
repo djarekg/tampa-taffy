@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.node.json",
+  "compilerOptions": {
+    "paths": {
+      "#app/*": ["./*"],
+      "@tt/core": ["../../packages/core/src/*"],
+      "@tt/db": ["../../packages/db/src/*"]
+    }
+  }
+}

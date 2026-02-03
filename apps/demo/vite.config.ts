@@ -15,6 +15,7 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
       '@tt/components': resolve(__dirname, '../../packages/components/src'),
       '@tt/core': resolve(__dirname, '../../packages/core/src'),
+      '@tt/db': resolve(__dirname, '../../packages/db/src'),
     },
     preserveSymlinks: true,
     conditions: ['browser', 'development'],

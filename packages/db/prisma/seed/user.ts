@@ -1,6 +1,6 @@
 import type { PrismaClient } from '#app/generated/prisma/client.ts';
 import { Gender } from '#app/generated/prisma/enums.ts';
-import type { UserCreateManyInput } from '#app/index';
+import type { UserCreateManyInput } from '#app/index.js';
 import { faker } from './faker-context.ts';
 import { getState } from './state.ts';
 

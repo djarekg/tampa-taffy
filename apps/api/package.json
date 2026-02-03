@@ -1,0 +1,32 @@
+{
+  "name": "@tt/api",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "imports": {
+    "#app/*": "./src/*"
+  },
+  "scripts": {
+    "build": "tsgo",
+    "dev": "bun run --watch --no-check src/index.ts"
+  },
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^15.3.0",
+    "@tt/core": "workspace:*",
+    "@tt/db": "workspace:*",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "koa": "^3.1.1",
+    "koa-body": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/koa": "^3.0.1",
+    "@types/koa__cors": "^5.0.1",
+    "@types/koa__router": "^12.0.5"
+  },
+  "peerDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20260119.1"
+  }
+}

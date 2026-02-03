@@ -85,7 +85,7 @@
     // "typescript.experimental.useTsgo": true,
     // "typescript.format.semicolons": "insert",
     "javascript.preferences.importModuleSpecifier": "non-relative",
-    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "javascript.preferences.importModuleSpecifierEnding": "minimal",
     "typescript.preferences.importModuleSpecifier": "non-relative",
 
     // TypeScript (Native Preview) > Use Tsgo
@@ -94,7 +94,7 @@
     "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview/lib",
     // "typescript.tsdk": "root/node_modules/typescript/lib",
 
-    "typescript.preferences.importModuleSpecifierEnding": "js",
+    "typescript.preferences.importModuleSpecifierEnding": "minimal",
     "typescript.reportStyleChecksAsWarnings": false,
     "typescript.autoClosingTags": true,
     // "typescript.preferences.autoImportFileExcludePatterns": [],

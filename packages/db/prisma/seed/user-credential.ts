@@ -1,4 +1,4 @@
-import { generateHash } from '#app/crypto/hash.ts';
+import { generateHash } from '@tt/core/crypto';
 import type { PrismaClient } from '#app/generated/prisma/client.ts';
 import { Role } from '#app/generated/prisma/enums.ts';
 import { faker } from './faker-context.ts';
