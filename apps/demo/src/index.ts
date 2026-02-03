@@ -12,18 +12,28 @@ export class Index extends LitElement {
 
   #router = new UIRouterLit();
 
-  connectedCallback() {
-    super.connectedCallback();
+  constructor() {
+    super();
 
-    this.#router.plugin(pushStateLocationPlugin);
     routes.forEach(route => this.#router.stateRegistry.register(route));
+    this.#router.plugin(pushStateLocationPlugin);
     this.#router.urlService.rules.initial({ state: 'home' });
     this.#router.transitionService.onBefore({ to: '*' }, trans => {
       console.log(trans.to());
       return true;
     });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
 
     this.#router.start();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.#router.dispose();
   }
 
   render() {
