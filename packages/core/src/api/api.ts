@@ -1,5 +1,5 @@
 import { ApiError } from './api-error.ts';
-import type { PlainObject } from '@/types/plain-object.ts';
+import type { PlainObject } from '../types/plain-object.ts';
 
 export type ApiOptions = {
   /**

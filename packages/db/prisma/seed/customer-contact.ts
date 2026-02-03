@@ -1,5 +1,5 @@
 import type { PrismaClient } from '#app/generated/prisma/client.ts';
-import type { CustomerContactCreateManyInput } from '#app/index';
+import type { CustomerContactCreateManyInput } from '#app/index.ts';
 import { faker } from './faker-context.ts';
 import { getState } from './state.ts';
 

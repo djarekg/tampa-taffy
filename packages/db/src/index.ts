@@ -1,3 +1,2 @@
-export * from './client/index.ts';
-export * from './generated/prisma/enums.js';
-export * from './generated/prisma/models.js';
+export * from './generated/prisma/enums.ts';
+export type * from './generated/prisma/models.ts';

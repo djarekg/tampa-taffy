@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsgo",
-    "dev": "bun run --watch --no-check src/index.ts"
+    "dev": "bun run --watch --no-check --env-file ../../packages/db/.env.local --env-file .env.local src/index.ts"
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",

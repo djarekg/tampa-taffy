@@ -1,4 +1,4 @@
-import prisma from '@tt/db/client';
+import prisma from '#app/db.ts';
 import { ApiError, ApiStatus } from '@tt/core/api';
 import type { AuiContext } from '#app/types/index.ts';
 import { tryRouteParam } from '#app/http/require.ts';

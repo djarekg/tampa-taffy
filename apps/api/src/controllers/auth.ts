@@ -1,5 +1,5 @@
 import { compareHash } from '@tt/core/crypto';
-import prisma from '@tt/db/client';
+import prisma from '#app/db.ts';
 import { Role } from '@tt/db';
 import { TOKEN_SECRET } from '#app/config.ts';
 import type { AuiContext } from '#app/types/index.ts';

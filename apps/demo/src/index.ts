@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import styles from './index.css?inline';
 import './layout/header.js';
 import { resource } from '@tt/core/resource';
-import { getUsers } from '@/services/user.service';
+import { getUsers } from '@/api/user.api';
 
 @customElement('app-index')
 export class Index extends LitElement {

@@ -1,5 +1,5 @@
 import { Gender, PrismaClient, ProductType } from '#app/generated/prisma/client.ts';
-import type { ProductCreateManyInput } from '#app/index';
+import type { ProductCreateManyInput } from '#app/index.ts';
 import { faker } from '@faker-js/faker';
 
 export const createProducts = async (prisma: PrismaClient) => {

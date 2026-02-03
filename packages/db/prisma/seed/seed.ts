@@ -1,4 +1,4 @@
-import prisma from '#app/client/index.ts';
+// import prisma from '#app/client/index.ts';
 import { createProductColors } from '#prisma/seed/product-color.ts';
 import { createProductInventories } from '#prisma/seed/product-inventory.ts';
 import { createProductSales } from '#prisma/seed/product-sale.ts';
@@ -8,6 +8,9 @@ import { createCustomerContacts } from './customer-contact.ts';
 import { createCustomers } from './customer.ts';
 import { createStates } from './state.ts';
 import { createUsers } from './user.ts';
+import { createPrismaClient } from '#app/client/index.ts';
+
+const prisma = createPrismaClient();
 
 const load = async () => {
   // await reset(prisma);

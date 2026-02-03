@@ -1,5 +1,5 @@
 import { type PrismaClient, Role } from '#app/generated/prisma/client.ts';
-import type { ProductSaleCreateManyInput } from '#app/generated/prisma/internal/prismaNamespaceBrowser';
+import type { ProductSaleCreateManyInput } from '#app/index.ts';
 
 export const createProductSales = async (prisma: PrismaClient) => {
   console.log('Seeding ProductSale...');
