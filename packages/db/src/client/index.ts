@@ -5,6 +5,13 @@ export type PrismaClientFactoryOptions = {
   url?: string;
 };
 
+/**
+ * Create a new PrismaClient instance.
+ *
+ * @param options - Options for creating the PrismaClient. If no URL is provided,
+ * it will use the DATABASE_URL environment variable.
+ * @return A new PrismaClient instance.
+ */
 export const createPrismaClient = (options: PrismaClientFactoryOptions = {}) => {
   const resolvedUrl = options.url ?? process.env.DATABASE_URL;
 
@@ -20,6 +27,3 @@ export const createPrismaClient = (options: PrismaClientFactoryOptions = {}) => 
 
   return new PrismaClient({ adapter });
 };
-
-// const prisma = createPrismaClient();
-// export default prisma;
