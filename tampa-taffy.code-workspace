@@ -144,6 +144,7 @@
 
     "html.customData": ["./node_modules/@m3e/button/dist/html-custom-data.json"],
     "css.customData": ["./node_modules/@m3e/button/dist/css-custom-data.json"],
+    "cSpell.words": ["iconbutton"],
   },
   "extensions": {
     "recommendations": [

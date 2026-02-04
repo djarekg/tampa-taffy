@@ -61,6 +61,7 @@
         "lit-element": "^4.2.2",
         "lit-html": "^3.3.2",
         "lit-ui-router": "^1.2.5",
+        "tslib": "^2.8.1",
       },
       "devDependencies": {
         "vite": "8.0.0-beta.11",
@@ -70,8 +71,10 @@
       "name": "@tt/components",
       "version": "0.0.1",
       "dependencies": {
+        "@lit-labs/signals": "^0.2.0",
         "@material/web": "^2.4.1",
         "@tt/core": "workspace:*",
+        "signal-utils": "^0.21.1",
       },
       "peerDependencies": {
         "@typescript/native-preview": "^7.0.0-dev.20260119.1",
@@ -87,6 +90,7 @@
         "@lit/task": "^1.0.3",
         "bcryptjs": "^3.0.3",
         "signal-polyfill": "^0.2.2",
+        "signal-utils": "^0.21.1",
       },
       "peerDependencies": {
         "@typescript/native-preview": "^7.0.0-dev.20260119.1",
@@ -976,6 +980,8 @@
     "signal-exit": ["signal-exit@4.1.0", "", {}, "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="],
 
     "signal-polyfill": ["signal-polyfill@0.2.2", "", {}, "sha512-p63Y4Er5/eMQ9RHg0M0Y64NlsQKpiu6MDdhBXpyywRuWiPywhJTpKJ1iB5K2hJEbFZ0BnDS7ZkJ+0AfTuL37Rg=="],
+
+    "signal-utils": ["signal-utils@0.21.1", "", { "peerDependencies": { "signal-polyfill": "^0.2.0" } }, "sha512-i9cdLSvVH4j8ql8mz2lyrA93xL499P8wEbIev3ldSriXeUwqh+wM4Q5VPhIZ19gPtIS4BOopJuKB8l1+wH9LCg=="],
 
     "source-map-js": ["source-map-js@1.2.1", "", {}, "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="],
 

@@ -12,6 +12,26 @@ const routes: LitStateDeclaration[] = [
       `;
     },
   },
+  {
+    name: 'users',
+    url: '/users',
+    component: () => {
+      import('./routes/users/users.ts');
+      return html`
+        <app-users></app-users>
+      `;
+    },
+  },
+  {
+    name: 'products',
+    url: '/products',
+    component: () => {
+      import('./routes/products/products.ts');
+      return html`
+        <app-products></app-products>
+      `;
+    },
+  },
 ];
 
 export default routes;

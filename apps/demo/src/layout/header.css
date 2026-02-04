@@ -10,20 +10,16 @@ header {
   grid-area: a;
   display: flex;
   align-items: center;
-  /*
+
   img {
-    border-radius: 50%;
-    box-shadow: 0 0 6px 5px hsla(270, 51%, 32%, 0.6);
-    transition:
-      box-shadow 0.3s ease,
-      transform 0.3s ease;
-    will-change: box-shadow, transform;
+    transform: scale(0.8);
+    will-change: transform;
+    transition: transform 0.3s ease;
 
     &:hover {
-      box-shadow: 0 0 10px 8px hsla(270, 51%, 32%, 0.6);
-      transform: scale(1.03);
+      transform: scale(1.03) rotate(60deg);
     }
-  } */
+  }
 }
 
 .title {
@@ -38,4 +34,11 @@ header {
 
 .menu {
   grid-area: c;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  svg {
+    cursor: pointer;
+  }
 }

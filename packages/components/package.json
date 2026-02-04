@@ -14,8 +14,10 @@
   },
   "scripts": {},
   "dependencies": {
+    "@lit-labs/signals": "^0.2.0",
     "@material/web": "^2.4.1",
-    "@tt/core": "workspace:*"
+    "@tt/core": "workspace:*",
+    "signal-utils": "^0.21.1"
   },
   "peerDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20260119.1",

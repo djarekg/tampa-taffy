@@ -1,5 +1,8 @@
+import '@material/web/iconbutton/icon-button';
 import { customElement } from 'lit/decorators.js';
 import { html, LitElement, unsafeCSS } from 'lit';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import menuSvg from '../assets/menu-transition.svg?raw';
 import styles from './header.css?inline';
 
 @customElement('app-header')
@@ -19,7 +22,9 @@ export class Header extends LitElement {
           </a>
         </div>
         <span class="title">Tampa Taffy</span>
-        <div class="menu"></div>
+        <div class="menu">
+          <span class="menu-wrapper">${unsafeSVG(menuSvg)}</span>
+        </div>
       </header>
     `;
   }
