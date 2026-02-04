@@ -18,7 +18,7 @@ export class Header extends LitElement {
               alt="Tampa Taffy Logo" />
           </a>
         </div>
-        <span class="title">Tampa Taffy Demo App</span>
+        <span class="title">Tampa Taffy</span>
         <div class="menu"></div>
       </header>
     `;
