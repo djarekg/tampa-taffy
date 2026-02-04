@@ -1,0 +1,17 @@
+:root {
+  --app-header-height: 80px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-inline-size: 320px;
+  min-block-size: 100vh;
+  block-size: 100vh;
+  overflow: hidden;
+}
+
+*:not(:defined) {
+  display: none;
+}

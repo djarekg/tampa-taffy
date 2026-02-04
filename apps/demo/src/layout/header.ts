@@ -1,20 +1,25 @@
 import { customElement } from 'lit/decorators.js';
-import { css, html, LitElement } from 'lit';
-
-const styles = css`
-  header {
-    color: var(--tt-color-primary);
-  }
-`;
+import { html, LitElement, unsafeCSS } from 'lit';
+import styles from './header.css?inline';
 
 @customElement('app-header')
 export class Header extends LitElement {
-  static override styles = [styles];
+  static override styles = [unsafeCSS(styles)];
 
   render() {
     return html`
       <header>
-        <h1>Welcome to the Demo App</h1>
+        <div class="image">
+          <a href="/">
+            <img
+              width="48"
+              height="48"
+              src="/candy.svg"
+              alt="Tampa Taffy Logo" />
+          </a>
+        </div>
+        <span class="title">Tampa Taffy Demo App</span>
+        <div class="menu"></div>
       </header>
     `;
   }

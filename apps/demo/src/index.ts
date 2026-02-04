@@ -1,10 +1,10 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import styles from './index.css?inline';
-import './layout/header.js';
 import { UIRouterLit } from 'lit-ui-router';
 import { pushStateLocationPlugin } from '@uirouter/core';
 import routes from './routes';
+import styles from './index.css?inline';
+import './layout/header.js';
 
 @customElement('app-index')
 export class Index extends LitElement {

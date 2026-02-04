@@ -1,8 +1,18 @@
 import { customElement } from 'lit/decorators.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 
 @customElement('app-home')
 export class Home extends LitElement {
+  static override styles = [
+    css`
+      :host {
+        display: grid;
+        place-content: center;
+        block-size: 100%;
+      }
+    `,
+  ];
+
   render() {
     return html`
       <h1>Welcome to the Home Page</h1>

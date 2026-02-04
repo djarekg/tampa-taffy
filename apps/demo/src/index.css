@@ -1,11 +1,12 @@
 :host {
   display: block;
-  block-size: 100%;
   inline-size: 100%;
+  block-size: 100vh;
 }
 
-*:not(:defined) {
-  display: none;
+main {
+  block-size: calc(100vh - var(--app-header-height));
+  inline-size: 100%;
 }
 
 .title {
