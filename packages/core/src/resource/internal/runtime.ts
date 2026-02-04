@@ -1,6 +1,7 @@
 import { Signal, computed, signal } from '@lit-labs/signals';
 import { Task, initialState } from '@lit/task';
 import type { ReactiveController, ReactiveControllerHost } from 'lit';
+import { batchedEffect } from 'signal-utils/subtle/batched-effect';
 import type {
   ReadableSignalLike,
   ResourceLoaderParams,
@@ -185,47 +186,28 @@ export const setupResourceEffect = <P, V, L extends (params: any) => any, D>(
   paramsSignal: ReadableSignalLike<P | null | undefined>,
   requestHostUpdate: () => void
 ): (() => void) => {
-  let isFlushingPendingEffects = false;
-  const effectWatcher = new Signal.subtle.Watcher(() => {
-    if (isFlushingPendingEffects) return;
-    isFlushingPendingEffects = true;
-    queueMicrotask(() => {
-      isFlushingPendingEffects = false;
-      for (const pending of effectWatcher.getPending()) {
-        pending.get();
+  return Signal.subtle.untrack(() =>
+    batchedEffect(() => {
+      const params = paramsSignal.get();
+      void reloadTick.get();
+
+      if (!runState.isHostConnected) {
+        setIdle(signals, requestHostUpdate);
+        return;
       }
-      effectWatcher.watch();
-    });
-  });
 
-  const effect = computed(() => {
-    const params = paramsSignal.get();
-    void reloadTick.get();
+      // Suspend loading only when an explicit params factory returns nullish.
+      // If `options.params` is omitted, we still run the loader once with
+      // `params === undefined`.
+      if (options.params && params == null) {
+        task.abort();
+        setIdle(signals, requestHostUpdate);
+        return;
+      }
 
-    if (!runState.isHostConnected) {
-      setIdle(signals, requestHostUpdate);
-      return;
-    }
-
-    // Suspend loading only when an explicit params factory returns nullish.
-    // If `options.params` is omitted, we still run the loader once with
-    // `params === undefined`.
-    if (options.params && params == null) {
-      task.abort();
-      setIdle(signals, requestHostUpdate);
-      return;
-    }
-
-    const myRun = ++runState.activeRunId;
-    beginLoading(signals, requestHostUpdate);
-    task.run([params as P, myRun]);
-  });
-
-  effectWatcher.watch(effect);
-  // Kick off the initial run, but don't let callers accidentally track it.
-  Signal.subtle.untrack(() => effect.get());
-
-  return () => {
-    effectWatcher.unwatch(effect);
-  };
+      const myRun = ++runState.activeRunId;
+      beginLoading(signals, requestHostUpdate);
+      task.run([params as P, myRun]);
+    })
+  );
 };
