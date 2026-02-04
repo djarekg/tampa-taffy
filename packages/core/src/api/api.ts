@@ -1,4 +1,4 @@
-import { ApiError } from './api-error.ts';
+import { ApiError } from './error.ts';
 import type { PlainObject } from '@/types/plain-object.ts';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';

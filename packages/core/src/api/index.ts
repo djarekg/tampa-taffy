@@ -1,3 +1,3 @@
 export { default } from './api';
-export * from './api-error';
-export * from './api-status';
+export * from './error';
+export * from './status';
