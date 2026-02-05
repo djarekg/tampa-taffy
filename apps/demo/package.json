@@ -23,6 +23,7 @@
     "lit-element": "^4.2.2",
     "lit-html": "^3.3.2",
     "lit-ui-router": "^1.2.5",
+    "signal-polyfill": "^0.2.2",
     "tslib": "^2.8.1"
   },
   "devDependencies": {

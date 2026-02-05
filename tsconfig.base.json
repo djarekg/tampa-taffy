@@ -3,6 +3,7 @@
     "target": "esnext",
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
+    // "emitDecoratorMetadata": true,
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
@@ -24,6 +25,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "noPropertyAccessFromIndexSignature": false
   }
 }

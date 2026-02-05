@@ -5,6 +5,9 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./navigation-drawer": {
+      "import": "./src/navigation-drawer/navigation-drawer.ts"
+    },
     "./styles/index.css": {
       "import": "./src/styles/index.css"
     },
@@ -17,6 +20,7 @@
     "@lit-labs/signals": "^0.2.0",
     "@material/web": "^2.4.1",
     "@tt/core": "workspace:*",
+    "signal-polyfill": "^0.2.2",
     "signal-utils": "^0.21.1"
   },
   "peerDependencies": {

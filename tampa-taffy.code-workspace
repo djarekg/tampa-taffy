@@ -92,7 +92,6 @@
     "typescript.experimental.useTsgo": true,
     "typescript.tsdk": "root/node_modules/@typescript/native-preview/lib",
     "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview/lib",
-    // "typescript.tsdk": "root/node_modules/typescript/lib",
 
     "typescript.preferences.importModuleSpecifierEnding": "minimal",
     "typescript.reportStyleChecksAsWarnings": false,
@@ -144,7 +143,15 @@
 
     "html.customData": ["./node_modules/@m3e/button/dist/html-custom-data.json"],
     "css.customData": ["./node_modules/@m3e/button/dist/css-custom-data.json"],
-    "cSpell.words": ["dbaeumer", "esbenp", "iconbutton", "qwtel", "runem", "typescriptteam"],
+    "cSpell.words": [
+      "dbaeumer",
+      "esbenp",
+      "iconbutton",
+      "qwtel",
+      "runem",
+      "typescriptteam",
+      "uirouter",
+    ],
   },
   "extensions": {
     "recommendations": [

@@ -61,6 +61,7 @@
         "lit-element": "^4.2.2",
         "lit-html": "^3.3.2",
         "lit-ui-router": "^1.2.5",
+        "signal-polyfill": "^0.2.2",
         "tslib": "^2.8.1",
       },
       "devDependencies": {
@@ -74,6 +75,7 @@
         "@lit-labs/signals": "^0.2.0",
         "@material/web": "^2.4.1",
         "@tt/core": "workspace:*",
+        "signal-polyfill": "^0.2.2",
         "signal-utils": "^0.21.1",
       },
       "peerDependencies": {

@@ -4,7 +4,8 @@ import { UIRouterLit } from 'lit-ui-router';
 import { pushStateLocationPlugin } from '@uirouter/core';
 import routes from './routes';
 import styles from './index.css?inline';
-import './layout/header.js';
+import './layout/header';
+import '@tt/components/navigation-drawer';
 
 @customElement('app-index')
 export class Index extends LitElement {
@@ -42,6 +43,7 @@ export class Index extends LitElement {
         <app-header></app-header>
         <main>
           <ui-view></ui-view>
+          <tt-navigation-drawer ?opened=${false}></tt-navigation-drawer>
         </main>
       </ui-router>
     `;
