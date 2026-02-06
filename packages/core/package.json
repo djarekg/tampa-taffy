@@ -24,7 +24,11 @@
       "import": "./src/index.ts"
     }
   },
-  "scripts": {},
+  "scripts": {
+    "test": "bunx vitest --test-timeout=10000",
+    "test:run": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
     "@lit/context": "^1.1.6",
@@ -32,6 +36,9 @@
     "bcryptjs": "^3.0.3",
     "signal-polyfill": "^0.2.2",
     "signal-utils": "^0.21.1"
+  },
+  "devDependencies": {
+    "vitest": "latest"
   },
   "peerDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20260119.1",
