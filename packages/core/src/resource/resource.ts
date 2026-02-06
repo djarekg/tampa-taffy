@@ -5,11 +5,106 @@ import { createReloadTick } from '../utils/create-reload-tick';
 import type { ResourceOptions, ResourceRef, ResourceRenderer, ResourceStatus } from './types';
 
 /**
- * A small resource primitive for async data.
+ * Pure function to render resource state based on current status.
+ * Follows Single Responsibility Principle - only handles rendering logic.
  *
- * - Tracks dependencies read inside `params()` (before the first `await`)
- * - Uses `signal-utils` AsyncComputed for async + abort + status
- * - Provides a `renderer()` method with the same four callbacks as `@lit/task`
+ * @param status - Current resource status
+ * @param value - Current resource value
+ * @param error - Current resource error
+ * @param renderers - Renderer callbacks for each state
+ * @returns Rendered result based on current state
+ */
+export function renderResourceState<T, R>(
+  status: ResourceStatus,
+  value: T | undefined,
+  error: unknown,
+  renderers: ResourceRenderer<T, R>
+): R | undefined {
+  switch (status) {
+    case 'initial':
+      return renderers.initial?.();
+    case 'pending':
+      return renderers.pending?.();
+    case 'complete':
+      return renderers.complete?.(value);
+    case 'error':
+      return renderers.error?.(error);
+  }
+}
+
+/**
+ * Pure factory function to create the async computation logic.
+ * Separates the computation creation from resource creation for better testability.
+ *
+ * @param params - Function to get current params
+ * @param loader - Async loader function
+ * @param reloadTick - Signal to track reload requests
+ * @returns Async computation function
+ */
+export function createAsyncComputation<P, T>(
+  params: () => P,
+  loader: (context: { params: P; abortSignal: AbortSignal }) => Promise<T>,
+  reloadTick: ReturnType<typeof createReloadTick>
+): (abortSignal: AbortSignal) => Promise<T> {
+  return async (abortSignal: AbortSignal) => {
+    // Read reload tick to track dependencies
+    reloadTick.get();
+
+    // Get params synchronously before first await to track signal dependencies
+    const paramsValue = params();
+    return loader({ params: paramsValue, abortSignal });
+  };
+}
+
+/**
+ * Factory to create signal wrappers for AsyncComputed state.
+ * Follows Dependency Inversion Principle - depends on abstractions, not concrete implementations.
+ *
+ * @param asyncData - The async computed data source
+ * @returns Object with computed signals for status, value, and error
+ */
+export function createResourceSignals<T>(asyncData: AsyncComputed<T>) {
+  return {
+    status: computed(() => asyncData.status as ResourceStatus),
+    value: computed(() => asyncData.value),
+    error: computed(() => asyncData.error),
+  };
+}
+
+/**
+ * Creates a resource renderer function.
+ * Follows Single Responsibility Principle - only creates the renderer.
+ *
+ * @param getStatus - Function to get current status
+ * @param getValue - Function to get current value
+ * @param getError - Function to get current error
+ * @returns Renderer function
+ */
+export function createResourceRenderer<T>(
+  getStatus: () => ResourceStatus,
+  getValue: () => T | undefined,
+  getError: () => unknown
+) {
+  return <R>(renderers: ResourceRenderer<T, R>): R | undefined => {
+    return renderResourceState(getStatus(), getValue(), getError(), renderers);
+  };
+}
+
+/**
+ * Creates a reload function.
+ * Pure function that returns a new function with captured dependencies.
+ *
+ * @param reloadTick - The reload tick signal
+ * @returns Reload function
+ */
+export function createReloadFunction(reloadTick: ReturnType<typeof createReloadTick>) {
+  return (): void => {
+    reloadTick.set(reloadTick.get() + 1);
+  };
+}
+
+/**
+ * A small resource primitive for async data.
  *
  * @example
  * ```ts
@@ -45,55 +140,37 @@ import type { ResourceOptions, ResourceRef, ResourceRenderer, ResourceStatus } f
 export function resource<T>(options: ResourceOptions<void, T>): ResourceRef<T>;
 export function resource<P, T>(options: ResourceOptions<P, T>): ResourceRef<T>;
 export function resource<P, T>(options: ResourceOptions<P, T>): ResourceRef<T> {
+  // Initialize dependencies - following Dependency Inversion Principle
   const reloadTick = createReloadTick();
   const params = options.params ?? (() => undefined as P);
 
-  const asyncData = new AsyncComputed<T>(
-    async abortSignal => {
-      // `AsyncComputed` only re-runs when a tracked dependency changes.
-      // We read a dedicated signal here so callers can force a refresh via
-      // `reload()` without having to mutate any of the real dependencies.
-      reloadTick.get();
+  // Create async computation using pure factory function
+  const computationFn = createAsyncComputation(params, options.loader, reloadTick);
 
-      // `params()` is intentionally called synchronously (before the first
-      // await) so any signals it reads become dependencies of the computation.
-      // When those signals change, `AsyncComputed` will abort the in-flight
-      // request (via `abortSignal`) and start a new run.
-      const paramsValue = params();
-      return options.loader({ params: paramsValue, abortSignal });
-    },
-    { initialValue: options.initialValue }
+  // Create AsyncComputed instance with the computation function
+  const asyncData = new AsyncComputed<T>(computationFn, {
+    initialValue: options.initialValue,
+  });
+
+  // Create reactive signals using factory function
+  const signals = createResourceSignals(asyncData);
+
+  // Create renderer using factory function - follows Single Responsibility
+  const renderer = createResourceRenderer(
+    () => signals.status.get(),
+    () => signals.value.get(),
+    () => signals.error.get()
   );
 
-  // Wrap AsyncComputed's reactive getters with `@lit-labs/signals` computed
-  // signals so Lit can subscribe (via SignalWatcher or `watch()`) and re-render
-  // when status/value/error changes.
-  const status = computed(() => asyncData.status as ResourceStatus);
-  const value = computed(() => asyncData.value);
-  const error = computed(() => asyncData.error);
+  // Create reload function using factory - follows DRY principle
+  const reload = createReloadFunction(reloadTick);
 
+  // Return ResourceRef with all composed functionality
   return {
-    status,
-    value,
-    error,
-
-    renderer<R>(renderers: ResourceRenderer<T, R>): R | undefined {
-      // Read via signals so Lit's SignalWatcher can subscribe and re-render
-      // when async state transitions (pending -> complete/error).
-      switch (status.get()) {
-        case 'initial':
-          return renderers.initial?.();
-        case 'pending':
-          return renderers.pending?.();
-        case 'complete':
-          return renderers.complete?.(value.get());
-        case 'error':
-          return renderers.error?.(error.get());
-      }
-    },
-
-    reload(): void {
-      reloadTick.set(reloadTick.get() + 1);
-    },
+    status: signals.status,
+    value: signals.value,
+    error: signals.error,
+    renderer,
+    reload,
   };
 }
