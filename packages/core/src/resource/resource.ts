@@ -48,15 +48,24 @@ export function resource<P, T>(options: ResourceOptions<P, T>): ResourceRef<T> {
 
   const asyncData = new AsyncComputed<T>(
     async abortSignal => {
-      // allow manual reload() without changing any other dependency
+      // `AsyncComputed` only re-runs when a tracked dependency changes.
+      // We read a dedicated signal here so callers can force a refresh via
+      // `reload()` without having to mutate any of the real dependencies.
       reloadTick.get();
 
+      // `params()` is intentionally called synchronously (before the first
+      // await) so any signals it reads become dependencies of the computation.
+      // When those signals change, `AsyncComputed` will abort the in-flight
+      // request (via `abortSignal`) and start a new run.
       const paramsValue = params();
       return options.loader({ params: paramsValue, abortSignal });
     },
     { initialValue: options.initialValue }
   );
 
+  // Wrap AsyncComputed's reactive getters with `@lit-labs/signals` computed
+  // signals so Lit can subscribe (via SignalWatcher or `watch()`) and re-render
+  // when status/value/error changes.
   const status = computed(() => asyncData.status as ResourceStatus);
   const value = computed(() => asyncData.value);
   const error = computed(() => asyncData.error);
