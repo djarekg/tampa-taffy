@@ -21,11 +21,14 @@ export default defineConfig({
     conditions: ['browser', 'development'],
     dedupe: [
       '@lit/reactive-element',
+      '@lit-labs/signals',
       'lit',
       'lit/decorators',
       'lit/directives',
       'lit-html',
       'lit-element',
+      'signal-polyfill',
+      'signal-utils',
     ],
   },
 });
