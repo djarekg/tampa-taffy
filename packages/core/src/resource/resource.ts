@@ -1,37 +1,8 @@
 import { computed } from '@lit-labs/signals';
-import type { Signal } from 'signal-polyfill';
 import { AsyncComputed } from 'signal-utils/async-computed';
 
 import { createReloadTick } from '../utils/create-reload-tick';
-
-export type ResourceStatus = 'initial' | 'pending' | 'complete' | 'error';
-
-export type ResourceRenderer<T, R> = {
-  initial?: () => R;
-  pending?: () => R;
-  complete?: (value: T | undefined) => R;
-  error?: (error: unknown) => R;
-};
-
-export type ResourceLoaderContext<P> = {
-  params: P;
-  abortSignal: AbortSignal;
-};
-
-export type ResourceOptions<P, T> = {
-  params?: () => P;
-  loader: (context: ResourceLoaderContext<P>) => Promise<T>;
-  initialValue?: T;
-};
-
-export type ResourceRef<T> = {
-  status: Signal.Computed<ResourceStatus>;
-  value: Signal.Computed<T | undefined>;
-  error: Signal.Computed<unknown>;
-
-  renderer<R>(renderers: ResourceRenderer<T, R>): R | undefined;
-  reload(): void;
-};
+import type { ResourceOptions, ResourceRef, ResourceRenderer, ResourceStatus } from './types';
 
 /**
  * A small resource primitive for async data.
@@ -39,6 +10,37 @@ export type ResourceRef<T> = {
  * - Tracks dependencies read inside `params()` (before the first `await`)
  * - Uses `signal-utils` AsyncComputed for async + abort + status
  * - Provides a `renderer()` method with the same four callbacks as `@lit/task`
+ *
+ * @example
+ * ```ts
+ * import { LitElement } from 'lit';
+ * import { customElement } from 'lit/decorators.js';
+ * import { html, SignalWatcher } from '@lit-labs/signals';
+ * import { signal } from '@lit-labs/signals';
+ * import { resource } from '@tt/core/resource';
+ *
+ * const productId = signal('123');
+ *
+ * const productResource = resource({
+ *   params: () => productId.get(),
+ *   loader: id => getProductById(id);
+ * });
+ *
+ * export class ProductView extends SignalWatcher(LitElement) {
+ *   const { renderer } = productResource;
+ *
+ *   render() {
+ *     return renderer({
+ *       initial: () => html`<p>Waiting...</p>`,
+ *       pending: () => html`<p>Loading...</p>`,
+ *       complete: (product) => html`<p>${product?.name}</p>`,
+ *       error: (err) => html`<p>Error: ${String(err)}</p>`,
+ *     });
+ *   }
+ * }
+ *
+ * customElements.define('product-view', ProductView);
+ * ```
  */
 export function resource<T>(options: ResourceOptions<void, T>): ResourceRef<T>;
 export function resource<P, T>(options: ResourceOptions<P, T>): ResourceRef<T>;

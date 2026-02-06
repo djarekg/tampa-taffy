@@ -144,11 +144,13 @@
     "html.customData": ["./node_modules/@m3e/button/dist/html-custom-data.json"],
     "css.customData": ["./node_modules/@m3e/button/dist/css-custom-data.json"],
     "cSpell.words": [
+      "bunx",
       "dbaeumer",
       "esbenp",
       "iconbutton",
       "qwtel",
       "runem",
+      "tsgo",
       "typescriptteam",
       "uirouter",
     ],
