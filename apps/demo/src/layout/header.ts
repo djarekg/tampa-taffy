@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js';
 import { html, LitElement } from 'lit';
 
 import styles from './header.css.ts';
-import logoSvg from '../assets/candy.svg';
+import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 
 @customElement('app-header')
 export class Header extends LitElement {
