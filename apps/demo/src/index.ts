@@ -1,15 +1,16 @@
-import { LitElement, html, unsafeCSS } from 'lit';
+import '@tt/components/navigation-drawer';
+import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { UIRouterLit } from 'lit-ui-router';
 import { pushStateLocationPlugin } from '@uirouter/core';
+
+import './layout/header.ts';
+import styles from './index.css.ts';
 import routes from './routes';
-import styles from './index.css?inline';
-import './layout/header';
-import '@tt/components/navigation-drawer';
 
 @customElement('app-index')
 export class Index extends LitElement {
-  static override styles = [unsafeCSS(styles)];
+  static override styles = [styles];
 
   #router = new UIRouterLit();
 
@@ -19,10 +20,10 @@ export class Index extends LitElement {
     routes.forEach(route => this.#router.stateRegistry.register(route));
     this.#router.plugin(pushStateLocationPlugin);
     this.#router.urlService.rules.initial({ state: 'home' });
-    this.#router.transitionService.onBefore({ to: '*' }, trans => {
-      console.log(trans.to());
-      return true;
-    });
+    // this.#router.transitionService.onBefore({ to: '*' }, trans => {
+    //   console.log(trans.to());
+    //   return true;
+    // });
   }
 
   connectedCallback() {

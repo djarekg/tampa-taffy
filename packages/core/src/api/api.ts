@@ -211,11 +211,9 @@ const resolveRequestBody = (
 };
 
 export default function api(baseUrl?: string) {
-  // Libraries generally shouldn't read build-tool-specific env (e.g. Vite's import.meta.env).
-  // Let the consuming app pass it in: api(import.meta.env.VITE_API_URL)
   if (!baseUrl) {
     throw new Error(
-      'API baseUrl not provided. Pass it from the consuming app, e.g. api(import.meta.env.VITE_API_URL).'
+      'API baseUrl not provided. Pass it from the consuming app, e.g. api(import.meta.env.PUBLIC_API_URL).'
     );
   }
 

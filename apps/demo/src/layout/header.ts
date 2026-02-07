@@ -1,13 +1,14 @@
 import '@material/web/iconbutton/icon-button';
+import '@material/web/icon/icon';
 import { customElement } from 'lit/decorators.js';
-import { html, LitElement, unsafeCSS } from 'lit';
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import menuSvg from '../assets/menu-transition.svg?raw';
-import styles from './header.css?inline';
+import { html, LitElement } from 'lit';
+
+import styles from './header.css.ts';
+import logoSvg from '../assets/candy.svg';
 
 @customElement('app-header')
 export class Header extends LitElement {
-  static override styles = [unsafeCSS(styles)];
+  static override styles = [styles];
 
   render() {
     return html`
@@ -17,13 +18,15 @@ export class Header extends LitElement {
             <img
               width="48"
               height="48"
-              src="/candy.svg"
+              src=${logoSvg}
               alt="Tampa Taffy Logo" />
           </a>
         </div>
         <span class="title">Tampa Taffy</span>
         <div class="menu">
-          <span class="menu-wrapper">${unsafeSVG(menuSvg)}</span>
+          <md-icon-button>
+            <md-icon>menu</md-icon>
+            </md-icon-button
         </div>
       </header>
     `;

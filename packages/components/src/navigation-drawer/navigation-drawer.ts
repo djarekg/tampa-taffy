@@ -1,12 +1,12 @@
 import { customElement, property } from 'lit/decorators.js';
-import { LitElement, unsafeCSS } from 'lit';
+import { LitElement } from 'lit';
 import { html, SignalWatcher } from '@lit-labs/signals';
 import { classMap } from 'lit/directives/class-map.js';
-import styles from './navigation-drawer.css?inline';
+import styles from './navigation-drawer.css';
 
 @customElement('tt-navigation-drawer')
 export class NavigationDrawer extends SignalWatcher(LitElement) {
-  static override styles = [unsafeCSS(styles)];
+  static override styles = [styles];
 
   @property({ type: Boolean, reflect: true })
   opened = false;

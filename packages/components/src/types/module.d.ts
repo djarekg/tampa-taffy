@@ -3,7 +3,7 @@ declare module '*.css' {
   export default src;
 }
 
-declare module '*?inline' {
+declare module '*' {
   const src: string;
   export default src;
 }
