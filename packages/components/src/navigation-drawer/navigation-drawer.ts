@@ -2,6 +2,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { html, SignalWatcher } from '@lit-labs/signals';
 import { classMap } from 'lit/directives/class-map.js';
+
 import styles from './navigation-drawer.css';
 
 @customElement('tt-navigation-drawer')

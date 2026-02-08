@@ -7,6 +7,7 @@ import { ApiError, ApiStatus } from '@tt/core/api';
 import { tryBodyString, tryRouteParam } from '#app/http/require.ts';
 import jwt from 'jsonwebtoken';
 import type { Context } from 'koa';
+import { isNotEmpty } from '@tt/core';
 
 /**
  * Get a single user by username (email).
@@ -78,4 +79,17 @@ export const signout = (ctx: Context) => {
   });
 
   ctx.body = { success: true };
+};
+
+/**
+ * Check if the user is authenticated by verifying their JWT.
+ */
+export const isAuthenticated = (ctx: Context) => {
+  const token = ctx.headers.authorization?.split(' ')[1] ?? '';
+  if (isNotEmpty(token)) {
+    const authenticated = !!jwt.verify(token, TOKEN_SECRET);
+    ctx.body = authenticated;
+  } else {
+    ctx.body = false;
+  }
 };

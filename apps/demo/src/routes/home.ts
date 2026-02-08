@@ -13,7 +13,7 @@ export class Home extends LitElement {
     `,
   ];
 
-  render() {
+  override render() {
     return html`
       <h1>Welcome to the Home Page</h1>
     `;

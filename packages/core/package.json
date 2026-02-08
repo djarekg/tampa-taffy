@@ -11,6 +11,9 @@
     "./crypto": {
       "import": "./src/crypto/index.ts"
     },
+    "./reactive": {
+      "import": "./src/reactive/index.ts"
+    },
     "./resource": {
       "import": "./src/resource/index.ts"
     },
@@ -19,6 +22,9 @@
     },
     "./utils": {
       "import": "./src/utils/index.ts"
+    },
+    "./validation": {
+      "import": "./src/validation/index.ts"
     },
     ".": {
       "import": "./src/index.ts"

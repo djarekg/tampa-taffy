@@ -3,3 +3,6 @@ logLevel = "debug"
 [run]
 shell = "bun"
 bun = true
+
+[serve.static]
+env = "PUBLIC_*"

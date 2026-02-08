@@ -14,11 +14,11 @@ export default css`
     block-size: 100%;
     inset-block: 0;
     inset-inline-end: 0;
-    background: var(--md-sys-color-background);
-    box-shadow: var(--md-sys-elevation-level2);
-    border-inline-end: 1px solid var(--bet-border-color);
-    border-start-end-radius: var(--md-sys-shape-large);
-    border-end-end-radius: var(--md-sys-shape-large);
+    background: var(--tt-color-background);
+    box-shadow: var(--tt-elevation-level2);
+    border-inline-end: 1px solid var(--tt-border-color);
+    border-start-start-radius: var(--tt-shape-large);
+    border-end-start-radius: var(--tt-shape-large);
     transform: translateX(calc(var(--_drawer-inline-size) * -1));
     will-change: transform;
     transition:
