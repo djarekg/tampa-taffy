@@ -1,12 +1,11 @@
-import '@material/web/iconbutton/icon-button';
-import '@material/web/icon/icon';
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
-import { customElement } from 'lit/decorators.js';
+import '@m3e/button';
 import { LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-import styles from './header.css.ts';
-import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import { isAuthenticated } from '@/api/auth.api';
+import logoSvg from '../assets/candy.svg' with { type: 'svg' };
+import styles from './header.css.ts';
 
 const authenticated = signal(await isAuthenticated());
 
@@ -17,9 +16,9 @@ export class Header extends SignalWatcher(LitElement) {
   override render() {
     const menuButtonHtml = authenticated.get()
       ? html`
-          <md-icon-button @click=${this.#handleMenuClick}>
+          <m3e-icon-button @click=${this.#handleMenuClick}>
             <md-icon>menu</md-icon>
-          </md-icon-button>
+          </m3e-icon-button>
         `
       : null;
 

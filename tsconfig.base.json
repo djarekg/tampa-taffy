@@ -6,6 +6,7 @@
     "module": "ESNext",
     "moduleDetection": "force",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
