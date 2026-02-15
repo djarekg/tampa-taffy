@@ -1,5 +1,3 @@
-@import url(../constants.css);
-
 [color-theme="dark"] {
   color-scheme: dark;
   --md-sys-color-primary: rgb(187, 95, 255); /* customized */

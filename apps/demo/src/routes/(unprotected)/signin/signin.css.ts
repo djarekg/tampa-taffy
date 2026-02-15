@@ -20,7 +20,6 @@ export default css`
   input {
     background: transparent;
     border: none;
-    border-bottom: 2px solid var(--md-sys-color-on-surface-variant);
     outline: none;
   }
 `;

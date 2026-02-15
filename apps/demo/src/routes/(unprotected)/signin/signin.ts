@@ -1,31 +1,69 @@
-import '@material/web/button/outlined-button';
-import '@material/web/textfield/filled-text-field';
-import { html, SignalWatcher } from '@lit-labs/signals';
+import '@m3e/button';
+import '@m3e/form-field';
+import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { LitElement } from 'lit';
 
+import { signin } from '@/api/auth.api';
+import { throwIfEmpty } from '@tt/core';
 import styles from './signin.css';
 
 @customElement('app-signin')
-export class SignInRoute extends SignalWatcher(LitElement) {
+export class SignInRoute extends LitElement {
   static override styles = [styles];
 
   override render() {
     return html`
-      <form class="form">
-        <md-filled-text-field
-          type="email"
-          name="email"
-          label="Email"
-          required></md-filled-text-field>
-        <md-filled-text-field
-          type="password"
-          name="password"
-          label="Password"
-          required></md-filled-text-field>
-        <md-outlined-button type="submit">Sign In</md-outlined-button>
+      <form
+        class="form"
+        method="post"
+        @submit=${this.#handleSubmit}>
+        <m3e-form-field variant="outlined">
+          <label
+            slot="label"
+            for="email">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required />
+        </m3e-form-field>
+        <m3e-form-field variant="outlined">
+          <label
+            slot="label"
+            for="password">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required />
+        </m3e-form-field>
+        <m3e-button
+          variant="outlined"
+          type="submit">
+          Sign In
+        </m3e-button>
       </form>
     `;
+  }
+
+  async #handleSubmit(e: Event) {
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const email = formData.get('email')?.toString();
+      const password = formData.get('password')?.toString();
+
+      throwIfEmpty(email, 'Email is required');
+      throwIfEmpty(password, 'Password is required');
+
+      const result = await signin(email, password);
+      console.log(result);
+    } catch (err) {
+      console.error('Failed to sign in', err);
+    }
   }
 }
 

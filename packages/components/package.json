@@ -18,7 +18,8 @@
   "scripts": {},
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
-    "@material/web": "^2.4.1",
+    "@m3e/all": "^1.1.11",
+    "@m3e/button": "^1.1.11",
     "@tt/core": "workspace:*",
     "signal-polyfill": "^0.2.2",
     "signal-utils": "^0.21.1"

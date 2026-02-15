@@ -50,9 +50,22 @@
       }
     </style>
 
+    <script type="importmap">
+      {
+        "imports": {
+          "@m3e/core": "/node_modules/@m3e/core/dist/index.js",
+          "@m3e/core/a11y": "/node_modules/@m3e/core/dist/a11y.js",
+          "@m3e/core/anchoring": "/node_modules/@m3e/core/dist/anchoring.js",
+          "@m3e/core/bidi": "/node_modules/@m3e/core/dist/bidi.js",
+          "@m3e/core/layout": "/node_modules/@m3e/core/dist/layout.js",
+          "@m3e/core/platform": "/node_modules/@m3e/core/dist/platform.js"
+        }
+      }
+    </script>
+
     <script
       type="module"
-      src="/src/index.ts"></script>
+      src="./src/index.ts"></script>
   </head>
 
   <body>
