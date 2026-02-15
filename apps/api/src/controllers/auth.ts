@@ -67,6 +67,7 @@ export const signin = async (ctx: AuiContext<{ email: string; password: string }
   });
 
   ctx.body = { userId: user.id, role: user.userCredential?.role ?? Role.USER };
+  ctx.status = ApiStatus.ok;
 };
 
 /**

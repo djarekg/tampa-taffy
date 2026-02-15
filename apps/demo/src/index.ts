@@ -1,12 +1,10 @@
-import { signal, SignalWatcher } from '@lit-labs/signals';
-import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
-
-import '@tt/components/navigation-drawer';
-
 import { isAuthenticated } from '@/api/auth.api';
-import './layout/header.ts';
+import { signal, SignalWatcher } from '@lit-labs/signals';
+import '@tt/components/navigation-drawer';
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import styles from './index.css.ts';
+import './layout/header.ts';
 import { router } from './router/router';
 
 const authenticated = signal(await isAuthenticated());

@@ -51,6 +51,8 @@ export class SignInRoute extends LitElement {
   }
 
   async #handleSubmit(e: Event) {
+    e.preventDefault();
+
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const email = formData.get('email')?.toString();
