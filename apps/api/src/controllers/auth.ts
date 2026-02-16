@@ -1,39 +1,23 @@
 import { TOKEN_SECRET } from '#app/config.ts';
 import prisma from '#app/db.ts';
-import { tryBodyString, tryRouteParam } from '#app/http/require.ts';
-import type { AuiContext } from '#app/types/index.ts';
+import { getBody } from '#app/utils/json.ts';
 import { isNotEmpty } from '@tt/core';
 import { ApiError, ApiStatus } from '@tt/core/api';
 import { compareHash } from '@tt/core/crypto';
 import { Role } from '@tt/db';
 import jwt from 'jsonwebtoken';
-import type { Context } from 'koa';
-
-/**
- * Get a single user by username (email).
- */
-export const getUser = async (ctx: AuiContext<{ username: string }>) => {
-  const username = tryRouteParam(ctx, 'username');
-
-  const user = await prisma.user.findFirst({
-    where: {
-      email: username,
-    },
-  });
-
-  if (!user) {
-    throw new ApiError(ApiStatus.notFound, 'User not found', { username });
-  }
-
-  ctx.body = user;
-};
 
 /**
  * Sign in a user and return a JWT if successful.
  */
-export const signin = async (ctx: AuiContext<{ email: string; password: string }>) => {
-  const email = tryBodyString(ctx, 'email');
-  const password = tryBodyString(ctx, 'password');
+export const signin = async (request: Request): Promise<Response> => {
+  const body = await getBody<{ email: string; password: string }>(request);
+  const { email, password } = body;
+
+  if (!email || !password) {
+    throw new ApiError(ApiStatus.badRequest, 'Email and password are required');
+  }
+
   const user = await prisma.user.findFirst({
     select: {
       id: true,
@@ -62,34 +46,37 @@ export const signin = async (ctx: AuiContext<{ email: string; password: string }
   }
 
   // Credentials are valid, so return a JWT
-  jwt.sign({ username: email }, TOKEN_SECRET, {
+  const token = jwt.sign({ username: email }, TOKEN_SECRET, {
     expiresIn: '1h',
   });
 
-  ctx.body = { userId: user.id, role: user.userCredential?.role ?? Role.USER };
-  ctx.status = ApiStatus.ok;
+  return Response.json({ userId: user.id, role: user.userCredential?.role ?? Role.USER, token });
 };
 
 /**
  * Sign out a user by expiring their JWT.
  */
-export const signout = (ctx: Context) => {
-  jwt.sign({}, TOKEN_SECRET, {
-    expiresIn: '1s', // Expire the token immediately
-  });
-
-  ctx.body = { success: true };
+export const signout = (request: Request): Response => {
+  // Note: In a real implementation, you might want to add the token to a blacklist
+  // For now, we just acknowledge the signout
+  return Response.json({ success: true });
 };
 
 /**
  * Check if the user is authenticated by verifying their JWT.
  */
-export const isAuthenticated = (ctx: Context) => {
-  const token = ctx.headers.authorization?.split(' ')[1] ?? '';
+export const isAuthenticated = (request: Request): Response => {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.split(' ')[1] ?? '';
+
   if (isNotEmpty(token)) {
-    const authenticated = !!jwt.verify(token, TOKEN_SECRET);
-    ctx.body = authenticated;
-  } else {
-    ctx.body = false;
+    try {
+      const authenticated = !!jwt.verify(token, TOKEN_SECRET);
+      return Response.json(authenticated);
+    } catch {
+      return Response.json(false);
+    }
   }
+
+  return Response.json(false);
 };

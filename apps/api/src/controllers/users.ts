@@ -1,13 +1,16 @@
 import prisma from '#app/db.ts';
 import { ApiError, ApiStatus } from '@tt/core/api';
-import type { AuiContext } from '#app/types/index.ts';
-import { tryRouteParam } from '#app/http/require.ts';
 
 /**
  * Get a single user by ID.
+ *
  */
-export const getUser = async (ctx: AuiContext<{ id: string }>) => {
-  const id = tryRouteParam(ctx, 'id');
+export const getUser = async (request: Request, params: { id: string }): Promise<Response> => {
+  const { id } = params;
+
+  if (!id) {
+    throw new ApiError(ApiStatus.badRequest, 'User ID is required');
+  }
 
   const user = await prisma.user.findUnique({
     where: {
@@ -19,13 +22,13 @@ export const getUser = async (ctx: AuiContext<{ id: string }>) => {
     throw new ApiError(ApiStatus.notFound, 'User not found', { id });
   }
 
-  ctx.body = user;
+  return Response.json(user);
 };
 
 /**
  * Get all users.
  */
-export const getUsers = async (ctx: AuiContext) => {
+export const getUsers = async (request: Request): Promise<Response> => {
   const users = await prisma.user.findMany();
-  ctx.body = users;
+  return Response.json(users);
 };

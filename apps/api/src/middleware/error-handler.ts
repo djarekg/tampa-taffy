@@ -1,6 +1,5 @@
-import { ApiError } from '@tt/core/api';
-import type { Middleware } from 'koa';
 import { IS_PROD } from '#app/config.ts';
+import { ApiError } from '@tt/core/api';
 
 const isApiError = (err: unknown): err is ApiError => err instanceof ApiError;
 
@@ -17,24 +16,29 @@ const toMessage = (err: unknown) => {
   }
 };
 
-export const errorHandler: Middleware = async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    const { method, path } = ctx;
+/**
+ * Handle errors and return appropriate Response
+ */
+export const handleError = (error: unknown, request: Request): Response => {
+  const url = new URL(request.url);
+  const { method, pathname } = { method: request.method, pathname: url.pathname };
 
-    if (isApiError(err)) {
-      ctx.status = err.status;
-      ctx.body = { error: err.message, data: err.data };
-      console.error(`[api] ${method} ${path} -> ${err.status} (${err.message})`, err);
-      return;
-    }
-
-    ctx.status = 500;
-    ctx.body = {
-      error: IS_PROD ? 'Internal Server Error' : toMessage(err),
-    };
-
-    console.error(`[api] ${method} ${path} -> 500`, err);
+  if (isApiError(error)) {
+    console.error(`[api] ${method} ${pathname} -> ${error.status} (${error.message})`, error);
+    return new Response(JSON.stringify({ error: error.message, data: error.data }), {
+      status: error.status,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
+
+  console.error(`[api] ${method} ${pathname} -> 500`, error);
+  return new Response(
+    JSON.stringify({
+      error: IS_PROD ? 'Internal Server Error' : toMessage(error),
+    }),
+    {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
 };

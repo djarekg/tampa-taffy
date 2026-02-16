@@ -61,8 +61,11 @@ export class SignInRoute extends LitElement {
       throwIfEmpty(email, 'Email is required');
       throwIfEmpty(password, 'Password is required');
 
-      const result = await signin(email, password);
-      console.log(result);
+      const signedIn = await signin(email, password);
+
+      if (signedIn) {
+        window.location.href = '/';
+      }
     } catch (err) {
       console.error('Failed to sign in', err);
     }
