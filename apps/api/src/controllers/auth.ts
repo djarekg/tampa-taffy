@@ -42,7 +42,7 @@ export const signin = async (request: Request): Promise<Response> => {
   const isValid = compareHash(password, hashPassword);
 
   if (!isValid) {
-    throw new ApiError(ApiStatus.unauthorized, 'Invalid credentials');
+    return Response.json({ success: false });
   }
 
   // Credentials are valid, so return a JWT
@@ -50,7 +50,12 @@ export const signin = async (request: Request): Promise<Response> => {
     expiresIn: '1h',
   });
 
-  return Response.json({ userId: user.id, role: user.userCredential?.role ?? Role.USER, token });
+  return Response.json({
+    success: true,
+    userId: user.id,
+    role: user.userCredential?.role ?? Role.USER,
+    token,
+  });
 };
 
 /**
@@ -73,8 +78,8 @@ export const isAuthenticated = (request: Request): Response => {
     try {
       const authenticated = !!jwt.verify(token, TOKEN_SECRET);
       return Response.json(authenticated);
-    } catch {
-      return Response.json(false);
+    } catch (error) {
+      console.error('Token verification failed', error);
     }
   }
 

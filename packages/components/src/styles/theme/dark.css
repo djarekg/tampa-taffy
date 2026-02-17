@@ -1,12 +1,12 @@
 [color-theme="dark"] {
   color-scheme: dark;
-  --md-sys-color-primary: rgb(187, 95, 255); /* customized */
+  --md-sys-color-primary: #bb5fff; /* customized */
   /* --md-sys-color-primary: rgb(226 182 255); */
   --md-sys-color-surface-tint: rgb(226 182 255);
   --md-sys-color-on-primary: rgb(77 0 123);
   --md-sys-color-primary-container: rgb(191 104 255);
   --md-sys-color-on-primary-container: rgb(60 0 97);
-  --md-sys-color-secondary: rgb(41, 126, 255); /* customized */
+  --md-sys-color-secondary: #297eff; /* customized */
   /* --md-sys-color-secondary: rgb(174 198 255); */
   --md-sys-color-on-secondary: rgb(0 46 107);
   --md-sys-color-secondary-container: rgb(79 142 255);

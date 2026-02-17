@@ -1,10 +1,13 @@
 import { isAuthenticated } from '@/api/auth.api';
 import { signal, SignalWatcher } from '@lit-labs/signals';
+import { provide } from '@lit/context';
+import '@m3e/theme';
 import '@tt/components/navigation-drawer';
 import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import styles from './index.css.ts';
 import './layout/header.ts';
+import { routerContext } from './router';
 import { router } from './router/router';
 
 const authenticated = signal(await isAuthenticated());
@@ -13,8 +16,11 @@ const authenticated = signal(await isAuthenticated());
 export class Index extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
-  #router = router();
   #drawerOpen = signal(false);
+
+  @provide({ context: routerContext })
+  @state()
+  private _router = router();
 
   override render() {
     const drawerHtml = authenticated.get()
@@ -24,13 +30,15 @@ export class Index extends SignalWatcher(LitElement) {
       : null;
 
     return html`
-      <ui-router .uiRouter=${this.#router}>
-        <app-header @menu-click=${this.#handleMenuClick}></app-header>
-        <main>
-          <ui-view></ui-view>
-          ${drawerHtml}
-        </main>
-      </ui-router>
+      <m3e-theme density="-3">
+        <ui-router .uiRouter=${this._router}>
+          <app-header @menu-click=${this.#handleMenuClick}></app-header>
+          <main>
+            <ui-view></ui-view>
+            ${drawerHtml}
+          </main>
+        </ui-router>
+      </m3e-theme>
     `;
   }
 
@@ -43,8 +51,4 @@ declare global {
   interface HTMLElementTagNameMap {
     'app-index': Index;
   }
-}
-
-if (import.meta.hot) {
-  import.meta.hot.accept();
 }

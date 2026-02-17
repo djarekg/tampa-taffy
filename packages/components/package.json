@@ -5,6 +5,9 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./link": {
+      "import": "./src/link/link.ts"
+    },
     "./navigation-drawer": {
       "import": "./src/navigation-drawer/navigation-drawer.ts"
     },
@@ -15,7 +18,10 @@
       "import": "./src/index.ts"
     }
   },
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsgo -p tsconfig.json --noEmit",
+    "build": "tsgo -p tsconfig.json"
+  },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
     "@m3e/all": "^1.1.11",
