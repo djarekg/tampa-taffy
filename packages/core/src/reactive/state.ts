@@ -1,19 +1,19 @@
 import type { PropertyDeclaration } from 'lit';
 import { ReactiveElement } from 'lit';
 
-const PROPERTY_MARKER = Symbol('tt-property-marker');
+const STATE_MARKER = Symbol('tt-state-marker');
 let initializerInstalled = false;
 
-type PropertyMarker<T> = {
-  [PROPERTY_MARKER]: {
+type StateMarker<T> = {
+  [STATE_MARKER]: {
     options: PropertyDeclaration;
     defaultValue?: T;
     hasDefault: boolean;
   };
 };
 
-const isPropertyMarker = (value: unknown): value is PropertyMarker<unknown> =>
-  typeof value === 'object' && value !== null && PROPERTY_MARKER in value;
+const isStateMarker = (value: unknown): value is StateMarker<unknown> =>
+  typeof value === 'object' && value !== null && STATE_MARKER in value;
 
 const installInitializer = () => {
   if (initializerInstalled) {
@@ -44,11 +44,11 @@ const installInitializer = () => {
       for (const key of keys) {
         const value = instanceAny[key as string];
 
-        if (!isPropertyMarker(value)) {
+        if (!isStateMarker(value)) {
           continue;
         }
 
-        const { options, defaultValue, hasDefault } = value[PROPERTY_MARKER];
+        const { options, defaultValue, hasDefault } = value[STATE_MARKER];
         ctor.createProperty(key as string, options);
 
         delete instanceAny[key as string];
@@ -83,12 +83,12 @@ const installInitializer = () => {
   });
 };
 
-export function property<T>(defaultValue: T, options?: PropertyDeclaration): T {
+export function state<T>(defaultValue: T, options?: PropertyDeclaration): T {
   installInitializer();
 
-  const marker: PropertyMarker<T> = {
-    [PROPERTY_MARKER]: {
-      options: { type: String, ...options },
+  const marker: StateMarker<T> = {
+    [STATE_MARKER]: {
+      options: { state: true, attribute: false, ...options },
       defaultValue,
       hasDefault: true,
     },

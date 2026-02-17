@@ -1,9 +1,9 @@
-import { customElement } from 'lit/decorators.js';
 import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 @customElement('app-products')
 export class AppProducts extends LitElement {
-  render() {
+  override render() {
     return html`
       <h1>Products Page</h1>
     `;

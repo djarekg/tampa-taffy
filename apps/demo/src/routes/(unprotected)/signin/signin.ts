@@ -6,9 +6,10 @@ import '@m3e/button';
 import '@m3e/form-field';
 import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
+import { state } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import styles from './signin.css';
 
 /**
@@ -36,8 +37,7 @@ export class SignInRoute extends SignalWatcher(LitElement) {
   #invalidCredentials = signal(false);
 
   @consume({ context: routerContext })
-  @state()
-  private _router?: UIRouterLit;
+  private _router = state<UIRouterLit | undefined>(undefined);
 
   override render() {
     // build error message HTML if invalid credentials flag is setS

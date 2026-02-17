@@ -4,8 +4,9 @@ import { consume } from '@lit/context';
 import '@m3e/button';
 import '@m3e/icon';
 import '@m3e/icon-button';
+import { state } from '@tt/core/reactive';
 import { LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
 
@@ -14,8 +15,7 @@ export class Header extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
   @consume({ context: authenticatedContext, subscribe: true })
-  @state()
-  private _authenticated!: boolean;
+  private _authenticated = state(false);
 
   override render() {
     const menuButtonHtml = this._authenticated

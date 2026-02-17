@@ -1,8 +1,8 @@
-import { LitElement, html } from 'lit';
-import { computed, watch } from '@lit-labs/signals';
-import { customElement } from 'lit/decorators.js';
-import { resource } from '@tt/core';
 import { getUsers } from '@/api/user.api';
+import { computed, watch } from '@lit-labs/signals';
+import { resource } from '@tt/core';
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 @customElement('app-users')
 export class AppUsers extends LitElement {
@@ -30,7 +30,7 @@ export class AppUsers extends LitElement {
     })
   );
 
-  render() {
+  override render() {
     return html`
       <h1>Users Page</h1>
       <p>Welcome to the users page!</p>
