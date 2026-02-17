@@ -1,11 +1,10 @@
-import { UIRouterLit } from 'lit-ui-router';
-import { pushStateLocationPlugin } from '@uirouter/core';
-
 import { isAuthenticated } from '@/api/auth.api';
+import { pushStateLocationPlugin } from '@uirouter/core';
+import { UIRouterLit } from 'lit-ui-router';
 import routes, { type StateDataType } from './routes';
 
 /**
- * Creates and configures the UIRouter instance.
+ * Creates and configures a new UIRouter instance.
  */
 export const router = () => {
   const router = new UIRouterLit();

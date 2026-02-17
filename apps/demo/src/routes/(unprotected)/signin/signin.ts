@@ -1,15 +1,33 @@
-import { signin } from '@/api/auth.api';
+import { signin } from '@/auth';
 import { routerContext } from '@/router';
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
 import '@m3e/button';
 import '@m3e/form-field';
 import '@tt/components/link';
-import { throwIfEmpty } from '@tt/core';
+import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { LitElement } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
 import { customElement, state } from 'lit/decorators.js';
 import styles from './signin.css';
+
+/**
+ * Extracts email and password from the form data, throwing an error if either is missing.
+ *
+ * @param form - The HTMLFormElement containing the email and password fields.
+ * @returns An object with email and password properties.
+ * @throws Will throw an error if email or password is missing.
+ */
+const extractCredentials = (form: HTMLFormElement) => {
+  const formData = new FormData(form);
+  const email = formData.get('email')?.toString();
+  const password = formData.get('password')?.toString();
+
+  throwIfEmpty(email, 'Email is required');
+  throwIfEmpty(password, 'Password is required');
+
+  return { email, password };
+};
 
 @customElement('app-signin')
 export class SignInRoute extends SignalWatcher(LitElement) {
@@ -22,6 +40,7 @@ export class SignInRoute extends SignalWatcher(LitElement) {
   private _router?: UIRouterLit;
 
   override render() {
+    // build error message HTML if invalid credentials flag is setS
     const errorHtml = this.#invalidCredentials.get()
       ? html`
           <span class="error">Invalid email or password. Please try again.</span>
@@ -91,19 +110,13 @@ export class SignInRoute extends SignalWatcher(LitElement) {
     `;
   }
 
-  async #handleSubmit(e: Event) {
+  async #handleSubmit(e: TypeEvent<HTMLFormElement>) {
     e.preventDefault();
 
     this.#invalidCredentials.set(false);
 
     try {
-      const formData = new FormData(e.target as HTMLFormElement);
-      const email = formData.get('email')?.toString();
-      const password = formData.get('password')?.toString();
-
-      throwIfEmpty(email, 'Email is required');
-      throwIfEmpty(password, 'Password is required');
-
+      const { email, password } = extractCredentials(e.target);
       const success = await signin(email, password);
 
       // If signin succeeds without throwing, navigate to home

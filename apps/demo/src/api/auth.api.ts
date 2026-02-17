@@ -18,7 +18,7 @@ type SigninResponse = {
  * @param password The user's password.
  * @returns A promise that resolves when authentication is successful and cookies are set.
  */
-export const signin = async (email: string, password: string): Promise<boolean> => {
+export const signin = async (email: string, password: string) => {
   const { post } = client;
   const { success, ...profile } = await post<SigninResponse>('/auth/signin', { email, password });
 
@@ -37,7 +37,7 @@ export const signin = async (email: string, password: string): Promise<boolean> 
  *
  * @returns A promise that resolves when the sign-out process is complete.
  */
-export const signout = async (): Promise<void> => {
+export const signout = async () => {
   const { post } = client;
   await post<void>('/auth/signout');
 

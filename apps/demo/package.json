@@ -18,6 +18,8 @@
     "@m3e/button": "^1.1.11",
     "@m3e/core": "^1.2.2",
     "@m3e/form-field": "^1.1.11",
+    "@m3e/icon": "^1.2.2",
+    "@m3e/icon-button": "^1.2.2",
     "@m3e/theme": "^1.2.2",
     "@tt/components": "workspace:*",
     "@tt/core": "workspace:*",

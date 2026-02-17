@@ -1,23 +1,27 @@
-import { html, signal, SignalWatcher } from '@lit-labs/signals';
+import { authenticatedContext } from '@/auth';
+import { html, SignalWatcher } from '@lit-labs/signals';
+import { consume } from '@lit/context';
 import '@m3e/button';
+import '@m3e/icon';
+import '@m3e/icon-button';
 import { LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
-
-import { isAuthenticated } from '@/api/auth.api';
+import { customElement, state } from 'lit/decorators.js';
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
-
-const authenticated = signal(await isAuthenticated());
 
 @customElement('app-header')
 export class Header extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
+  @consume({ context: authenticatedContext, subscribe: true })
+  @state()
+  private _authenticated!: boolean;
+
   override render() {
-    const menuButtonHtml = authenticated.get()
+    const menuButtonHtml = this._authenticated
       ? html`
           <m3e-icon-button @click=${this.#handleMenuClick}>
-            <md-icon>menu</md-icon>
+            <m3e-icon name="menu"></m3e-icon>
           </m3e-icon-button>
         `
       : null;
