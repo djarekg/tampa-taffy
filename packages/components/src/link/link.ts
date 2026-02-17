@@ -1,6 +1,7 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
+import { property } from '@tt/core/reactive';
 import { css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 const styles = css`
   :host {
@@ -38,11 +39,9 @@ const styles = css`
 export class Link extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
-  @property({ type: String, reflect: true })
-  color: 'primary' | 'secondary' | 'error' | '' = 'primary';
+  color = property<'primary' | 'secondary' | 'error' | ''>('primary', { reflect: true });
 
-  @property({ type: String })
-  href = '#';
+  href = property('#');
 
   override render() {
     return html`

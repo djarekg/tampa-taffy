@@ -1,16 +1,15 @@
-import { customElement, property } from 'lit/decorators.js';
-import { LitElement } from 'lit';
 import { html, SignalWatcher } from '@lit-labs/signals';
+import { property } from '@tt/core/reactive';
+import { LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-
 import styles from './navigation-drawer.css';
 
 @customElement('tt-navigation-drawer')
 export class NavigationDrawer extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
-  @property({ type: Boolean, reflect: true })
-  opened = false;
+  opened = property(false, { type: Boolean, reflect: true });
 
   override render() {
     const open = this.opened;
