@@ -427,6 +427,6 @@ describe('TextInput', () => {
 
 ## Next Steps
 
-- Read [README_REACTIVE.md](./README_REACTIVE.md) for full API reference
+- Read [REACTIVE_GUIDE.md](../core/src/reactive/REACTIVE_GUIDE.md) for full API reference
 - Check [property.test.ts](./src/reactive/property.test.ts) for real test examples
 - See [navigation-drawer.ts](../components/src/navigation-drawer/navigation-drawer.ts) for production example
