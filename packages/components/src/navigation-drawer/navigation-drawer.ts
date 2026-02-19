@@ -1,12 +1,12 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
-import { property } from '@tt/core/reactive';
+import { property, TaffyMixin } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import styles from './navigation-drawer.css';
 
 @customElement('tt-navigation-drawer')
-export class NavigationDrawer extends SignalWatcher(LitElement) {
+export class NavigationDrawer extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
   opened = property(false, { type: Boolean, reflect: true });
@@ -36,6 +36,13 @@ export class NavigationDrawer extends SignalWatcher(LitElement) {
 
   close() {
     this.opened = false;
+
+    this.dispatchEvent(
+      new CustomEvent('drawer-closed', {
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   #getDrawerClasses() {

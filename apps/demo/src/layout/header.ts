@@ -4,14 +4,14 @@ import { consume } from '@lit/context';
 import '@m3e/button';
 import '@m3e/icon';
 import '@m3e/icon-button';
-import { state } from '@tt/core/reactive';
+import { state, TaffyMixin } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
 
 @customElement('app-header')
-export class Header extends SignalWatcher(LitElement) {
+export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
   @consume({ context: authenticatedContext, subscribe: true })

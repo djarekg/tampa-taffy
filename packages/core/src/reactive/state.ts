@@ -1,98 +1,76 @@
+import { signal } from '@lit-labs/signals';
 import type { PropertyDeclaration } from 'lit';
 import { ReactiveElement } from 'lit';
 
-const STATE_MARKER = Symbol('tt-state-marker');
-let initializerInstalled = false;
+const STATE_SIGNAL = Symbol('tt-state-signal');
 
-type StateMarker<T> = {
-  [STATE_MARKER]: {
-    options: PropertyDeclaration;
-    defaultValue?: T;
-    hasDefault: boolean;
-  };
-};
-
-const isStateMarker = (value: unknown): value is StateMarker<unknown> =>
-  typeof value === 'object' && value !== null && STATE_MARKER in value;
-
-const installInitializer = () => {
-  if (initializerInstalled) {
-    return;
-  }
-
-  initializerInstalled = true;
-
-  ReactiveElement.addInitializer(instance => {
-    let processed = false;
-    const instanceAny = instance as unknown as Record<string, unknown>;
-    const instanceWithUpdate = instance as unknown as {
-      connectedCallback?: () => void;
-      update?: (...args: unknown[]) => unknown;
-      performUpdate: (...args: unknown[]) => unknown;
-    };
-
-    const processMarkers = () => {
-      if (processed) {
-        return;
-      }
-
-      processed = true;
-
-      const ctor = instance.constructor as typeof ReactiveElement;
-      const keys = Object.keys(instance) as Array<keyof typeof instance>;
-
-      for (const key of keys) {
-        const value = instanceAny[key as string];
-
-        if (!isStateMarker(value)) {
-          continue;
-        }
-
-        const { options, defaultValue, hasDefault } = value[STATE_MARKER];
-        ctor.createProperty(key as string, options);
-
-        delete instanceAny[key as string];
-
-        if (hasDefault) {
-          instanceAny[key as string] = defaultValue;
-        }
-      }
-    };
-
-    const originalConnectedCallback = instanceWithUpdate.connectedCallback;
-    if (originalConnectedCallback) {
-      instanceWithUpdate.connectedCallback = () => {
-        processMarkers();
-        return originalConnectedCallback.call(instance);
-      };
-    }
-
-    const originalUpdate = instanceWithUpdate.update;
-    if (originalUpdate) {
-      instanceWithUpdate.update = (...args) => {
-        processMarkers();
-        return originalUpdate.apply(instance, args);
-      };
-    }
-
-    const originalPerformUpdate = instanceWithUpdate.performUpdate;
-    instanceWithUpdate.performUpdate = (...args) => {
-      processMarkers();
-      return originalPerformUpdate.apply(instance, args);
-    };
-  });
+type StateSignal<T> = ReturnType<typeof signal<T>> & {
+  [STATE_SIGNAL]: PropertyDeclaration;
 };
 
 export function state<T>(defaultValue: T, options?: PropertyDeclaration): T {
-  installInitializer();
+  const sig = signal(defaultValue) as StateSignal<T>;
+  sig[STATE_SIGNAL] = { state: true, attribute: false, ...options };
+  return sig as unknown as T;
+}
 
-  const marker: StateMarker<T> = {
-    [STATE_MARKER]: {
-      options: { state: true, attribute: false, ...options },
-      defaultValue,
-      hasDefault: true,
-    },
-  };
+export function initializeStates(element: ReactiveElement): void {
+  const keys = Object.getOwnPropertyNames(element);
 
-  return marker as unknown as T;
+  for (const key of keys) {
+    const value = (element as any)[key];
+
+    if (value && typeof value === 'object' && STATE_SIGNAL in value) {
+      const sig = value as StateSignal<unknown>;
+      const backingKey = `__${key}_signal__`;
+
+      // Store the signal in a backing field on the instance
+      (element as any)[backingKey] = sig;
+
+      // Check if the parent already set this property before initialization
+      const existingInstanceValue = (element as any)[key];
+      if (existingInstanceValue !== sig) {
+        // Migrate existing value to the signal
+        sig.set(existingInstanceValue);
+      }
+
+      // Delete the instance property
+      delete (element as any)[key];
+
+      // Install accessor on the PROTOTYPE
+      const proto = Object.getPrototypeOf(element);
+
+      // Only install if not already present (avoid reinstalling for multiple instances)
+      if (
+        !Object.getOwnPropertyDescriptor(proto, key) ||
+        Object.getOwnPropertyDescriptor(proto, key)?.configurable
+      ) {
+        Object.defineProperty(proto, key, {
+          get(this: ReactiveElement) {
+            const bk = `__${key}_signal__`;
+            const signal = (this as any)[bk];
+            if (!signal) {
+              return undefined;
+            }
+            return signal.get();
+          },
+          set(this: ReactiveElement, newValue: unknown) {
+            const bk = `__${key}_signal__`;
+            const signal = (this as any)[bk];
+            if (!signal) {
+              return;
+            }
+            const oldValue = signal.get();
+            signal.set(newValue);
+
+            if (oldValue !== newValue) {
+              this.requestUpdate(key, oldValue);
+            }
+          },
+          enumerable: true,
+          configurable: true,
+        });
+      }
+    }
+  }
 }

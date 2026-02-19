@@ -2,6 +2,10 @@ import { css } from 'lit';
 
 export default css`
   aside {
+    --_background-color: var(
+      --tt-navigation-drawer-background-color,
+      var(--md-sys-color-surface-container)
+    );
     --_drawer-inline-size: 260px;
 
     content-visibility: hidden;
@@ -14,12 +18,12 @@ export default css`
     block-size: 100%;
     inset-block: 0;
     inset-inline-end: 0;
-    background: var(--tt-color-background);
+    background: var(--_background-color);
     box-shadow: var(--tt-elevation-level2);
     border-inline-end: 1px solid var(--tt-border-color);
-    border-start-start-radius: var(--tt-shape-large);
-    border-end-start-radius: var(--tt-shape-large);
-    transform: translateX(calc(var(--_drawer-inline-size) * -1));
+    border-start-start-radius: var(--md-sys-shape-corner-extra-large);
+    border-end-start-radius: var(--md-sys-shape-corner-extra-large);
+    transform: translateX(var(--_drawer-inline-size));
     will-change: transform;
     transition:
       transform 500ms var(--md-sys-motion-standard-easing),

@@ -6,7 +6,7 @@ import '@m3e/button';
 import '@m3e/form-field';
 import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
-import { state } from '@tt/core/reactive';
+import { state, TaffyMixin } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
 import { customElement } from 'lit/decorators.js';
@@ -31,7 +31,7 @@ const extractCredentials = (form: HTMLFormElement) => {
 };
 
 @customElement('app-signin')
-export class SignInRoute extends SignalWatcher(LitElement) {
+export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
   #invalidCredentials = signal(false);

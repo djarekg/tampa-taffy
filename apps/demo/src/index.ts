@@ -2,7 +2,7 @@ import { signal, SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
 import '@m3e/theme';
 import '@tt/components/navigation-drawer';
-import { state } from '@tt/core/reactive';
+import { state, TaffyMixin } from '@tt/core/reactive';
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { authenticated, authenticatedContext } from './auth';
@@ -24,7 +24,7 @@ import { router } from './router/router';
  * `constructor` or `connectedCallback` would break reactivity.
  */
 @customElement('app-index')
-export class Index extends SignalWatcher(LitElement) {
+export class Index extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
   #drawerOpen = signal(false);
@@ -43,7 +43,11 @@ export class Index extends SignalWatcher(LitElement) {
 
     const drawerHtml = this._authenticated
       ? html`
-          <tt-navigation-drawer ?opened=${this.#drawerOpen.get()}></tt-navigation-drawer>
+          <tt-navigation-drawer
+            ?opened=${this.#drawerOpen.get()}
+            @drawer-closed=${this.#handleClose}>
+            <button @click=${this.#handleClose}>Close Drawer</button>
+          </tt-navigation-drawer>
         `
       : null;
 
@@ -62,6 +66,10 @@ export class Index extends SignalWatcher(LitElement) {
 
   #handleMenuClick() {
     this.#drawerOpen.set(true);
+  }
+
+  #handleClose() {
+    this.#drawerOpen.set(false);
   }
 }
 

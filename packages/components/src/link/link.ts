@@ -1,5 +1,5 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
-import { property } from '@tt/core/reactive';
+import { property, TaffyMixin } from '@tt/core/reactive';
 import { css, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
@@ -36,7 +36,7 @@ const styles = css`
 `;
 
 @customElement('tt-link')
-export class Link extends SignalWatcher(LitElement) {
+export class Link extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
   color = property<'primary' | 'secondary' | 'error' | ''>('primary', { reflect: true });
