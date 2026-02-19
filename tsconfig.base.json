@@ -5,7 +5,7 @@
     "useDefineForClassFields": false,
     "module": "ESNext",
     "moduleDetection": "force",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM"],
     "types": ["vite/client"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
