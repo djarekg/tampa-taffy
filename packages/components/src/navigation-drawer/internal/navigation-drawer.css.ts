@@ -6,7 +6,8 @@ export default css`
       --tt-navigation-drawer-background-color,
       var(--md-sys-color-surface-container)
     );
-    --_drawer-inline-size: 260px;
+    --_inline-size: var(--tt-navigation-drawer-inline-size, 260px);
+    --_padding: var(--tt-navigation-drawer-padding, 1rem);
 
     content-visibility: hidden;
     visibility: hidden;
@@ -14,16 +15,17 @@ export default css`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    inline-size: var(--_drawer-inline-size);
+    inline-size: var(--_inline-size);
     block-size: 100%;
     inset-block: 0;
     inset-inline-end: 0;
+    padding: var(--_padding);
     background: var(--_background-color);
     box-shadow: var(--tt-elevation-level2);
     border-inline-end: 1px solid var(--tt-border-color);
     border-start-start-radius: var(--md-sys-shape-corner-extra-large);
     border-end-start-radius: var(--md-sys-shape-corner-extra-large);
-    transform: translateX(var(--_drawer-inline-size));
+    transform: translateX(var(--_inline-size));
     will-change: transform;
     transition:
       transform 500ms var(--md-sys-motion-deceleration-easing),

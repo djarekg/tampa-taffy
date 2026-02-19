@@ -20,12 +20,10 @@ export class SettingsNav extends SignalWatcher(LitElement) {
   #renderDrawerContent() {
     return html`
       <nav>
-        <ul>
-          <li><a href="/settings/profile">Profile</a></li>
-          <li><a href="/settings/account">Account</a></li>
-          <li><a href="/settings/notifications">Notifications</a></li>
-          <li><a href="/settings/privacy">Privacy</a></li>
-        </ul>
+        <tt-navigation-item
+          href="/settings/profile"
+          label="Profile"
+          icon="person"></tt-navigation-item>
       </nav>
     `;
   }
