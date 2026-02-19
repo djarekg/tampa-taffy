@@ -57,6 +57,29 @@ export function initializeProperties(element: ReactiveElement): void {
       // Tell Lit about this property so it sets up attribute observation
       ctor.createProperty(key, options);
 
+      // Check if there's an existing attribute value and sync it to the signal
+      // This handles attributes that were set before initialization (e.g., in HTML)
+      const attributeName =
+        options.attribute === false
+          ? null
+          : typeof options.attribute === 'string'
+            ? options.attribute
+            : key.toLowerCase();
+
+      if (attributeName) {
+        const attrValue = element.getAttribute(attributeName);
+        if (attrValue !== null) {
+          // Convert string attribute to the correct type
+          let newVal: unknown = attrValue;
+          if (options.type === Boolean) {
+            newVal = true; // Presence of attribute means true
+          } else if (options.type === Number) {
+            newVal = Number(attrValue);
+          }
+          sig.set(newVal);
+        }
+      }
+
       // Now install our signal-syncing accessor on top of Lit's property
       const proto = Object.getPrototypeOf(element);
       if (
