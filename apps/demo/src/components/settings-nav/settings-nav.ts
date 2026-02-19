@@ -10,6 +10,7 @@ export class SettingsNav extends SignalWatcher(LitElement) {
   override render() {
     return html`
       <tt-navigation-drawer
+        headline="Settings"
         ?opened=${this.opened}
         @drawer-closed=${this.#handleClose}>
         ${this.#renderDrawerContent()}
@@ -24,6 +25,11 @@ export class SettingsNav extends SignalWatcher(LitElement) {
           href="/settings/profile"
           label="Profile"
           icon="person"></tt-navigation-item>
+
+        <tt-navigation-item
+          href="/settings/profile"
+          label="Sign out"
+          icon="logout"></tt-navigation-item>
       </nav>
     `;
   }

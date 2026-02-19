@@ -5,8 +5,19 @@ import { property } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 
 export class NavigationItem extends SignalWatcher(LitElement) {
+  /**
+   * The URL that the navigation item points to. This is rendered as the href attribute
+   * of the underlying anchor element.
+   */
   href = property('');
+  /**
+   * The label text to display for the navigation item.
+   */
   label = property('');
+  /**
+   * The name of the Material icon to display for the navigation item. If not provided,
+   * no icon will be rendered.
+   */
   icon = property<string | null>(null);
 
   override render() {

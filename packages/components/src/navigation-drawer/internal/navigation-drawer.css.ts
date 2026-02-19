@@ -7,7 +7,7 @@ export default css`
       var(--md-sys-color-surface-container)
     );
     --_inline-size: var(--tt-navigation-drawer-inline-size, 260px);
-    --_padding: var(--tt-navigation-drawer-padding, 1rem);
+    --_padding: var(--tt-navigation-drawer-padding, 2rem 1rem);
 
     content-visibility: hidden;
     visibility: hidden;
@@ -15,6 +15,7 @@ export default css`
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    gap: 1.6rem;
     inline-size: var(--_inline-size);
     block-size: 100%;
     inset-block: 0;
@@ -57,5 +58,12 @@ export default css`
     --_scrim-opacity: 0.2;
 
     visibility: visible;
+  }
+
+  .headline {
+    font-size: var(
+      --tt-navigation-drawer-headline-font-size,
+      var(--md-sys-typescale-title-medium-size)
+    );
   }
 `;

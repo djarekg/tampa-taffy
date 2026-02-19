@@ -1,4 +1,5 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
+import { isNotEmpty } from '@tt/core';
 import { property } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
@@ -10,6 +11,11 @@ export class NavigationDrawer extends SignalWatcher(LitElement) {
    * This property is reflected to an attribute so it can be styled with CSS.
    */
   opened = property(false, { type: Boolean, reflect: true });
+  /**
+   * The headline text to display at the top of the drawer. If not provided,
+   * no headline will be rendered.
+   */
+  headline = property('');
 
   override render() {
     const open = this.opened;
@@ -26,10 +32,20 @@ export class NavigationDrawer extends SignalWatcher(LitElement) {
         aria-expanded="${ariaExpanded}"
         aria-hidden="${ariaHidden}"
         class=${classMap(this.#getDrawerClasses())}>
-        <div>test</div>
+        ${this.#renderHeadline()}
         <slot></slot>
       </aside>
     `;
+  }
+
+  #renderHeadline() {
+    if (isNotEmpty(this.headline)) {
+      return html`
+        <span class="headline">${this.headline}</span>
+      `;
+    }
+
+    return null;
   }
 
   open() {
