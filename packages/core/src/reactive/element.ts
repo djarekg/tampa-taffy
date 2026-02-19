@@ -2,61 +2,29 @@ import { ReactiveElement } from 'lit';
 import { initializeProperties } from './property';
 import { initializeStates } from './state';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+// Track which elements have been initialized to avoid duplicate initialization
+const initializedElements = new WeakSet<ReactiveElement>();
 
 /**
- * Mixin that initializes properties and states created with the property() and state() functions.
- * Apply this to your base class to enable automatic property/state initialization.
+ * Ensures a reactive element has been initialized (properties and states set up).
+ * This is called automatically in connectedCallback.
  *
- * @example
- * ```typescript
- * import { LitElement } from 'lit';
- * import { TaffyMixin } from '@tt/core/reactive';
- *
- * class MyElement extends TaffyMixin(LitElement) {
- *   opened = property(false, { type: Boolean, reflect: true });
- *   count = state(0);
- * }
- * ```
+ * @internal
  */
-export function TaffyMixin<T extends Constructor<ReactiveElement>>(base: T) {
-  return class extends base {
-    constructor(...args: any[]) {
-      super(...args);
-
-      // Defer initialization to next microtask to ensure field initializers have run
-      // Field initializers run AFTER constructor completes in JavaScript
-      queueMicrotask(() => {
-        initializeProperties(this);
-        initializeStates(this);
-      });
-    }
-  };
-}
-
-/**
- * Base class that extends ReactiveElement with automatic property/state initialization.
- * Use this as your base class if you don't need other mixins.
- *
- * @example
- * ```typescript
- * import { TaffyElement } from '@tt/core/reactive';
- *
- * class MyElement extends TaffyElement {
- *   opened = property(false, { type: Boolean, reflect: true });
- *   count = state(0);
- * }
- * ```
- */
-export class TaffyElement extends ReactiveElement {
-  constructor() {
-    super();
-
-    // Defer initialization to next microtask to ensure field initializers have run
-    queueMicrotask(() => {
-      initializeProperties(this);
-      initializeStates(this);
-      this.requestUpdate();
-    });
+export function ensureInitialized(element: ReactiveElement): void {
+  if (initializedElements.has(element)) {
+    return;
   }
+
+  initializeProperties(element);
+  initializeStates(element);
+  initializedElements.add(element);
 }
+
+// Hook into ReactiveElement.connectedCallback to auto-initialize
+// This allows users to just extend LitElement without any special setup
+const originalConnectedCallback = ReactiveElement.prototype.connectedCallback;
+ReactiveElement.prototype.connectedCallback = function (this: ReactiveElement) {
+  ensureInitialized(this);
+  originalConnectedCallback.call(this);
+};

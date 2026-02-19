@@ -1,0 +1,14 @@
+import { List } from './internal/list';
+import styles from './internal/list.css';
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'tt-list': TtList;
+  }
+}
+
+export class TtList extends List {
+  static override styles = [styles];
+}
+
+customElements.define('tt-list', TtList);

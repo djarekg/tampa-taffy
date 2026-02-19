@@ -1,9 +1,9 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
-import { property, TaffyMixin } from '@tt/core/reactive';
+import { property } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 
-export class NavigationDrawer extends TaffyMixin(SignalWatcher(LitElement)) {
+export class NavigationDrawer extends SignalWatcher(LitElement) {
   opened = property(false, { type: Boolean, reflect: true });
 
   override render() {

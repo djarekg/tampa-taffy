@@ -11,20 +11,19 @@ The Taffy reactive system provides decorator-free reactive properties and state 
 
 ### Pure Functions
 
-Both `property()` and `state()` are pure functions that return their default values. They are marked with metadata symbols internally so the `TaffyMixin` can identify them during initialization.
+Both `property()` and `state()` are pure functions that return their default values. They are marked with metadata symbols internally so the auto-initialization system can identify them when the element connects to the DOM.
 
 ## Usage
 
 ### Basic Setup
 
-Extend your component from `TaffyElement` or use the `TaffyMixin`:
+Just extend `LitElement` directly - initialization happens automatically:
 
 ```typescript
-import { TaffyElement } from '@tt/core/reactive';
-import { html } from 'lit';
+import { html, LitElement } from 'lit';
 import { property, state } from '@tt/core/reactive';
 
-class MyDrawer extends TaffyElement {
+class MyDrawer extends LitElement {
   // Properties: can be set by parent, emit events to notify parent of changes
   opened = property(false, { type: Boolean, reflect: true });
 
@@ -56,7 +55,7 @@ customElements.define('my-drawer', MyDrawer);
 #### Boolean Properties with Reflection
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   // Reflects to HTML attribute
   active = property(false, { type: Boolean, reflect: true });
 
@@ -70,7 +69,7 @@ When `active` is `true`, the element has `active=""` attribute. When `false`, th
 #### String Properties
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   // Default string
   title = property('Untitled');
 
@@ -82,7 +81,7 @@ class MyElement extends TaffyElement {
 #### Number Properties
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   count = property(0, { type: Number });
   priority = property(5, { type: Number, reflect: true });
 }
@@ -91,7 +90,7 @@ class MyElement extends TaffyElement {
 #### State Properties
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   // Internal state, never exposed to parent
   isLoading = state(false);
   error = state('');
@@ -106,7 +105,7 @@ class MyElement extends TaffyElement {
 1. **Field Declaration**: Properties/states are declared as class fields with `property()` or `state()` calls
 2. **Constructor Runs**: Regular Lit constructor executes
 3. **Field Initializers Run**: JavaScript field initializers set up the signal-backed properties
-4. **TaffyMixin Deferred Initialization**: `initializeProperties()` and `initializeStates()` run via `queueMicrotask()`
+4. **Element Connects**: When `connectedCallback` fires, auto-initialization kicks in
 5. **Accessor Installation**: Prototype accessors are installed to sync with signals
 6. **Lit Registration**: `createProperty()` tells Lit about the property
 7. **MutationObserver Setup**: Watches for attribute changes from the parent and syncs to signals
@@ -150,7 +149,7 @@ html`<my-drawer @close="${() => (this.isOpen.set(false))}"></my-drawer>`
 ### Custom Attribute Names
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   // Uses "data-value" attribute instead of "myValue"
   myValue = property(0, { attribute: 'data-value', type: Number });
 }
@@ -161,7 +160,7 @@ class MyElement extends TaffyElement {
 The underlying signal is accessible for advanced use cases:
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   count = property(0);
 
   incrementAsync() {
@@ -179,7 +178,7 @@ class MyElement extends TaffyElement {
 You can create computed properties using Lit's `@query` or by computing in the getter:
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   firstName = property('');
   lastName = property('');
 
@@ -211,7 +210,7 @@ close() {
 
 ```typescript
 // ✅ Good: Internal UI state as state
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   isMenuOpen = state(false);
 
   render() {
@@ -222,7 +221,7 @@ class MyElement extends TaffyElement {
 }
 
 // ❌ Avoid: Exposing internal state as properties
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   isMenuOpen = property(false); // Don't expose menu state to parent
 }
 ```
@@ -268,9 +267,10 @@ class MyElement extends LitElement {
 }
 
 // After (Taffy Pure Functions)
-import { TaffyElement, property, state } from '@tt/core/reactive';
+import { property, state } from '@tt/core/reactive';
+import { LitElement } from 'lit';
 
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   opened = property(false, { type: Boolean, reflect: true });
   title = property('Default', { type: String });
   isLoading = state(false);
@@ -369,35 +369,31 @@ isLoading = state(false);
 errorMessage = state('');
 ```
 
-### `TaffyElement`
+### Direct LitElement Usage
 
-Base class that extends `ReactiveElement` with automatic property/state initialization.
-
-**Use this as your base class** for the most straightforward setup.
+No special base class needed. Just extend `LitElement` directly - initialization happens automatically when the element connects to the DOM.
 
 **Example:**
 
 ```typescript
-class MyElement extends TaffyElement {
+class MyElement extends LitElement {
   title = property('');
   isOpen = state(false);
 }
 ```
 
-### `TaffyMixin(base: T): T`
+### Auto-initialization
 
-Mixin function for applying Taffy reactivity to any `ReactiveElement` class.
+Initialization happens automatically via a hook into `ReactiveElement.connectedCallback()`. No special setup required - just use `property()` and `state()` in any `LitElement` class.
 
-**Use this if** you need to extend a different base class or use other mixins.
-
-**Example:**
+**Works anywhere:**
 
 ```typescript
-class MyElement extends TaffyMixin(LitElement) {
+class MyElement extends LitElement {
   title = property('');
 }
 
-class MyElementWithOtherMixin extends TaffyMixin(SomethingElse) {
+class MyElementMixed extends OtherMixin(LitElement) {
   title = property('');
 }
 ```

@@ -1,7 +1,7 @@
 import { TOKEN_SECRET } from '#app/config.ts';
 import prisma from '#app/db.ts';
 import { getBody } from '#app/utils/json.ts';
-import { isNotEmpty } from '@tt/core';
+import { isEmpty, isNotEmpty } from '@tt/core';
 import { ApiError, ApiStatus } from '@tt/core/api';
 import { compareHash } from '@tt/core/crypto';
 import { Role } from '@tt/db';
@@ -14,7 +14,7 @@ export const signin = async (request: Request): Promise<Response> => {
   const body = await getBody<{ email: string; password: string }>(request);
   const { email, password } = body;
 
-  if (!email || !password) {
+  if (isEmpty(email) || isEmpty(password)) {
     throw new ApiError(ApiStatus.badRequest, 'Email and password are required');
   }
 

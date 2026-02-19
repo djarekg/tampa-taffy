@@ -4,14 +4,21 @@ import { consume } from '@lit/context';
 import '@m3e/button';
 import '@m3e/icon';
 import '@m3e/icon-button';
-import { state, TaffyMixin } from '@tt/core/reactive';
+import { state } from '@tt/core/reactive';
 import { LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
 
-@customElement('app-header')
-export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
+/**
+ * Header component that displays the application logo, title, and a menu button
+ * for authenticated users.
+ *
+ * @remarks
+ * The component uses a signal to track the state of the navigation drawer and
+ * consumes the authentication context to conditionally render the menu button
+ * and navigation drawer.
+ */
+export class Header extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
   #drawerOpen = signal(false);
@@ -20,22 +27,6 @@ export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
   private _authenticated = state(false);
 
   override render() {
-    const menuButtonHtml = this._authenticated
-      ? html`
-          <m3e-icon-button @click=${this.#handleMenuClick}>
-            <m3e-icon name="menu"></m3e-icon>
-          </m3e-icon-button>
-        `
-      : null;
-
-    const drawerHtml = this._authenticated
-      ? html`
-          <app-settings-nav
-            ?opened=${this.#drawerOpen.get()}
-            @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
-        `
-      : null;
-
     return html`
       <header>
         <div class="image">
@@ -48,10 +39,34 @@ export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
           </a>
         </div>
         <span class="title">Tampa Taffy</span>
-        <div class="menu">${menuButtonHtml}</div>
+        <div class="menu">${this.#renderMenuButton()}</div>
       </header>
-      ${drawerHtml}
+      ${this.#renderSettingsNav()}
     `;
+  }
+
+  #renderMenuButton() {
+    if (this._authenticated) {
+      return html`
+        <m3e-icon-button @click=${this.#handleMenuClick}>
+          <m3e-icon name="menu"></m3e-icon>
+        </m3e-icon-button>
+      `;
+    }
+
+    return null;
+  }
+
+  #renderSettingsNav() {
+    if (this._authenticated) {
+      return html`
+        <app-settings-nav
+          ?opened=${this.#drawerOpen.get()}
+          @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
+      `;
+    }
+
+    return null;
   }
 
   #handleMenuClick() {
@@ -68,3 +83,5 @@ declare global {
     'app-header': Header;
   }
 }
+
+customElements.define('app-header', Header);

@@ -8,6 +8,9 @@
     "./link": {
       "import": "./src/link/index.ts"
     },
+    "./list": {
+      "import": "./src/list/index.ts"
+    },
     "./navigation": {
       "import": "./src/navigation/index.ts"
     },

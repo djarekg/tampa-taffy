@@ -1,7 +1,7 @@
 import { SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
 import '@m3e/theme';
-import { state, TaffyMixin } from '@tt/core/reactive';
+import { state } from '@tt/core/reactive';
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
@@ -25,7 +25,7 @@ import styles from './index.css.ts';
  * `constructor` or `connectedCallback` would break reactivity.
  */
 @customElement('app-index')
-export class Index extends TaffyMixin(SignalWatcher(LitElement)) {
+export class Index extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
   @provide({ context: authenticatedContext })

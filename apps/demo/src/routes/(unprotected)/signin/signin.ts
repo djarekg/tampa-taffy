@@ -6,10 +6,9 @@ import '@m3e/button';
 import '@m3e/form-field';
 import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
-import { state, TaffyMixin } from '@tt/core/reactive';
+import { state } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
-import { customElement } from 'lit/decorators.js';
 import styles from './signin.css';
 
 /**
@@ -30,8 +29,15 @@ const extractCredentials = (form: HTMLFormElement) => {
   return { email, password };
 };
 
-@customElement('app-signin')
-export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
+/**
+ * SignIn component that renders a sign-in form and handles authentication.
+ *
+ * @remarks
+ * The component uses a signal to track invalid credentials and conditionally
+ * renders an error message. It also consumes the router context to navigate
+ * on successful sign-in.
+ */
+export class SignIn extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
   #invalidCredentials = signal(false);
@@ -142,6 +148,8 @@ export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'app-signin': SignInRoute;
+    'app-signin': SignIn;
   }
 }
+
+customElements.define('app-signin', SignIn);

@@ -1,8 +1,8 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
-import { property, TaffyMixin } from '@tt/core/reactive';
+import { property } from '@tt/core/reactive';
 import { LitElement } from 'lit';
 
-export class Link extends TaffyMixin(SignalWatcher(LitElement)) {
+export class Link extends SignalWatcher(LitElement) {
   color = property<'primary' | 'secondary' | 'error' | ''>('primary', { reflect: true });
   href = property('#');
 
