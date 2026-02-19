@@ -40,7 +40,7 @@ export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
   private _router = state<UIRouterLit | undefined>(undefined);
 
   override render() {
-    // build error message HTML if invalid credentials flag is setS
+    // Build error message HTML if invalid credentials flag is set.
     const errorHtml = this.#invalidCredentials.get()
       ? html`
           <span class="error">Invalid email or password. Please try again.</span>
@@ -63,7 +63,8 @@ export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
             id="email"
             name="email"
             type="email"
-            required />
+            required
+            @keydown=${this.#handleInputKeyDown} />
         </m3e-form-field>
         <m3e-form-field
           variant="outlined"
@@ -77,7 +78,8 @@ export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
             id="password"
             name="password"
             type="password"
-            required />
+            required
+            @keydown=${this.#handleInputKeyDown} />
           <div
             class="password-hint"
             slot="hint">
@@ -108,6 +110,13 @@ export class SignInRoute extends TaffyMixin(SignalWatcher(LitElement)) {
         </div>
       </form>
     `;
+  }
+
+  #handleInputKeyDown(e: KeyboardEvent) {
+    // If the user presses Enter while focused on an input, submit the form.
+    if (e.key === 'Enter') {
+      e.target instanceof HTMLInputElement && e.target.closest('form')?.requestSubmit();
+    }
   }
 
   async #handleSubmit(e: TypeEvent<HTMLFormElement>) {
