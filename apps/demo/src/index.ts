@@ -12,7 +12,7 @@ import { routerContext } from './router';
 import { router } from './router/router';
 
 /**
- * Root application component that wires up global providers, routing, and layout.
+ * @summary Root application component that wires up global providers, routing, and layout.
  *
  * @remarks
  * The `authenticated` signal is read during rendering so `SignalWatcher` can
@@ -45,9 +45,7 @@ export class Index extends TaffyMixin(SignalWatcher(LitElement)) {
       ? html`
           <tt-navigation-drawer
             ?opened=${this.#drawerOpen.get()}
-            @drawer-closed=${this.#handleClose}>
-            <button @click=${this.#handleClose}>Close Drawer</button>
-          </tt-navigation-drawer>
+            @drawer-closed=${this.#handleClose}></tt-navigation-drawer>
         `
       : null;
 

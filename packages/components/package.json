@@ -6,10 +6,16 @@
   "exports": {
     "./package.json": "./package.json",
     "./link": {
-      "import": "./src/link/link.ts"
+      "import": "./src/link/index.ts"
+    },
+    "./navigation": {
+      "import": "./src/navigation/index.ts"
     },
     "./navigation-drawer": {
-      "import": "./src/navigation-drawer/navigation-drawer.ts"
+      "import": "./src/navigation-drawer/index.ts"
+    },
+    "./navigation-item": {
+      "import": "./src/navigation-item/index.ts"
     },
     "./styles/index.css": {
       "import": "./src/styles/index.css"

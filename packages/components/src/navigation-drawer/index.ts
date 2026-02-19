@@ -1,1 +1,1 @@
-export * from './navigation-drawer.ts';
+export * from './navigation-drawer';

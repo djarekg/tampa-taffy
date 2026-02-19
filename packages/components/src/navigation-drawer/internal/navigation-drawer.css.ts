@@ -26,7 +26,7 @@ export default css`
     transform: translateX(var(--_drawer-inline-size));
     will-change: transform;
     transition:
-      transform 500ms var(--md-sys-motion-standard-easing),
+      transform 500ms var(--md-sys-motion-deceleration-easing),
       visibility 0s linear 500ms;
   }
 
@@ -34,7 +34,7 @@ export default css`
     content-visibility: visible;
     visibility: visible;
     transform: translateX(0);
-    transition: transform 200ms var(--md-sys-motion-standard-easing);
+    transition: transform 200ms var(--md-sys-motion-deceleration-easing);
   }
 
   .scrim {
