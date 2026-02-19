@@ -1,5 +1,5 @@
 import { authenticatedContext } from '@/auth';
-import { html, SignalWatcher } from '@lit-labs/signals';
+import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
 import '@m3e/button';
 import '@m3e/icon';
@@ -14,6 +14,8 @@ import styles from './header.css.ts';
 export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
+  #drawerOpen = signal(false);
+
   @consume({ context: authenticatedContext, subscribe: true })
   private _authenticated = state(false);
 
@@ -23,6 +25,14 @@ export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
           <m3e-icon-button @click=${this.#handleMenuClick}>
             <m3e-icon name="menu"></m3e-icon>
           </m3e-icon-button>
+        `
+      : null;
+
+    const drawerHtml = this._authenticated
+      ? html`
+          <app-settings-nav
+            ?opened=${this.#drawerOpen.get()}
+            @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
         `
       : null;
 
@@ -40,18 +50,16 @@ export class Header extends TaffyMixin(SignalWatcher(LitElement)) {
         <span class="title">Tampa Taffy</span>
         <div class="menu">${menuButtonHtml}</div>
       </header>
+      ${drawerHtml}
     `;
   }
 
   #handleMenuClick() {
-    // The icon-button that triggers this event handle is supposed to notify the parent
-    // listener so that the navigation drawer can be opened.
-    this.dispatchEvent(
-      new CustomEvent('menu-click', {
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.#drawerOpen.set(true);
+  }
+
+  #handleSettingsNavClosed() {
+    this.#drawerOpen.set(false);
   }
 }
 

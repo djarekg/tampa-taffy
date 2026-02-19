@@ -47,4 +47,4 @@ export const isEmpty = (value: unknown): value is null | undefined => {
  * @param {string | object | Array<unknown> | unknown} value The value to check.
  * @returns {boolean} True if the value is not empty, false otherwise.
  */
-export const isNotEmpty = (value: string | object | Array<unknown>) => !isEmpty(value);
+export const isNotEmpty = (value: unknown) => !isEmpty(value);

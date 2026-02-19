@@ -1,15 +1,16 @@
-import { signal, SignalWatcher } from '@lit-labs/signals';
+import { SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
 import '@m3e/theme';
-import '@tt/components/navigation-drawer';
 import { state, TaffyMixin } from '@tt/core/reactive';
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { authenticated, authenticatedContext } from './auth';
+
+import { authenticated, authenticatedContext } from '@/auth';
+import '@/components/settings-nav/settings-nav';
+import '@/layout/header';
+import { routerContext } from '@/router';
+import { router } from '@/router/router';
 import styles from './index.css.ts';
-import './layout/header.ts';
-import { routerContext } from './router';
-import { router } from './router/router';
 
 /**
  * @summary Root application component that wires up global providers, routing, and layout.
@@ -27,8 +28,6 @@ import { router } from './router/router';
 export class Index extends TaffyMixin(SignalWatcher(LitElement)) {
   static override styles = [styles];
 
-  #drawerOpen = signal(false);
-
   @provide({ context: authenticatedContext })
   private _authenticated = state(false);
 
@@ -40,34 +39,18 @@ export class Index extends TaffyMixin(SignalWatcher(LitElement)) {
     // It should stay in {@link render} to preserve signal tracking; moving it to
     // `constructor` or `connectedCallback` would break reactivity.
     this._authenticated = authenticated.get();
-
-    const drawerHtml = this._authenticated
-      ? html`
-          <tt-navigation-drawer
-            ?opened=${this.#drawerOpen.get()}
-            @drawer-closed=${this.#handleClose}></tt-navigation-drawer>
-        `
-      : null;
+    console.debug(this._authenticated);
 
     return html`
       <m3e-theme density="-3">
         <ui-router .uiRouter=${this._router}>
-          <app-header @menu-click=${this.#handleMenuClick}></app-header>
+          <app-header></app-header>
           <main>
             <ui-view></ui-view>
-            ${drawerHtml}
           </main>
         </ui-router>
       </m3e-theme>
     `;
-  }
-
-  #handleMenuClick() {
-    this.#drawerOpen.set(true);
-  }
-
-  #handleClose() {
-    this.#drawerOpen.set(false);
   }
 }
 
