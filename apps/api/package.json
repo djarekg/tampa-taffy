@@ -21,6 +21,6 @@
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "@typescript/native-preview": "^7.0.0-dev.20260119.1"
+    "@typescript/native-preview": "^7.0.0-dev.20260219.1"
   }
 }

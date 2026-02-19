@@ -44,11 +44,11 @@
     "signal-utils": "^0.21.1"
   },
   "devDependencies": {
-    "happy-dom": "^16.0.0",
+    "happy-dom": "^20.6.3",
     "vitest": "latest"
   },
   "peerDependencies": {
-    "@typescript/native-preview": "^7.0.0-dev.20260119.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260219.1",
     "lit": "^3.3.1"
   }
 }
