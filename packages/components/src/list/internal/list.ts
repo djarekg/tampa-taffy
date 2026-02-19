@@ -22,10 +22,10 @@ export class List extends SignalWatcher(LitElement) {
    */
   listTabIndex = property(0, { type: Number });
   /**
-   * We use a query to get a reference to the list element for keyboard navigation purposes,
-   * but we don't want to expose it as a public property since it can be misused by consumers.
+   * We use a query to get a reference to the list element in the render root. This allows
+   * us to focus the list when the component itself is focused.
    */
-  #listRoot = query<HTMLUListElement>('tt-list', true);
+  #listRoot = query<HTMLUListElement>('tt-list');
 
   override render() {
     return html`
@@ -40,6 +40,6 @@ export class List extends SignalWatcher(LitElement) {
   }
 
   override focus() {
-    this.#listRoot(this)?.focus();
+    this.#listRoot?.focus();
   }
 }

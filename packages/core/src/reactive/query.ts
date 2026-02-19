@@ -1,46 +1,80 @@
 import type { ReactiveElement } from 'lit';
 
-const queryCache = new WeakMap<ReactiveElement, Map<string, Element | null>>();
+const QUERY_DESCRIPTORS = Symbol('tt-query-descriptors');
+
+interface QueryDescriptor {
+  key: string | symbol;
+  selector: string;
+}
 
 /**
- * Queries the component's render root for a given selector and caches the result.
- * The cache is updated after the component has updated at least once, ensuring that it reflects the latest DOM structure.
- * If the cache option is enabled, the query result will be stored and returned on subsequent calls with the same selector.
- * The cache is automatically invalidated when the component updates, ensuring that it always reflects the current state of the DOM.
+ * Creates a query descriptor for a DOM element selector.
+ * When used as a class field initializer, automatically sets up a getter
+ * that queries the renderRoot.
  *
- * @param selector - The CSS selector to query for.
- * @param cache - Whether to cache the query result. Defaults to false.
- * @returns A function that takes a ReactiveElement and returns the queried Element or null.
+ * @param selector - CSS selector to query
+ * @returns The query descriptor (converted to getter during initialization)
+ *
  * @example
  * ```ts
- * import { LitElement, html } from 'lit';
- * import { customElement, query } from 'lit/decorators.js';
- *
  * class MyElement extends LitElement {
- *   myButton = query<HTMLButtonElement>('.my-button', true);
+ *   readonly drawerRoot = query<HTMLElement>('#drawer');
+ *
+ *   override firstUpdated() {
+ *     console.log(this.drawerRoot?.tagName);
+ *   }
  * }
  * ```
  */
-export const query = <T extends Element = Element>(selector: string, cache?: boolean) => {
-  return (el: ReactiveElement): T | null => {
-    if (cache) {
-      let elementCache = queryCache.get(el);
-      if (elementCache?.has(selector)) {
-        return elementCache.get(selector) as T | null;
-      }
+export function query<T extends Element = Element>(selector: string): T | null {
+  // Return a sentinel object that marks this as a query
+  return { __querySelector: selector } as unknown as T | null;
+}
+
+/**
+ * Initializes all query descriptors on an element.
+ * Scans for query markers and converts them to getters.
+ *
+ * Called automatically during connectedCallback.
+ *
+ * @internal
+ */
+export function initializeQueries(element: ReactiveElement): void {
+  // Collect all queries from public fields
+  const queries: QueryDescriptor[] = [];
+  const keys = Object.getOwnPropertyNames(element);
+
+  for (const key of keys) {
+    const value = (element as any)[key];
+
+    // Check if this is a query descriptor (has __querySelector)
+    if (value && typeof value === 'object' && '__querySelector' in value) {
+      queries.push({
+        key,
+        selector: value.__querySelector,
+      });
     }
+  }
 
-    const result = (el.renderRoot?.querySelector(selector) ?? null) as T | null;
+  if (queries.length === 0) {
+    return;
+  }
 
-    if (cache && (result !== null || el.hasUpdated)) {
-      let elementCache = queryCache.get(el);
-      if (!elementCache) {
-        elementCache = new Map();
-        queryCache.set(el, elementCache);
-      }
-      elementCache.set(selector, result);
-    }
+  // Store queries for later reference
+  (element as any)[QUERY_DESCRIPTORS] = queries;
 
-    return result;
-  };
-};
+  // Install getters for each query
+  for (const { key, selector } of queries) {
+    // Delete the placeholder value
+    delete (element as any)[key];
+
+    // Install a simple getter that queries the renderRoot
+    Object.defineProperty(element, key, {
+      get(this: ReactiveElement) {
+        return this.renderRoot?.querySelector(selector) ?? null;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  }
+}

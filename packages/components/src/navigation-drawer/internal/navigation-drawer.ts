@@ -4,6 +4,11 @@ import { LitElement } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 
 export class NavigationDrawer extends SignalWatcher(LitElement) {
+  /**
+   * Whether the drawer is open or closed. When true, the drawer is visible and the
+   * scrim is active. When false, the drawer is hidden and the scrim is inactive.
+   * This property is reflected to an attribute so it can be styled with CSS.
+   */
   opened = property(false, { type: Boolean, reflect: true });
 
   override render() {
@@ -16,10 +21,12 @@ export class NavigationDrawer extends SignalWatcher(LitElement) {
         class="scrim ${classMap(this.#getScrimClasses())}"
         @click=${this.close}></div>
       <aside
+        id="drawer"
         role="dialog"
         aria-expanded="${ariaExpanded}"
         aria-hidden="${ariaHidden}"
         class=${classMap(this.#getDrawerClasses())}>
+        <div>test</div>
         <slot></slot>
       </aside>
     `;
