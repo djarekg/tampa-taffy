@@ -45,4 +45,8 @@ export default css`
       cursor: pointer;
     }
   }
+
+  m3e-icon-button {
+    --m3e-icon-button-medium-icon-size: 2rem;
+  }
 `;

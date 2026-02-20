@@ -8,8 +8,10 @@ export class NavigationItem extends SignalWatcher(LitElement) {
   /**
    * The URL that the navigation item points to. This is rendered as the href attribute
    * of the underlying anchor element.
+   *
+   * @default '#'
    */
-  href = property('');
+  href = property('#');
   /**
    * The label text to display for the navigation item.
    */
@@ -17,6 +19,8 @@ export class NavigationItem extends SignalWatcher(LitElement) {
   /**
    * The name of the Material icon to display for the navigation item. If not provided,
    * no icon will be rendered.
+   *
+   * @default null which means no icon will be rendered.
    */
   icon = property<string | null>(null);
 

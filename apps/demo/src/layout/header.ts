@@ -5,6 +5,7 @@ import '@m3e/button';
 import '@m3e/icon';
 import '@m3e/icon-button';
 import { state } from '@tt/core/reactive';
+import { safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
@@ -48,8 +49,10 @@ export class Header extends SignalWatcher(LitElement) {
   #renderMenuButton() {
     if (this._authenticated) {
       return html`
-        <m3e-icon-button @click=${this.#handleMenuClick}>
-          <m3e-icon name="menu"></m3e-icon>
+        <m3e-icon-button
+          size="medium"
+          @click=${this.#handleMenuClick}>
+          <m3e-icon name="manage_accounts"></m3e-icon>
         </m3e-icon-button>
       `;
     }
@@ -84,4 +87,4 @@ declare global {
   }
 }
 
-customElements.define('app-header', Header);
+safeDefine('app-header', Header);

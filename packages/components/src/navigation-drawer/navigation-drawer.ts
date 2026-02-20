@@ -1,3 +1,4 @@
+import { safeDefine } from '@tt/core/utils';
 import { NavigationDrawer } from './internal/navigation-drawer';
 import styles from './internal/navigation-drawer.css';
 
@@ -18,4 +19,4 @@ export class TtNavigationDrawer extends NavigationDrawer {
   static override styles = [styles];
 }
 
-customElements.define('tt-navigation-drawer', TtNavigationDrawer);
+safeDefine('tt-navigation-drawer', TtNavigationDrawer);

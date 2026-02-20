@@ -1,15 +1,14 @@
-import { SignalWatcher } from '@lit-labs/signals';
-import { provide } from '@lit/context';
-import '@m3e/theme';
-import { state } from '@tt/core/reactive';
-import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
-
 import { authenticated, authenticatedContext } from '@/auth';
 import '@/components/settings-nav/settings-nav';
 import '@/layout/header';
 import { routerContext } from '@/router';
 import { router } from '@/router/router';
+import { SignalWatcher } from '@lit-labs/signals';
+import { provide } from '@lit/context';
+import '@m3e/theme';
+import { state } from '@tt/core/reactive';
+import { safeDefine } from '@tt/core/utils';
+import { html, LitElement } from 'lit';
 import styles from './index.css.ts';
 
 /**
@@ -24,7 +23,6 @@ import styles from './index.css.ts';
  * should stay in {@link render} to preserve signal tracking; moving it to
  * `constructor` or `connectedCallback` would break reactivity.
  */
-@customElement('app-index')
 export class Index extends SignalWatcher(LitElement) {
   static override styles = [styles];
 
@@ -59,3 +57,5 @@ declare global {
     'app-index': Index;
   }
 }
+
+safeDefine('app-index', Index);

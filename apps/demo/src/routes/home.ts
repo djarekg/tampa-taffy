@@ -1,7 +1,6 @@
-import { customElement } from 'lit/decorators.js';
+import { safeDefine } from '@tt/core/utils';
 import { css, html, LitElement } from 'lit';
 
-@customElement('app-home')
 export class Home extends LitElement {
   static override styles = [
     css`
@@ -25,3 +24,5 @@ declare global {
     'app-home': Home;
   }
 }
+
+safeDefine('app-home', Home);

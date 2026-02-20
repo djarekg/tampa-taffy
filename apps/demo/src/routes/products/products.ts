@@ -1,7 +1,6 @@
+import { safeDefine } from '@tt/core/utils';
 import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
 
-@customElement('app-products')
 export class AppProducts extends LitElement {
   override render() {
     return html`
@@ -15,3 +14,5 @@ declare global {
     'app-products': AppProducts;
   }
 }
+
+safeDefine('app-products', AppProducts);

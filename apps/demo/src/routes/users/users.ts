@@ -1,11 +1,10 @@
 import { getUsers } from '@/api/user.api';
 import { computed, watch } from '@lit-labs/signals';
 import { resource } from '@tt/core';
+import { safeDefine } from '@tt/core/utils';
 import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
 
-@customElement('app-users')
-export class AppUsers extends LitElement {
+export class Users extends LitElement {
   #resource = resource({
     loader: () => getUsers(),
   });
@@ -41,6 +40,8 @@ export class AppUsers extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'app-users': AppUsers;
+    'app-users': Users;
   }
 }
+
+safeDefine('app-users', Users);

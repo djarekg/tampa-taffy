@@ -1,3 +1,4 @@
+import { safeDefine } from '@tt/core/utils';
 import { List } from './internal/list';
 import styles from './internal/list.css';
 
@@ -11,4 +12,4 @@ export class TtList extends List {
   static override styles = [styles];
 }
 
-customElements.define('tt-list', TtList);
+safeDefine('tt-list', TtList);

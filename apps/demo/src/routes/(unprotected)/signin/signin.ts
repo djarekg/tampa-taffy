@@ -7,6 +7,7 @@ import '@m3e/form-field';
 import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
+import { safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
 import styles from './signin.css';
@@ -42,17 +43,10 @@ export class SignIn extends SignalWatcher(LitElement) {
 
   #invalidCredentials = signal(false);
 
-  @consume({ context: routerContext })
+  @consume({ context: routerContext, subscribe: true })
   private _router = state<UIRouterLit | undefined>(undefined);
 
   override render() {
-    // Build error message HTML if invalid credentials flag is set.
-    const errorHtml = this.#invalidCredentials.get()
-      ? html`
-          <span class="error">Invalid email or password. Please try again.</span>
-        `
-      : null;
-
     return html`
       <form
         class="form"
@@ -103,7 +97,7 @@ export class SignIn extends SignalWatcher(LitElement) {
           Sign In
         </m3e-button>
 
-        ${errorHtml}
+        ${this.#renderError()}
 
         <div class="account-actions">
           <tt-link href="/signup">Don't have an account? Sign Up</tt-link>
@@ -116,6 +110,16 @@ export class SignIn extends SignalWatcher(LitElement) {
         </div>
       </form>
     `;
+  }
+
+  #renderError() {
+    if (this.#invalidCredentials.get()) {
+      return html`
+        <span class="error">Invalid email or password. Please try again.</span>
+      `;
+    }
+
+    return null;
   }
 
   #handleInputKeyDown(e: KeyboardEvent) {
@@ -152,4 +156,4 @@ declare global {
   }
 }
 
-customElements.define('app-signin', SignIn);
+safeDefine('app-signin', SignIn);
