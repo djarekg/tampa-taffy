@@ -1,7 +1,7 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
 import { isNotEmpty } from '@tt/core';
 import { property } from '@tt/core/reactive';
-import { LitElement } from 'lit';
+import { LitElement, nothing } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 
 export class NavigationDrawer extends SignalWatcher(LitElement) {
@@ -45,7 +45,7 @@ export class NavigationDrawer extends SignalWatcher(LitElement) {
       `;
     }
 
-    return null;
+    return nothing;
   }
 
   open() {

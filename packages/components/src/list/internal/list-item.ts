@@ -1,0 +1,118 @@
+import { html, SignalWatcher } from '@lit-labs/signals';
+import { property } from '@tt/core/reactive';
+import { LitElement, nothing } from 'lit';
+import { when } from 'lit/directives/when.js';
+
+export class ListItem extends SignalWatcher(LitElement) {
+  /**
+   * The ARIA checked attribute for the list item.
+   *
+   * @default false
+   */
+  override ariaChecked = property<'true' | 'false'>('false');
+  /**
+   * The ARIA selected attribute for the list item.
+   *
+   * @default false
+   */
+  ariaCSelected = property<'true' | 'false'>('false');
+  /**
+   * The ARIA role attribute for the list item.
+   *
+   * @default listitem
+   */
+  ariaRole = property('listitem');
+  /**
+   * The tabindex attribute for the list item. This determines whether the list item is focusable
+   * and its position in the tab order. By default, list items are not focusable (tabindex=-1)
+   * to prevent them from being focusable by screen readers, but they can be made focusable
+   * by setting itemTabIndex to 0 or a positive value.
+   *
+   * @default -1
+   */
+  itemTabIndex = property(-1, { type: Number });
+  /**
+   * Whether the list item is active. An active list item is typically styled
+   * differently to indicate that it is currently selected or highlighted.
+   *
+   * @default false
+   */
+  active = property(false, { type: Boolean });
+  /**
+   * Whether the list item is disabled. A disabled list item cannot be interacted with.
+   *
+   * @default false
+   */
+  disabled = property(false, { type: Boolean });
+  /**
+   * The headline text to display for the list item.
+   */
+  headline = property('');
+  /**
+   * The supporting text to display for the list item. This is rendered
+   * below the headline in a smaller font size.
+   */
+  supportingText = property('');
+  /**
+   * The name of the Material icon to display for the navigation item. If not provided,
+   * no icon will be rendered.
+   *
+   * @default null
+   */
+  icon = property<string | null>(null);
+
+  override render() {
+    return html`
+      <li
+        class="list-item"
+        aria-checked=${this.ariaChecked || nothing}
+        aria-selected=${this.ariaCSelected || nothing}
+        tabindex=${this.disabled ? -1 : this.itemTabIndex}
+        role=${this.ariaRole}>
+        ${this.#renderListItemContent()}
+        <div class="indicator"></div>
+      </li>
+    `;
+  }
+
+  #renderListItemContent() {
+    const content = html`
+      <div class="content">${this.#renderStart()} ${this.#renderBody()} ${this.#renderEnd()}</div>
+    `;
+
+    return this.renderContent(content);
+  }
+
+  protected renderContent(content: unknown) {
+    return html`
+      ${content}
+    `;
+  }
+
+  #renderStart() {
+    return html`
+      <slot name="start"></slot>
+    `;
+  }
+
+  #renderBody() {
+    return html`
+      <div class="body">
+        <span class="headline">${this.headline}</span>
+        ${when(this.supportingText, () => this.#renderSupportingText())}
+      </div>
+    `;
+  }
+
+  #renderSupportingText() {
+    return html`
+      <span class="supporting-text">${this.supportingText}</span>
+    `;
+  }
+
+  #renderEnd() {
+    return html`
+      <slot name="end"></slot>
+    `;
+  }
+}

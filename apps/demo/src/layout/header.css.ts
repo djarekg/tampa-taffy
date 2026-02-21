@@ -3,7 +3,7 @@ import { css } from 'lit';
 export default css`
   header {
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 300px 1fr 300px;
     grid-template-areas: 'a b c';
     block-size: var(--app-header-height);
     padding-inline: 1rem;
@@ -11,31 +11,45 @@ export default css`
 
   .image {
     grid-area: a;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+
+    &:hover {
+      img {
+        transform: scale(1.03) rotate(60deg);
+      }
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 0.7rem;
+      text-decoration: none;
+      inline-size: fit-content;
+    }
 
     img {
       transform: scale(0.8);
       will-change: transform;
       transition: transform 0.3s ease;
-
-      &:hover {
-        transform: scale(1.03) rotate(60deg);
-      }
     }
   }
 
   .title {
-    grid-area: b;
-    display: grid;
-    color: #38eaa0;
-    place-content: center;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--tt-color-primary);
+    color: var(--m3e-color-on-surface);
   }
 
-  .menu {
+  .site-menu {
+    grid-area: b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .settings-nav-button {
     grid-area: c;
     display: flex;
     justify-content: end;

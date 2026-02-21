@@ -8,7 +8,7 @@ import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
-import { LitElement } from 'lit';
+import { LitElement, nothing } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
 import styles from './signin.css';
 
@@ -119,7 +119,7 @@ export class SignIn extends SignalWatcher(LitElement) {
       `;
     }
 
-    return null;
+    return nothing;
   }
 
   #handleInputKeyDown(e: KeyboardEvent) {

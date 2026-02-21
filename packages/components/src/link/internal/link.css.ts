@@ -1,12 +1,6 @@
 import { css } from 'lit';
 
 export default css`
-  :host {
-    --_font-size: var(--tt-link-font-size, 0.875rem);
-    --_font-weight: var(--tt-link-font-weight, 400);
-    --_color: var(--tt-link-color, var(--md-sys-color-primary));
-  }
-
   :host([color='primary']) {
     --_color: var(--md-sys-color-primary);
   }
@@ -20,9 +14,9 @@ export default css`
   }
 
   a {
-    font-size: var(--_font-size);
-    font-weight: var(--_font-weight);
-    color: var(--_color);
+    font-size: var(--tt-link-font-size, 0.875rem);
+    font-weight: var(--tt-link-font-weight, 400);
+    color: var(--tt-link-color, var(--md-sys-color-primary));
     text-decoration: none;
     text-underline-offset: 3px;
 

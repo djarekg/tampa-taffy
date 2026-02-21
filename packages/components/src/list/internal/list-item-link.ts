@@ -1,8 +1,9 @@
-import { html, SignalWatcher } from '@lit-labs/signals';
+import { html } from '@lit-labs/signals';
 import { property } from '@tt/core/reactive';
-import { LitElement } from 'lit';
+import '../../link/link.js';
+import { ListItem } from './list-item';
 
-export class Link extends SignalWatcher(LitElement) {
+export class ListItemLink extends ListItem {
   /**
    * The URL that the link points to.
    *
@@ -16,12 +17,12 @@ export class Link extends SignalWatcher(LitElement) {
    */
   target = property('_self');
 
-  override render() {
+  protected override renderContent(content: unknown) {
     return html`
       <a
         href=${this.href}
         target=${this.target}>
-        <slot></slot>
+        ${content}
       </a>
     `;
   }

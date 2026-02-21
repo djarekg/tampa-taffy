@@ -1,10 +1,10 @@
 import { getUsers } from '@/api/user.api';
-import { computed, watch } from '@lit-labs/signals';
+import { computed, html, SignalWatcher } from '@lit-labs/signals';
 import { resource } from '@tt/core';
 import { safeDefine } from '@tt/core/utils';
-import { LitElement, html } from 'lit';
+import { LitElement } from 'lit';
 
-export class Users extends LitElement {
+export class Users extends SignalWatcher(LitElement) {
   #resource = resource({
     loader: () => getUsers(),
   });
@@ -33,7 +33,7 @@ export class Users extends LitElement {
     return html`
       <h1>Users Page</h1>
       <p>Welcome to the users page!</p>
-      ${watch(this.#usersView)}
+      ${this.#usersView}
     `;
   }
 }

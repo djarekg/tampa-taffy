@@ -1,8 +1,9 @@
 import { signout } from '@/api/auth.api';
 import { getUserId } from '@/api/profile.api';
 import { html, SignalWatcher } from '@lit-labs/signals';
+import '@m3e/icon';
+import '@tt/components/list';
 import '@tt/components/navigation-drawer';
-import '@tt/components/navigation-item';
 import { property } from '@tt/core/reactive';
 import { isBrowser, safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
@@ -35,17 +36,32 @@ export class SettingsNav extends SignalWatcher(LitElement) {
 
   #renderDrawerContent() {
     return html`
-      <nav>
+      <tt-list ariaRole="navigation">
+        <tt-list-item-link
+          href="/users/${this.#userId}/settings"
+          headline="Profile">
+          <m3e-icon
+            slot="start"
+            name="person"></m3e-icon>
+        </tt-list-item-link>
+        <tt-list-item-link
+          headline="Sign out"
+          @click=${this.#handleSignoutClick}>
+          <m3e-icon
+            slot="start"
+            name="logout"></m3e-icon>
+        </tt-list-item-link>
+      </tt-list>
+      <!-- <nav>
         <tt-navigation-item
           href="/users/${this.#userId}/settings"
           label="Profile"
           icon="person"></tt-navigation-item>
-
         <tt-navigation-item
           label="Sign out"
           icon="logout"
           @click=${this.#handleSignoutClick}></tt-navigation-item>
-      </nav>
+      </nav> -->
     `;
   }
 

@@ -8,6 +8,11 @@ declare global {
   }
 }
 
+/**
+ * The `tt-list` component is a customizable list element that can be used to
+ * display a collection of items. It supports various styles and configurations
+ * to suit different use cases.
+ */
 export class TtList extends List {
   static override styles = [styles];
 }
