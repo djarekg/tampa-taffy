@@ -2,13 +2,33 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        sourcemapPathTransform: relativeSourcePath => {
+          return relativeSourcePath;
+        },
+      },
+    },
+  },
   server: {
     port: 3006,
     hmr: true,
+    sourcemapIgnoreList: () => false,
+  },
+  css: {
+    devSourcemap: true,
+  },
+  esbuild: {
+    sourcemap: 'inline',
+  },
+  define: {
+    __DEV__: JSON.stringify(true),
   },
   optimizeDeps: {
     include: ['@lit/reactive-element', 'lit', '@libsql/client'],
-    exclude: ['@prisma/client'],
+    exclude: ['@prisma/client', '@tt/core', '@tt/components', '@tt/db'],
   },
   resolve: {
     alias: {

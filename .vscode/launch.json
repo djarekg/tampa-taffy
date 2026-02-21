@@ -13,38 +13,68 @@
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
-      "name": "Launch web (edge)",
+      "name": "Launch Dev Server",
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/demo",
       "command": "bun run dev",
-      "serverReadyAction": {
-        "action": "debugWithEdge",
-        "killOnServerStop": true,
-        "pattern": "Local:\\s+(http?://\\S+)",
-        "uriFormat": "%s",
-        "webRoot": "${workspaceFolder}/apps/demo"
+      "isBackground": true // DO NOT REMOVE THIS. Needed for debugging to work in demo.
+    },
+    {
+      "name": "Attach to Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3006",
+      "webRoot": "${workspaceFolder}",
+      "pathMapping": {
+        "/src": "${workspaceFolder}/apps/demo/src",
+        "/@fs/D:/repos/djarekg/tampa-taffy/": "D:/repos/djarekg/tampa-taffy/",
+        "/@fs/d:/repos/djarekg/tampa-taffy/": "D:/repos/djarekg/tampa-taffy/"
+      },
+      "sourceMapPathOverrides": {
+        "/@fs/*/apps/demo/src/*": "${workspaceFolder}/apps/demo/src/*",
+        "/src/*": "${workspaceFolder}/apps/demo/src/*",
+        "/@id/@tt/core/*": "${workspaceFolder}/packages/core/src/*",
+        "/@id/@tt/components/*": "${workspaceFolder}/packages/components/src/*",
+        "/@id/@tt/db/*": "${workspaceFolder}/packages/db/src/*",
+        "/@tt/core/*": "${workspaceFolder}/packages/core/src/*",
+        "/@tt/components/*": "${workspaceFolder}/packages/components/src/*",
+        "/@tt/db/*": "${workspaceFolder}/packages/db/src/*",
+        "/@fs/*/packages/core/src/*": "${workspaceFolder}/packages/core/src/*",
+        "/@fs/*/packages/components/src/*": "${workspaceFolder}/packages/components/src/*",
+        "/@fs/*/packages/db/src/*": "${workspaceFolder}/packages/db/src/*"
       }
     },
     {
-      "name": "Launch web (chrome)",
-      "type": "node-terminal",
+      "name": "Attach to Chrome",
+      "type": "chrome",
       "request": "launch",
-      "cwd": "${workspaceFolder}\\apps\\demo",
-      "command": "bun run dev",
-      "serverReadyAction": {
-        "action": "debugWithChrome",
-        "killOnServerStop": true,
-        "pattern": "Local:\\s+(http?://\\S+)",
-        "uriFormat": "%s",
-        "webRoot": "${workspaceFolder}\\apps\\demo"
+      "url": "http://localhost:3006",
+      "webRoot": "${workspaceFolder}",
+      "pathMapping": {
+        "/src": "${workspaceFolder}/apps/demo/src",
+        "/@fs/D:/repos/djarekg/tampa-taffy/": "D:/repos/djarekg/tampa-taffy/",
+        "/@fs/d:/repos/djarekg/tampa-taffy/": "D:/repos/djarekg/tampa-taffy/"
+      },
+      "sourceMapPathOverrides": {
+        "/@fs/*/apps/demo/src/*": "${workspaceFolder}/apps/demo/src/*",
+        "/src/*": "${workspaceFolder}/apps/demo/src/*",
+        "/@id/@tt/core/*": "${workspaceFolder}/packages/core/src/*",
+        "/@id/@tt/components/*": "${workspaceFolder}/packages/components/src/*",
+        "/@id/@tt/db/*": "${workspaceFolder}/packages/db/src/*",
+        "/@tt/core/*": "${workspaceFolder}/packages/core/src/*",
+        "/@tt/components/*": "${workspaceFolder}/packages/components/src/*",
+        "/@tt/db/*": "${workspaceFolder}/packages/db/src/*",
+        "/@fs/*/packages/core/src/*": "${workspaceFolder}/packages/core/src/*",
+        "/@fs/*/packages/components/src/*": "${workspaceFolder}/packages/components/src/*",
+        "/@fs/*/packages/db/src/*": "${workspaceFolder}/packages/db/src/*"
       }
     }
   ],
   "compounds": [
     {
       "name": "Debug app (edge)",
-      "configurations": ["Launch api", "Launch web (edge)"],
+      "configurations": ["Launch api", "Attach to Edge"],
       "stopAll": true,
       "presentation": {
         "hidden": false,
@@ -54,11 +84,21 @@
     },
     {
       "name": "Debug app (chrome)",
-      "configurations": ["Launch api", "Launch web (chrome)"],
+      "configurations": ["Launch api", "Attach to Chrome"],
       "stopAll": true,
       "presentation": {
         "hidden": false,
         "group": "1",
+        "order": 2
+      }
+    },
+    {
+      "name": "Debug Full Stack (edge)",
+      "configurations": ["Launch api", "Launch Dev Server", "Attach to Edge"],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "2",
         "order": 1
       }
     }
