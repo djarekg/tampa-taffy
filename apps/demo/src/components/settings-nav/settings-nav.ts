@@ -47,7 +47,6 @@ export class SettingsNav extends SignalWatcher(LitElement) {
             name="person"></m3e-icon>
         </tt-list-item-link>
         <tt-list-item-link
-          href="javascript:void(0)"
           headline="Sign out"
           @click=${this.#handleSignoutClick}>
           <m3e-icon

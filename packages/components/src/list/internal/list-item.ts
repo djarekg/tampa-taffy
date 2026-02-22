@@ -65,7 +65,6 @@ export class ListItem extends SignalWatcher(LitElement) {
   indicator = property<'background' | 'underline' | 'none'>('background');
 
   override render() {
-    const indicator = this.#getIndicator();
     return html`
       <li
         class="list-item"
@@ -73,7 +72,7 @@ export class ListItem extends SignalWatcher(LitElement) {
         aria-selected=${this.ariaCSelected || nothing}
         tabindex=${this.disabled ? -1 : this.itemTabIndex}
         role=${this.ariaRole}>
-        ${this.#renderListItemContent()} ${this.#renderIndicator(indicator)}
+        ${this.#renderListItemContent()} ${this.#renderIndicator(this.indicator)}
       </li>
     `;
   }
@@ -99,12 +98,10 @@ export class ListItem extends SignalWatcher(LitElement) {
   }
 
   #renderBody() {
-    const headline = this.#getHeadline();
-    const supportingText = this.#getSupportingText();
     return html`
       <div class="body">
-        <span class="headline">${headline}</span>
-        ${when(supportingText, () => this.#renderSupportingText(supportingText))}
+        <span class="headline">${this.headline}</span>
+        ${when(this.supportingText, () => this.#renderSupportingText(this.supportingText))}
       </div>
     `;
   }
@@ -128,17 +125,5 @@ export class ListItem extends SignalWatcher(LitElement) {
         <div class="indicator"></div>
       `
     );
-  }
-
-  #getHeadline() {
-    return this.headline ?? this.getAttribute('headline') ?? '';
-  }
-
-  #getSupportingText() {
-    return this.supportingText ?? this.getAttribute('supportingtext') ?? '';
-  }
-
-  #getIndicator() {
-    return this.indicator ?? this.getAttribute('indicator') ?? 'background';
   }
 }

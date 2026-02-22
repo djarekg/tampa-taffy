@@ -7,9 +7,9 @@ export class ListItemLink extends ListItem {
   /**
    * The URL that the link points to.
    *
-   * @default '#'
+   * @default 'javascript:void(0)'
    */
-  href = property('#');
+  href = property('javascript:void(0)');
   /**
    * The target attribute specifies where to open the linked document.
    *
@@ -18,12 +18,10 @@ export class ListItemLink extends ListItem {
   target = property('_self');
 
   protected override renderContent(content: unknown) {
-    const href = this.href ?? this.getAttribute('href') ?? '#';
-    const target = this.target ?? this.getAttribute('target') ?? '_self';
     return html`
       <a
-        href=${href}
-        target=${target}>
+        href=${this.href}
+        target=${this.target}>
         ${content}
       </a>
     `;
