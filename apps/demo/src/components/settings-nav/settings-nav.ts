@@ -1,6 +1,4 @@
-import { signout } from '@/api/auth.api';
-import { getUserId } from '@/api/profile.api';
-import { html, SignalWatcher } from '@lit-labs/signals';
+import { SignalWatcher, html } from '@lit-labs/signals';
 import '@m3e/icon';
 import '@tt/components/list';
 import '@tt/components/navigation-drawer';
@@ -8,13 +6,16 @@ import { property } from '@tt/core/reactive';
 import { isBrowser, safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
 
+import { signout } from '@/api/auth.api';
+import { getUserId } from '@/api/profile.api';
+
 /**
  * The `SettingsNav` component is a navigation drawer that provides links to user
  * options and tasks. It can be toggled open or closed and emits a 'closed' event
  * when the drawer is closed.
  */
 export class SettingsNav extends SignalWatcher(LitElement) {
-  #userId = getUserId();
+  readonly #userId = getUserId();
 
   /**
    * Controls whether the navigation drawer is open or closed.
@@ -72,7 +73,7 @@ export class SettingsNav extends SignalWatcher(LitElement) {
       new CustomEvent('closed', {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 }

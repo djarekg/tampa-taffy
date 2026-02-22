@@ -1,5 +1,5 @@
-import { ApiError } from './error.ts';
 import type { PlainObject } from '../types/plain-object.ts';
+import { ApiError } from './error.ts';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 
@@ -154,7 +154,6 @@ const isConnectionRefusedError = (err: unknown): boolean => {
   }
 
   // Fallback to string inspection
-  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   const s = String(err);
   if (/(ERR_CONNECTION_REFUSED|ECONNREFUSED|Failed to fetch)/i.test(s)) {
     return true;
@@ -206,7 +205,6 @@ const resolveRequestBody = (
   }
 
   // Non-JSON body; caller is responsible for passing a supported BodyInit.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return body as any;
 };
 

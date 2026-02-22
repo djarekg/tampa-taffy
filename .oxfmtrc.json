@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/build/**",
+    "**/node_modules/**",
+    "**/generated/**"
+  ],
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "quoteProps": "as-needed",
+  "semi": true,
+  "singleQuote": true,
+  "singleAttributePerLine": true,
+  "trailingComma": "all",
+  "useTabs": false,
+  "tabWidth": 2,
+  "experimentalSortImports": {
+    "groups": [
+      "type-import",
+      ["value-builtin", "value-external"],
+      "type-internal",
+      "value-internal",
+      ["type-parent", "type-sibling", "type-index"],
+      ["value-parent", "value-sibling", "value-index"],
+      "unknown"
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.css"],
+      "options": {
+        "singleQuote": false
+      }
+    },
+    {
+      "files": ["*.json", "*.jsonc"],
+      "options": {
+        "trailingComma": "none"
+      }
+    }
+  ]
+}

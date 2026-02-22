@@ -15,6 +15,8 @@
     },
   ],
   "settings": {
+    "oxc.typeAware": true,
+
     "bun.runtime": "${userHome}\\.bun\\bin\\bun",
     "bun.debugTerminal.enabled": true,
     "bun.debugTerminal.stopOnEntry": false,
@@ -33,10 +35,12 @@
 
     "editor.formatOnSave": false,
     "editor.lightbulb.enabled": "on",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
+      "source.fixAll.oxc": "always",
+      // "source.fixAll": "explicit",
       "source.organizeImports": "explicit",
+      "source.sortImports": "always",
     },
     "editor.rulers": [100],
     "editor.overviewRulerBorder": true,
@@ -49,21 +53,19 @@
     "explorer.fileNesting.enabled": true,
 
     "[css]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
     },
     "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
-      "prettier.trailingComma": "none",
     },
     "[jsonc]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
-      "prettier.trailingComma": "none",
     },
     "[html]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
     },
     "[prisma]": {
@@ -71,15 +73,15 @@
       "editor.formatOnSave": true,
     },
     "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
     },
     "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
     },
     "[yaml]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.formatOnSave": true,
     },
     "[xml]": {
@@ -87,8 +89,6 @@
       "editor.formatOnSave": true,
     },
 
-    // "typescript.experimental.useTsgo": true,
-    // "typescript.format.semicolons": "insert",
     "javascript.preferences.importModuleSpecifier": "non-relative",
     "javascript.preferences.importModuleSpecifierEnding": "minimal",
     "typescript.preferences.importModuleSpecifier": "non-relative",
@@ -154,10 +154,13 @@
       "importmap",
       "libsql",
       "litelement",
+      "oxfmt",
+      "oxlint",
       "packagejson",
       "qwtel",
       "runem",
       "tsgo",
+      "tsgolint",
       "typescale",
       "typescriptteam",
       "uirouter",
@@ -169,13 +172,12 @@
   "extensions": {
     "recommendations": [
       "Prisma.prisma",
-      "dbaeumer.vscode-eslint",
-      "esbenp.prettier-vscode",
       "oven.bun-vscode",
       "runem.lit-plugin",
       "typescriptteam.native-preview",
       "qwtel.sqlite-viewer",
       "vitest.explorer",
+      "oxc.oxc-vscode",
     ],
   },
 }

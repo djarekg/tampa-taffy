@@ -11,7 +11,6 @@ const toMessage = (err: unknown) => {
   try {
     return JSON.stringify(err);
   } catch {
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     return String(err);
   }
 };
