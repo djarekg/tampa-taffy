@@ -9,7 +9,7 @@ export class List extends SignalWatcher(LitElement) {
    * The aria-label attribute provides an accessible name for the list, which
    * can be read by screen readers.
    */
-  override ariaLabel = property('');
+  ariaLabelOverride = property('');
   /**
    * The role attribute is set to "list" to indicate that this element is a list, which
    * can be used by assistive technologies to understand the structure of the content.
@@ -38,7 +38,7 @@ export class List extends SignalWatcher(LitElement) {
     return html`
       <ul
         class="tt-list"
-        ariaLabel=${this.ariaLabel}
+        ariaLabel=${this.ariaLabelOverride}
         role=${this.ariaRole}
         tabindex=${this.listTabIndex}>
         <slot @click=${(e: Event) => e.stopPropagation()}></slot>

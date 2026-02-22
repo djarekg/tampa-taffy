@@ -9,7 +9,7 @@ export class ListItem extends SignalWatcher(LitElement) {
    *
    * @default false
    */
-  override ariaChecked = property<'true' | 'false'>('false');
+  ariaCheckedOverride = property<'true' | 'false'>('false');
   /**
    * The ARIA selected attribute for the list item.
    *
@@ -54,23 +54,26 @@ export class ListItem extends SignalWatcher(LitElement) {
    */
   supportingText = property('');
   /**
-   * The name of the Material icon to display for the navigation item. If not provided,
-   * no icon will be rendered.
+   * The type of indicator to display for the list item. The indicator is a visual
+   * element that can be used to highlight the list item on hover or focus. The
+   * 'background' indicator displays a background color behind the list item, while
+   * the 'underline' indicator displays a line underneath the headline. The 'none' option
+   * disables the indicator.
    *
-   * @default null
+   * @default 'background'
    */
-  icon = property<string | null>(null);
+  indicator = property<'background' | 'underline' | 'none'>('background');
 
   override render() {
+    const indicator = this.#getIndicator();
     return html`
       <li
         class="list-item"
-        aria-checked=${this.ariaChecked || nothing}
+        aria-checked=${this.ariaCheckedOverride || nothing}
         aria-selected=${this.ariaCSelected || nothing}
         tabindex=${this.disabled ? -1 : this.itemTabIndex}
         role=${this.ariaRole}>
-        ${this.#renderListItemContent()}
-        <div class="indicator"></div>
+        ${this.#renderListItemContent()} ${this.#renderIndicator(indicator)}
       </li>
     `;
   }
@@ -96,17 +99,19 @@ export class ListItem extends SignalWatcher(LitElement) {
   }
 
   #renderBody() {
+    const headline = this.#getHeadline();
+    const supportingText = this.#getSupportingText();
     return html`
       <div class="body">
-        <span class="headline">${this.headline}</span>
-        ${when(this.supportingText, () => this.#renderSupportingText())}
+        <span class="headline">${headline}</span>
+        ${when(supportingText, () => this.#renderSupportingText(supportingText))}
       </div>
     `;
   }
 
-  #renderSupportingText() {
+  #renderSupportingText(supportingText: string) {
     return html`
-      <span class="supporting-text">${this.supportingText}</span>
+      <span class="supporting-text">${supportingText}</span>
     `;
   }
 
@@ -114,5 +119,26 @@ export class ListItem extends SignalWatcher(LitElement) {
     return html`
       <slot name="end"></slot>
     `;
+  }
+
+  #renderIndicator(indicator: string) {
+    return when(
+      indicator === 'background',
+      () => html`
+        <div class="indicator"></div>
+      `
+    );
+  }
+
+  #getHeadline() {
+    return this.headline ?? this.getAttribute('headline') ?? '';
+  }
+
+  #getSupportingText() {
+    return this.supportingText ?? this.getAttribute('supportingtext') ?? '';
+  }
+
+  #getIndicator() {
+    return this.indicator ?? this.getAttribute('indicator') ?? 'background';
   }
 }

@@ -36,7 +36,9 @@ export class SettingsNav extends SignalWatcher(LitElement) {
 
   #renderDrawerContent() {
     return html`
-      <tt-list ariaRole="navigation">
+      <tt-list
+        ariaRole="navigation"
+        ariaLabel="Settings nav">
         <tt-list-item-link
           href="/users/${this.#userId}/settings"
           headline="Profile">
@@ -45,6 +47,7 @@ export class SettingsNav extends SignalWatcher(LitElement) {
             name="person"></m3e-icon>
         </tt-list-item-link>
         <tt-list-item-link
+          href="javascript:void(0)"
           headline="Sign out"
           @click=${this.#handleSignoutClick}>
           <m3e-icon
@@ -52,16 +55,6 @@ export class SettingsNav extends SignalWatcher(LitElement) {
             name="logout"></m3e-icon>
         </tt-list-item-link>
       </tt-list>
-      <!-- <nav>
-        <tt-navigation-item
-          href="/users/${this.#userId}/settings"
-          label="Profile"
-          icon="person"></tt-navigation-item>
-        <tt-navigation-item
-          label="Sign out"
-          icon="logout"
-          @click=${this.#handleSignoutClick}></tt-navigation-item>
-      </nav> -->
     `;
   }
 

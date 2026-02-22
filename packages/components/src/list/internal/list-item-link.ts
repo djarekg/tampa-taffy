@@ -18,10 +18,12 @@ export class ListItemLink extends ListItem {
   target = property('_self');
 
   protected override renderContent(content: unknown) {
+    const href = this.href ?? this.getAttribute('href') ?? '#';
+    const target = this.target ?? this.getAttribute('target') ?? '_self';
     return html`
       <a
-        href=${this.href}
-        target=${this.target}>
+        href=${href}
+        target=${target}>
         ${content}
       </a>
     `;

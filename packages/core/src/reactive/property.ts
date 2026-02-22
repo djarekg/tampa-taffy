@@ -2,7 +2,7 @@ import { signal } from '@lit-labs/signals';
 import type { PropertyDeclaration } from 'lit';
 import { ReactiveElement } from 'lit';
 
-const PROPERTY_SIGNAL = Symbol('tt-property-signal');
+const PROPERTY_SIGNAL = Symbol.for('tt-property-signal');
 
 type PropertySignal<T> = ReturnType<typeof signal<T>> & {
   [PROPERTY_SIGNAL]: PropertyDeclaration;

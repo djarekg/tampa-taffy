@@ -1,11 +1,9 @@
 import { authenticatedContext } from '@/auth';
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
-import '@m3e/button';
 import '@m3e/icon';
 import '@m3e/icon-button';
 import '@tt/components/list';
-import '@tt/components/navigation-item';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing } from 'lit';
@@ -56,12 +54,14 @@ export class Header extends SignalWatcher(LitElement) {
           ariaRole="navigation"
           ariaLabel="Site menu"
           alignment="horizontal">
-          <tt-navigation-item
+          <tt-list-item-link
             href="/"
-            label="Home"></tt-navigation-item>
-          <tt-navigation-item
+            headline="Home"
+            indicator="underline"></tt-list-item-link>
+          <tt-list-item-link
             href="/users"
-            label="Users"></tt-navigation-item>
+            headline="Users"
+            indicator="underline"></tt-list-item-link>
         </tt-list>
       `;
     }
