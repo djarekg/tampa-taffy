@@ -14,9 +14,6 @@
     "./reactive": {
       "import": "./src/reactive/index.ts"
     },
-    "./resource": {
-      "import": "./src/resource/index.ts"
-    },
     "./types": {
       "import": "./src/types/index.ts"
     },

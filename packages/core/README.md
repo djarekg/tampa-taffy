@@ -71,51 +71,6 @@ export class MyCounter extends LitElement {
 }
 ```
 
-### 📦 resource
-
-Async resource primitive for loading and rendering remote data with signals.
-
-- 📄 **resource.ts** - Main `resource()` factory with status tracking and rendering
-- 📄 **types.ts** - TypeScript types for resource states and renderers
-
-```ts
-import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { SignalWatcher, signal } from '@lit-labs/signals';
-import { resource } from '@tt/core/resource';
-
-const productId = signal('123');
-
-const productResource = resource({
-  params: () => productId.get(),
-  loader: async ({ params: id, abortSignal }) => {
-    const response = await fetch(`/api/products/${id}`, { signal: abortSignal });
-    if (!response.ok) throw new Error(response.statusText);
-    return response.json();
-  },
-});
-
-@customElement('product-view')
-export class ProductView extends SignalWatcher(LitElement) {
-  render() {
-    return productResource.renderer({
-      initial: () => html`
-        <p>Waiting...</p>
-      `,
-      pending: () => html`
-        <p>Loading...</p>
-      `,
-      complete: product => html`
-        <p>${product?.name}</p>
-      `,
-      error: err => html`
-        <p>Error: ${String(err)}</p>
-      `,
-    });
-  }
-}
-```
-
 ### 📝 types
 
 Common TypeScript type definitions.
