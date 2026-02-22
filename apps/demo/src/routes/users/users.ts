@@ -4,6 +4,17 @@ import { resource } from '@tt/core';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
 
+/**
+ * @summary A simple users page that demonstrates fetching and displaying a list of users.
+ *
+ * @remarks
+ * The `resource` function is used to manage the asynchronous loading of user data, and
+ * the `computed` function creates a reactive view that updates based on the resource's
+ * state (pending, error, complete).
+ *
+ * @note
+ * This component is registered as 'app-users' and can be navigated to via the router.
+ */
 export class Users extends SignalWatcher(LitElement) {
   #resource = resource({
     loader: () => getUsers(),
@@ -31,8 +42,6 @@ export class Users extends SignalWatcher(LitElement) {
 
   override render() {
     return html`
-      <h1>Users Page</h1>
-      <p>Welcome to the users page!</p>
       ${this.#usersView}
     `;
   }
