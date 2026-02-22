@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 /**
  * Sign in a user and return a JWT if successful.
  */
-export const signin = async (request: Request): Promise<Response> => {
+export const signin = async (request: Request) => {
   const body = await getBody<{ email: string; password: string }>(request);
   const { email, password } = body;
 
@@ -61,7 +61,7 @@ export const signin = async (request: Request): Promise<Response> => {
 /**
  * Sign out a user by expiring their JWT.
  */
-export const signout = (request: Request): Response => {
+export const signout = () => {
   // Note: In a real implementation, you might want to add the token to a blacklist
   // For now, we just acknowledge the signout
   return Response.json({ success: true });
@@ -70,7 +70,7 @@ export const signout = (request: Request): Response => {
 /**
  * Check if the user is authenticated by verifying their JWT.
  */
-export const isAuthenticated = (request: Request): Response => {
+export const isAuthenticated = (request: Request) => {
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1] ?? '';
 

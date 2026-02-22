@@ -1,23 +1,16 @@
 import { IS_DEV, PORT } from '#app/config.ts';
-import { isAuthenticated, signin, signout } from '#app/controllers/auth.ts';
-import { getUser, getUsers } from '#app/controllers/users.ts';
-import { withCors } from './middleware/with-cors.ts';
+import { authRoutes } from '#app/routes/auth.ts';
+import { userRoutes } from '#app/routes/user.ts';
 import { createCorsPreflightResponse, getCorsHeaders } from './utils/cors.ts';
 
 export const server = Bun.serve({
   port: PORT,
   development: IS_DEV,
   routes: {
-    // Auth routes
-    '/auth/signin': withCors(req => signin(req)),
-    '/auth/signout': withCors(async req => signout(req)),
-    '/auth/authenticated': withCors(async req => isAuthenticated(req)),
-
-    // Users routes
-    '/users': withCors(req => getUsers(req)),
-    '/users/:id': withCors((req, { params }) => getUser(req, { id: params.id })),
+    ...authRoutes,
+    ...userRoutes,
   },
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request: Request) {
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return createCorsPreflightResponse();

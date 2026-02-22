@@ -5,7 +5,7 @@ import { ApiError, ApiStatus } from '@tt/core/api';
  * Get a single user by ID.
  *
  */
-export const getUser = async (request: Request, params: { id: string }): Promise<Response> => {
+export const getUser = async (request: Request, params: { id: string }) => {
   const { id } = params;
 
   if (!id) {
@@ -28,7 +28,7 @@ export const getUser = async (request: Request, params: { id: string }): Promise
 /**
  * Get all users.
  */
-export const getUsers = async (request: Request): Promise<Response> => {
+export const getUsers = async ()  => {
   const users = await prisma.user.findMany();
   return Response.json(users);
 };
