@@ -40,7 +40,13 @@ export class Index extends SignalWatcher(LitElement) {
     console.debug(this._authenticated);
 
     return html`
-      <m3e-theme density="-3">
+      <m3e-theme
+        color="#bb5fff"
+        scheme="dark"
+        density="-3"
+        motion="expressive"
+        variant="rainbow"
+        strong-focus>
         <ui-router .uiRouter=${this._router}>
           <app-header></app-header>
           <main>
