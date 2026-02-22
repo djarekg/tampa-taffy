@@ -146,8 +146,6 @@
     // Lit Plugin Settings
     "lit-plugin.strict": true,
 
-    "html.customData": ["./node_modules/@m3e/button/dist/html-custom-data.json"],
-    "css.customData": ["./node_modules/@m3e/button/dist/css-custom-data.json"],
     "cSpell.words": [
       "bunx",
       "dbaeumer",
@@ -155,6 +153,8 @@
       "iconbutton",
       "importmap",
       "libsql",
+      "litelement",
+      "packagejson",
       "qwtel",
       "runem",
       "tsgo",
@@ -162,6 +162,9 @@
       "typescriptteam",
       "uirouter",
     ],
+
+    "html.customData": ["./.vscode/vscode.html-custom-data.json"],
+    "css.customData": ["./.vscode/vscode.css-custom-data.json"],
   },
   "extensions": {
     "recommendations": [

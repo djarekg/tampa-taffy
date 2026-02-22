@@ -22,8 +22,8 @@ export default css`
   }
 
   .headline {
-    color: var(--tt-navigation-item-color, var(--md-sys-color-on-surface));
-    font-size: var(--tt-navigation-item-font-size, var(--md-sys-typescale-label-large-size));
+    color: var(--tt-list-item-headline-color, var(--md-sys-color-on-surface));
+    font-size: var(--tt-list-item-font-size, var(--md-sys-typescale-label-large-size));
   }
 
   .indicator {
@@ -31,7 +31,7 @@ export default css`
     content-visibility: var(--_indicator-visibility);
     position: absolute;
     inset: 0;
-    background: var(--tt-navigation-item-color, var(--md-sys-color-inverse-on-surface));
+    background: var(--tt-list-item-background-color, var(--md-sys-color-inverse-on-surface));
     border-radius: var(--md-sys-shape-corner-small);
     opacity: var(--_indicator-opacity);
     z-index: -1;

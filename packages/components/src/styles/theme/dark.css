@@ -1,5 +1,7 @@
 [color-theme="dark"] {
   color-scheme: dark;
+  --md-sys-color-accent: #6ea8ff; /* customized */
+
   --md-sys-color-primary: #bb5fff; /* customized */
   /* --md-sys-color-primary: rgb(226 182 255); */
   --md-sys-color-surface-tint: rgb(226 182 255);
