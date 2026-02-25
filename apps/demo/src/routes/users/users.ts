@@ -1,14 +1,18 @@
 import type { UserModel } from '@tt/db';
+import type { UIRouterLit } from 'lit-ui-router';
 
+import { html } from '@lit-labs/signals';
+import { consume } from '@lit/context';
 import { Task } from '@lit/task';
-import '@m3e/icon';
-import '@m3e/progress-indicator';
+import '@m3e/web/icon';
+import '@m3e/web/progress-indicator';
 import '@tt/components/card';
 import { safeDefine } from '@tt/core/utils';
-import { html, LitElement } from 'lit';
+import { LitElement } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 
-import { getUsers } from '@/api/user.api';
+import { getUsers } from '@/core/api/user.api';
+import { routerContext } from '@/router';
 
 import styles from './users.css';
 
@@ -17,6 +21,9 @@ import styles from './users.css';
  */
 export class Users extends LitElement {
   static override styles = [styles];
+
+  @consume({ context: routerContext, subscribe: true })
+  private _router!: UIRouterLit;
 
   readonly #usersTask = new Task(
     this,
@@ -31,6 +38,39 @@ export class Users extends LitElement {
         error: () => this.#renderError(),
         complete: users => this.#renderUserList(users),
       })}
+    `;
+  }
+
+  #renderUserList(users: UserModel[]) {
+    return html`
+      <div class="user-list">
+        ${repeat(
+          users,
+          ({ id }) => id,
+          (user, index) => this.#renderUserCard(user, index),
+        )}
+      </div>
+    `;
+  }
+
+  #renderUserCard(user: UserModel, index: number) {
+    return html`
+      <tt-card key=${index} @click=${async () => this.#handleUserClick(user.id)}>
+        <div class="header">
+          <m3e-icon name="person" filled></m3e-icon>
+          <span class="fullname">${user.firstName}&nbsp;${user.lastName}</span>
+        </div>
+        <div class="content">
+          <div>
+            <m3e-icon name="label" filled></m3e-icon>
+            ${user.jobTitle}
+          </div>
+            <div>
+              <m3e-icon name="email" filled></m3e-icon>
+              ${user.email}
+          </div>
+        </div>
+      </tt-card>
     `;
   }
 
@@ -51,37 +91,8 @@ export class Users extends LitElement {
     `;
   }
 
-  #renderUserList(users: UserModel[]) {
-    return html`
-      <div class="user-list">
-        ${repeat(
-          users,
-          ({ id }) => id,
-          (user, index) => this.#renderUserCard(user, index),
-        )}
-      </div>
-    `;
-  }
-
-  #renderUserCard(user: UserModel, index: number) {
-    return html`
-      <tt-card key=${index}>
-        <div class="header">
-          <m3e-icon name="person" filled></m3e-icon>
-          <span class="fullname">${user.firstName}&nbsp;${user.lastName}</span>
-        </div>
-        <div class="content">
-          <div>
-            <m3e-icon name="label" filled></m3e-icon>
-            ${user.jobTitle}
-          </div>
-            <div>
-              <m3e-icon name="email" filled></m3e-icon>
-              ${user.email}
-          </div>
-        </div>
-      </tt-card>
-    `;
+  async #handleUserClick(id: string) {
+    await this._router.stateService.go('user', { id });
   }
 }
 

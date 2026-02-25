@@ -8,14 +8,14 @@
  * @param source - The Request or Response object containing the body to parse.
  * @returns A promise that resolves to the parsed JSON object, or an empty object if body is empty.
  */
-export const getBody = async <T = Record<string, unknown>>(
-  source: Request | Response
+export const parseBody = async <T = Record<string, unknown>>(
+  source: Request | Response,
 ): Promise<T> => {
   try {
     return (await source.json()) as T;
   } catch (error) {
     throw new Error(
-      `Failed to parse JSON: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Failed to parse JSON: ${error instanceof Error ? error.message : 'Unknown error'}`,
     );
   }
 };

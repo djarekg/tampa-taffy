@@ -1,13 +1,13 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
-import { state } from '@tt/core/reactive';
-import '@m3e/icon';
-import '@m3e/icon-button';
+import '@m3e/web/icon';
+import '@m3e/web/icon-button';
 import '@tt/components/list';
+import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing } from 'lit';
 
-import { authenticatedContext } from '@/auth';
+import { authenticatedContext } from '@/core/auth';
 
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';

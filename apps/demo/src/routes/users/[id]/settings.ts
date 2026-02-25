@@ -1,9 +1,11 @@
-import { routerContext } from '@/router';
+import type { UIRouterLit } from 'lit-ui-router';
+
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
-import type { UIRouterLit } from 'lit-ui-router';
+
+import { routerContext } from '@/router';
 
 /**
  * UserSettings component that displays user-specific settings based on the user ID.

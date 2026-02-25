@@ -7,10 +7,10 @@ import '@/components/settings-nav/settings-nav';
 import '@/layout/header';
 import { html, LitElement, nothing } from 'lit';
 
-import { authenticated, authenticatedContext } from '@/auth';
+import { authenticated, authenticatedContext } from '@/core/auth';
 import { routerContext } from '@/router';
 import { router } from '@/router/router';
-import '@m3e/theme';
+import '@m3e/web/theme';
 import styles from './index.css.ts';
 import scrollStyles from './styles/scroll.css.ts';
 

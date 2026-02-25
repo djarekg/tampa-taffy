@@ -1,13 +1,13 @@
 import { SignalWatcher, html } from '@lit-labs/signals';
-import '@m3e/icon';
+import '@m3e/web/icon';
 import '@tt/components/list';
 import '@tt/components/navigation-drawer';
 import { property } from '@tt/core/reactive';
 import { isBrowser, safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
 
-import { signout } from '@/api/auth.api';
-import { getUserId } from '@/api/profile.api';
+import { signout } from '@/core/api/auth.api';
+import { getUserId } from '@/core/api/profile.api';
 
 /**
  * The `SettingsNav` component is a navigation drawer that provides links to user

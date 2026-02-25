@@ -1,6 +1,8 @@
-import { isAuthenticated } from '@/api/auth.api';
 import { pushStateLocationPlugin } from '@uirouter/core';
 import { UIRouterLit } from 'lit-ui-router';
+
+import { isAuthenticated } from '@/core/api/auth.api';
+
 import routes, { type StateDataType } from './routes';
 
 /**

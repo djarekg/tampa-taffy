@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from '@/utils/cookie.ts';
+import { getCookie, setCookie } from '@/core/utils/cookie.ts';
 
 const USER_ID_COOKIE = 'userId';
 const USER_ROLE_COOKIE = 'role';

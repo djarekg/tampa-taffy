@@ -1,8 +1,11 @@
-import * as authApi from '@/api/auth.api';
 import { signal } from '@lit-labs/signals';
 import { createContext } from '@lit/context';
 
-export const authenticatedContext = createContext<boolean>(Symbol('authenticated'));
+import * as authApi from '@/core/api/auth.api';
+
+export const authenticatedContext = createContext<boolean>(
+  Symbol('authenticated'),
+);
 
 /**
  * Signal to track the current user's authentication state.

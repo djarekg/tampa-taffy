@@ -1,6 +1,6 @@
 import { TOKEN_SECRET } from '#app/config.ts';
 import prisma from '#app/db.ts';
-import { getBody } from '#app/utils/json.ts';
+import { parseBody } from '#app/utils/json.ts';
 import { isEmpty, isNotEmpty } from '@tt/core';
 import { ApiError, ApiStatus } from '@tt/core/api';
 import { compareHash } from '@tt/core/crypto';
@@ -10,8 +10,8 @@ import jwt from 'jsonwebtoken';
 /**
  * Sign in a user and return a JWT if successful.
  */
-export const signin = async (request: Request) => {
-  const body = await getBody<{ email: string; password: string }>(request);
+export const signin = async (req: Request) => {
+  const body = await parseBody<{ email: string; password: string }>(req);
   const { email, password } = body;
 
   if (isEmpty(email) || isEmpty(password)) {
@@ -33,6 +33,8 @@ export const signin = async (request: Request) => {
     },
   });
 
+  // If user doesn't exist, we throw a 404 to avoid revealing
+  // whether the email is registered or not
   if (!user) {
     throw new ApiError(ApiStatus.notFound, 'User not found');
   }
@@ -41,6 +43,7 @@ export const signin = async (request: Request) => {
   const hashPassword = user.userCredential?.password ?? '';
   const isValid = compareHash(password, hashPassword);
 
+  // If credentials are invalid, signin was unsuccessful
   if (!isValid) {
     return Response.json({ success: false });
   }
@@ -70,9 +73,9 @@ export const signout = () => {
 /**
  * Check if the user is authenticated by verifying their JWT.
  */
-export const isAuthenticated = (request: Request) => {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.split(' ')[1] ?? '';
+export const isAuthenticated = (req: Request) => {
+  const header = req.headers.get('authorization');
+  const token = header?.split(' ')[1] ?? '';
 
   if (isNotEmpty(token)) {
     try {

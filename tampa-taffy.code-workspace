@@ -166,8 +166,12 @@
       "uirouter",
     ],
 
-    "html.customData": ["./.vscode/vscode.html-custom-data.json"],
-    "css.customData": ["./.vscode/vscode.css-custom-data.json"],
+    "html.customData": [
+      "./apps/demo/node_modules/@m3e/web/dist/html-custom-data.json",
+    ],
+    "css.customData": [
+      "./apps/demo/node_modules/@m3e/web/dist/css-custom-data.json",
+    ],
   },
   "extensions": {
     "recommendations": [

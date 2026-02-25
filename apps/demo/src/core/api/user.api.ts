@@ -1,5 +1,6 @@
-import { client } from '@/api/client';
 import type { UserModel } from '@tt/db';
+
+import { client } from '@/core/api/client';
 
 /**
  * Get a single user by ID.
@@ -7,7 +8,7 @@ import type { UserModel } from '@tt/db';
  * @param id - The ID of the user to retrieve.
  * @returns A promise that resolves to the user data.
  */
-export const getUser = (id: string) => {
+export const getUser = async (id: string) => {
   const { get } = client;
   return get<UserModel>(`/users/${id}`);
 };
@@ -17,7 +18,7 @@ export const getUser = (id: string) => {
  *
  * @returns A promise that resolves to an array of user data.
  */
-export const getUsers = () => {
+export const getUsers = async () => {
   const { get } = client;
   return get<UserModel[]>('/users');
 };
@@ -29,7 +30,7 @@ export const getUsers = () => {
  * @param isActive - The new active status.
  * @returns A promise that resolves to the updated user data.
  */
-export const updateUserActive = (id: string, isActive: boolean) => {
+export const updateUserActive = async (id: string, isActive: boolean) => {
   const { post } = client;
   return post<UserModel>(`/users/${id}/active`, { isActive });
 };

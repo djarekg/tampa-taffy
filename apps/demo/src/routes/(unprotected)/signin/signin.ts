@@ -1,15 +1,18 @@
-import { signin } from '@/auth';
-import { routerContext } from '@/router';
+import type { UIRouterLit } from 'lit-ui-router';
+
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
-import '@m3e/button';
-import '@m3e/form-field';
+import '@m3e/web/button';
+import '@m3e/web/form-field';
 import '@tt/components/link';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing } from 'lit';
-import type { UIRouterLit } from 'lit-ui-router';
+
+import { signin } from '@/core/auth';
+import { routerContext } from '@/router';
+
 import styles from './signin.css';
 
 /**
@@ -125,7 +128,8 @@ export class SignIn extends SignalWatcher(LitElement) {
   #handleInputKeyDown(e: KeyboardEvent) {
     // If the user presses Enter while focused on an input, submit the form.
     if (e.key === 'Enter') {
-      e.target instanceof HTMLInputElement && e.target.closest('form')?.requestSubmit();
+      e.target instanceof HTMLInputElement &&
+        e.target.closest('form')?.requestSubmit();
     }
   }
 

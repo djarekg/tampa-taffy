@@ -20,6 +20,10 @@ export default css`
     block-size: 125px;
     gap: 0.8rem;
 
+    &:hover {
+      transform: scale(1.02);
+    }
+
     .header {
       --m3e-icon-size: 32px;
 

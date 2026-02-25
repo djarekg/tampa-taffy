@@ -56,7 +56,7 @@ export default defineConfig({
     // 'typescript/prefer-readonly-parameter-types': 'warn',
     // 'typescript/prefer-readonly': 'warn',
     'typescript/promise-function-async': 'error',
-    'typescript/require-await': 'error',
+    // 'typescript/require-await': 'error',
     'typescript/restrict-template-expressions': 'error',
     'typescript/return-await': 'error',
     'typescript/unbound-method': 'off',
