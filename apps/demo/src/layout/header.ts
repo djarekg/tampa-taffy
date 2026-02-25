@@ -1,12 +1,14 @@
-import { authenticatedContext } from '@/auth';
-import { html, signal, SignalWatcher } from '@lit-labs/signals';
+import { html, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
+import { state } from '@tt/core/reactive';
 import '@m3e/icon';
 import '@m3e/icon-button';
 import '@tt/components/list';
-import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing } from 'lit';
+
+import { authenticatedContext } from '@/auth';
+
 import logoSvg from '../assets/candy.svg' with { type: 'svg' };
 import styles from './header.css.ts';
 
@@ -21,8 +23,6 @@ import styles from './header.css.ts';
  */
 export class Header extends SignalWatcher(LitElement) {
   static override styles = [styles];
-
-  #drawerOpen = signal(false);
 
   @consume({ context: authenticatedContext, subscribe: true })
   private _authenticated = state(false);
@@ -43,7 +43,6 @@ export class Header extends SignalWatcher(LitElement) {
         <div class="site-menu">${this.#renderSiteMenu()}</div>
         <div class="settings-nav-button">${this.#renderSettingsNavButton()}</div>
       </header>
-      ${this.#renderSettingsNav()}
     `;
   }
 
@@ -83,24 +82,8 @@ export class Header extends SignalWatcher(LitElement) {
     return nothing;
   }
 
-  #renderSettingsNav() {
-    if (this._authenticated) {
-      return html`
-        <app-settings-nav
-          ?opened=${this.#drawerOpen.get()}
-          @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
-      `;
-    }
-
-    return nothing;
-  }
-
   #handleMenuClick() {
-    this.#drawerOpen.set(true);
-  }
-
-  #handleSettingsNavClosed() {
-    this.#drawerOpen.set(false);
+    this.dispatchEvent(new CustomEvent('open-settings-nav', { bubbles: true }));
   }
 }
 

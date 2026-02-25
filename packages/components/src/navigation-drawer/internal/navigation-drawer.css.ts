@@ -26,6 +26,7 @@ export default css`
     border-inline-end: 1px solid var(--tt-border-color);
     border-start-start-radius: var(--md-sys-shape-corner-extra-large);
     border-end-start-radius: var(--md-sys-shape-corner-extra-large);
+    z-index: 1000;
     transform: translateX(var(--_inline-size));
     will-change: transform;
     transition:
@@ -52,6 +53,7 @@ export default css`
     background-color: var(--md-sys-color-scrim);
     opacity: var(--_scrim-opacity);
     transition: opacity 200ms linear 100ms;
+    z-index: 999;
   }
 
   :host([opened]) .scrim {

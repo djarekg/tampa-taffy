@@ -1,15 +1,18 @@
-import { authenticated, authenticatedContext } from '@/auth';
-import '@/components/settings-nav/settings-nav';
-import '@/layout/header';
-import { routerContext } from '@/router';
-import { router } from '@/router/router';
-import { SignalWatcher } from '@lit-labs/signals';
+import { signal, SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
-import '@m3e/theme';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
-import { html, LitElement } from 'lit';
+
+import '@/components/settings-nav/settings-nav';
+import '@/layout/header';
+import { html, LitElement, nothing } from 'lit';
+
+import { authenticated, authenticatedContext } from '@/auth';
+import { routerContext } from '@/router';
+import { router } from '@/router/router';
+import '@m3e/theme';
 import styles from './index.css.ts';
+import scrollStyles from './styles/scroll.css.ts';
 
 /**
  * @summary Root application component that wires up global providers, routing, and layout.
@@ -24,7 +27,9 @@ import styles from './index.css.ts';
  * `constructor` or `connectedCallback` would break reactivity.
  */
 export class Index extends SignalWatcher(LitElement) {
-  static override styles = [styles];
+  static override styles = [scrollStyles, styles];
+
+  #drawerOpen = signal(false);
 
   @provide({ context: authenticatedContext })
   private _authenticated = state(false);
@@ -48,13 +53,38 @@ export class Index extends SignalWatcher(LitElement) {
         variant="rainbow"
         strong-focus>
         <ui-router .uiRouter=${this._router}>
-          <app-header></app-header>
-          <main>
-            <ui-view></ui-view>
-          </main>
+          <div
+            class="body"
+            scrollable>
+            <app-header @open-settings-nav=${this.#handleMenuClick}></app-header>
+            <main>
+              <ui-view></ui-view>
+            </main>
+          </div>
+          ${this.#renderSettingsNav()}
         </ui-router>
       </m3e-theme>
     `;
+  }
+
+  #renderSettingsNav() {
+    if (this._authenticated) {
+      return html`
+        <app-settings-nav
+          ?opened=${this.#drawerOpen.get()}
+          @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
+      `;
+    }
+
+    return nothing;
+  }
+
+  #handleMenuClick() {
+    this.#drawerOpen.set(true);
+  }
+
+  #handleSettingsNavClosed() {
+    this.#drawerOpen.set(false);
   }
 }
 
