@@ -1,0 +1,6 @@
+:root {
+  --tt-color-on-surface-label: rgb(153 140 159);
+  --tt-color-secondary: #297eff; /* customized */
+  --tt-color-primary: #bb5fff; /* customized */
+  /* --md-sys-color-primary: rgb(226 182 255); */
+}

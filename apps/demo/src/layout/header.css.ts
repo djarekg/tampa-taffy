@@ -1,12 +1,19 @@
 import { css } from 'lit';
 
 export default css`
+  :host {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 100;
+  }
+
   header {
     display: grid;
     grid-template-columns: 300px 1fr 300px;
     grid-template-areas: 'a b c';
     block-size: var(--app-header-height);
     padding-inline: 1rem;
+    backdrop-filter: blur(4px);
   }
 
   .image {

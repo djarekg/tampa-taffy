@@ -1,15 +1,17 @@
 import { css } from 'lit';
 
 export default css`
-  :host {
+  :host,
+  .body {
     display: block;
     inline-size: 100%;
-    block-size: 100vh;
+    block-size: 100%;
   }
 
   main {
-    block-size: calc(100vh - var(--app-header-height));
+    display: block;
     inline-size: 100%;
+    block-size: calc(100% - var(--app-header-height));
   }
 
   .title {

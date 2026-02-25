@@ -1,10 +1,13 @@
 {
   "name": "@tt/components",
-  "private": false,
   "version": "0.0.1",
+  "private": false,
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./card": {
+      "import": "./src/card/index.ts"
+    },
     "./link": {
       "import": "./src/link/index.ts"
     },
@@ -16,9 +19,6 @@
     },
     "./navigation-drawer": {
       "import": "./src/navigation-drawer/index.ts"
-    },
-    "./navigation-item": {
-      "import": "./src/navigation-item/index.ts"
     },
     "./styles/index.css": {
       "import": "./src/styles/index.css"

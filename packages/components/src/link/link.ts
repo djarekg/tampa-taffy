@@ -1,4 +1,5 @@
 import { safeDefine } from '@tt/core/utils';
+
 import { Link } from './internal/link';
 import styles from './internal/link.css';
 

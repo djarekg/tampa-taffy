@@ -1,5 +1,6 @@
 :root {
   --app-header-height: 80px;
+  --app-page-padding: 2rem;
 }
 
 html,
@@ -7,8 +8,8 @@ body {
   margin: 0;
   padding: 0;
   min-inline-size: 320px;
-  min-block-size: 100vh;
-  block-size: 100vh;
+  /* min-block-size: 100%; */
+  block-size: 100%;
   overflow: hidden;
 }
 
