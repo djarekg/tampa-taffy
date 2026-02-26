@@ -1,7 +1,8 @@
-import { SignalWatcher, html } from '@lit-labs/signals';
 import '@m3e/web/icon';
 import '@tt/components/list';
 import '@tt/components/navigation-drawer';
+
+import { html, SignalWatcher } from '@lit-labs/signals';
 import { property } from '@tt/core/reactive';
 import { isBrowser, safeDefine } from '@tt/core/utils';
 import { LitElement } from 'lit';
@@ -61,7 +62,7 @@ export class SettingsNav extends SignalWatcher(LitElement) {
   async #handleSignoutClick() {
     await signout();
 
-    if (isBrowser()) {
+    if (isBrowser) {
       window.location.reload();
     }
   }

@@ -2,8 +2,8 @@ import { css } from 'lit';
 
 export default css`
   :host {
-    display: grid;
-    place-content: center;
+    display: flex;
+    justify-content: center;
     block-size: 100%;
   }
 
@@ -14,6 +14,8 @@ export default css`
     gap: 1rem;
     padding: 16px;
     inline-size: 300px;
+    block-size: fit-content;
+    margin-block-start: 1rem;
     border-radius: var(--md-sys-shape-corner-large);
     background-color: var(--md-sys-color-surface-container-low);
   }

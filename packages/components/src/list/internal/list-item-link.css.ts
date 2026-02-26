@@ -19,7 +19,8 @@ export default css`
     display: flex;
     align-items: center;
     text-decoration: var(--_text-decoration);
-    padding: 0.6rem 1rem;
+    padding: var(--tt-list-item-block-padding, 0.6rem)
+      var(--tt-list-item-inline-padding, 1rem);
     color: inherit;
   }
 `;

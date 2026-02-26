@@ -1,42 +1,14 @@
-/**
- * Checks if the code is currently executing in a browser environment.
- *
- * This is useful for conditional logic when preparing for Server-Side Rendering (SSR),
- * allowing you to safely access browser-only APIs like `window` or `document`.
- *
- * @returns `true` if running in a browser environment, `false` otherwise
- *
- * @example
- * ```ts
- * if (isBrowser()) {
- *   window.location.reload();
- * }
- * ```
- */
-export function isBrowser(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.document !== 'undefined' &&
-    typeof window.document.createElement !== 'undefined'
-  );
-}
+import { isServer } from 'lit';
 
 /**
- * Checks if the code is currently executing in a server environment.
+ * A utility that indicates whether the current environment is a browser. This is
+ * useful for conditionally executing code that should only run in a browser context,
+ * such as accessing `window` or `document`.
  *
- * This is useful for conditional logic when preparing for Server-Side Rendering (SSR),
- * allowing you to skip browser-specific code on the server.
- *
- * @returns `true` if running in a server environment, `false` otherwise
- *
- * @example
- * ```ts
- * if (isServer()) {
- *   // Use server-side alternatives
- *   console.log('Running on server');
- * }
- * ```
+ * @remarks
+ * The `isBrowser` constant is derived from the `isServer` utility provided by
+ * the `lit` library. It is set to `true` if the code is running in a browser
+ * environment and `false` if it is running in a server environment
+ * (e.g., during server-side rendering).
  */
-export function isServer(): boolean {
-  return !isBrowser();
-}
+export const isBrowser = !isServer;

@@ -5,6 +5,9 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./breadcrumbs": {
+      "import": "./src/breadcrumbs/index.ts"
+    },
     "./card": {
       "import": "./src/card/index.ts"
     },
@@ -33,7 +36,9 @@
   },
   "dependencies": {
     "@lit-labs/signals": "^0.2.0",
+    "@m3e/web": "^2.0.0",
     "@tt/core": "workspace:*",
+    "lit-ui-router": "^1.2.5",
     "signal-polyfill": "^0.2.2",
     "signal-utils": "^0.21.1"
   },

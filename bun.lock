@@ -57,7 +57,9 @@
       "version": "0.0.1",
       "dependencies": {
         "@lit-labs/signals": "^0.2.0",
+        "@m3e/web": "^2.0.0",
         "@tt/core": "workspace:*",
+        "lit-ui-router": "^1.2.5",
         "signal-polyfill": "^0.2.2",
         "signal-utils": "^0.21.1",
       },

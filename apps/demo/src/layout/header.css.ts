@@ -2,6 +2,10 @@ import { css } from 'lit';
 
 export default css`
   :host {
+    --_breadcrumbs-gutter-height: 50px;
+    --_header-height: calc(
+      var(--app-header-height) - var(--_breadcrumbs-gutter-height)
+    );
     position: sticky;
     inset-block-start: 0;
     z-index: 100;
@@ -11,9 +15,16 @@ export default css`
     display: grid;
     grid-template-columns: 300px 1fr 300px;
     grid-template-areas: 'a b c';
-    block-size: var(--app-header-height);
+    block-size: var(--_header-height);
     padding-inline: 1rem;
     backdrop-filter: blur(4px);
+  }
+
+  .breadcrumbs-gutter {
+    display: flex;
+    align-items: flex-start;
+    block-size: var(--_breadcrumbs-gutter-height);
+    padding-inline: 1rem;
   }
 
   .image {
