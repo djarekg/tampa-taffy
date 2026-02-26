@@ -2,5 +2,7 @@
   --tt-color-on-surface-label: rgb(153 140 159);
   --tt-color-secondary: #297eff; /* customized */
   --tt-color-primary: #bb5fff; /* customized */
-  /* --md-sys-color-primary: rgb(226 182 255); */
+  --tt-color-label-info: hsl(240, 3%, 60%);
+  --tt-color-icon-secondary: hsl(240, 3%, 80%);
+  --tt-color-pink: hsl(300, 70%, 70%);
 }

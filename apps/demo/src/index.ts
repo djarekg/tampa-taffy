@@ -1,16 +1,18 @@
+import '@/components/settings-nav/settings-nav';
+import '@/layout/header';
+import '@tt/components/styles/index.css';
+import '@m3e/web/theme';
+
 import { signal, SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
-
-import '@/components/settings-nav/settings-nav';
-import '@/layout/header';
 import { html, LitElement, nothing } from 'lit';
 
 import { authenticated, authenticatedContext } from '@/core/auth';
 import { routerContext } from '@/router';
 import { router } from '@/router/router';
-import '@m3e/web/theme';
+
 import styles from './index.css.ts';
 import scrollStyles from './styles/scroll.css.ts';
 

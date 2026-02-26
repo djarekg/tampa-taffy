@@ -164,6 +164,7 @@
       "typescale",
       "typescriptteam",
       "uirouter",
+      "webauthn",
     ],
 
     "html.customData": [

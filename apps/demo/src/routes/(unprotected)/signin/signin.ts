@@ -1,14 +1,14 @@
-import type { UIRouterLit } from 'lit-ui-router';
-
-import { html, signal, SignalWatcher } from '@lit-labs/signals';
-import { consume } from '@lit/context';
 import '@m3e/web/button';
 import '@m3e/web/form-field';
 import '@tt/components/link';
+
+import { html, signal, SignalWatcher } from '@lit-labs/signals';
+import { consume } from '@lit/context';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing } from 'lit';
+import type { UIRouterLit } from 'lit-ui-router';
 
 import { signin } from '@/core/auth';
 import { routerContext } from '@/router';
@@ -24,8 +24,8 @@ import styles from './signin.css';
  */
 const extractCredentials = (form: HTMLFormElement) => {
   const formData = new FormData(form);
-  const email = formData.get('email')?.toString();
-  const password = formData.get('password')?.toString();
+  const email = formData.get('email') as string | null;
+  const password = formData.get('password') as string | null;
 
   throwIfEmpty(email, 'Email is required');
   throwIfEmpty(password, 'Password is required');
@@ -49,6 +49,25 @@ export class SignIn extends SignalWatcher(LitElement) {
   @consume({ context: routerContext, subscribe: true })
   private _router = state<UIRouterLit | undefined>(undefined);
 
+  override connectedCallback() {
+    super.connectedCallback();
+
+    const passwordInput = this.renderRoot.querySelector(
+      '#password',
+    ) as HTMLInputElement;
+    const capsLockMessage = this.renderRoot.querySelector(
+      '.caps-lock-message',
+    ) as HTMLElement;
+    passwordInput.addEventListener('keyup', function (event) {
+      const isCapsLockOn = event.getModifierState('CapsLock');
+      if (isCapsLockOn) {
+        capsLockMessage.style.display = 'block';
+      } else {
+        capsLockMessage.style.display = 'none';
+      }
+    });
+  }
+
   override render() {
     return html`
       <form
@@ -66,6 +85,7 @@ export class SignIn extends SignalWatcher(LitElement) {
             id="email"
             name="email"
             type="email"
+            autocomplete="username"
             required
             @keydown=${this.#handleInputKeyDown} />
         </m3e-form-field>
@@ -81,6 +101,7 @@ export class SignIn extends SignalWatcher(LitElement) {
             id="password"
             name="password"
             type="password"
+            autocomplete="current-password"
             required
             @keydown=${this.#handleInputKeyDown} />
           <div
@@ -125,7 +146,7 @@ export class SignIn extends SignalWatcher(LitElement) {
     return nothing;
   }
 
-  #handleInputKeyDown(e: KeyboardEvent) {
+  async #handleInputKeyDown(e: KeyboardEvent) {
     // If the user presses Enter while focused on an input, submit the form.
     if (e.key === 'Enter') {
       e.target instanceof HTMLInputElement &&
@@ -144,7 +165,7 @@ export class SignIn extends SignalWatcher(LitElement) {
 
       // If signin succeeds without throwing, navigate to home
       if (success) {
-        return this._router?.stateService.go('home');
+        return await this._router?.stateService.go('home');
       }
     } catch (err) {
       console.error('Failed to sign in', err);

@@ -19,6 +19,7 @@ export default css`
     box-shadow: var(--_box-shadow);
     padding: var(--tt-card-padding, 1rem);
     overflow: hidden;
+    block-size: 100%;
   }
 
   :host([variant='filled']) {

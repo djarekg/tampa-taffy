@@ -1,14 +1,14 @@
-import type { UserModel } from '@tt/db';
-import type { UIRouterLit } from 'lit-ui-router';
+import '@m3e/web/icon';
+import '@m3e/web/progress-indicator';
+import '@tt/components/card';
 
 import { html } from '@lit-labs/signals';
 import { consume } from '@lit/context';
 import { Task } from '@lit/task';
-import '@m3e/web/icon';
-import '@m3e/web/progress-indicator';
-import '@tt/components/card';
 import { safeDefine } from '@tt/core/utils';
+import type { UserModel } from '@tt/db';
 import { LitElement } from 'lit';
+import type { UIRouterLit } from 'lit-ui-router';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { getUsers } from '@/core/api/user.api';
@@ -57,7 +57,11 @@ export class Users extends LitElement {
     return html`
       <tt-card key=${index} @click=${async () => this.#handleUserClick(user.id)}>
         <div class="header">
-          <m3e-icon name="person" filled></m3e-icon>
+          <m3e-icon
+            name=${user.gender === 'FEMALE' ? 'face_3' : 'face'}
+            filled
+            ?female=${user.gender === 'FEMALE'}
+            ?male=${user.gender !== 'FEMALE'}></m3e-icon>
           <span class="fullname">${user.firstName}&nbsp;${user.lastName}</span>
         </div>
         <div class="content">

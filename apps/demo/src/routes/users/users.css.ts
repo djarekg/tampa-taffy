@@ -25,11 +25,19 @@ export default css`
     }
 
     .header {
-      --m3e-icon-size: 32px;
+      --m3e-icon-size: 28px;
 
       display: flex;
       align-items: flex-end;
       gap: 1rem;
+
+      m3e-icon[female] {
+        color: var(--tt-color-pink);
+      }
+
+      m3e-icon[male] {
+        color: var(--tt-color-secondary);
+      }
     }
 
     .fullname {
@@ -55,7 +63,7 @@ export default css`
       }
 
       m3e-icon {
-        color: var(--tt-color-primary);
+        color: var(--tt-color-icon-secondary);
         /* color: var(--m3e-color-on-surface); */
       }
     }
