@@ -13,7 +13,18 @@ const propertySignalMap = new WeakMap<Function, Map<string, string>>();
 
 export function property<T>(defaultValue: T, options?: PropertyDeclaration): T {
   const sig = signal(defaultValue) as PropertySignal<T>;
-  sig[PROPERTY_SIGNAL] = { type: String, ...options };
+
+  // Automatically infer type from default value if not explicitly provided
+  let inferredType = String;
+  if (typeof defaultValue === 'boolean') {
+    inferredType = Boolean;
+  } else if (typeof defaultValue === 'number') {
+    inferredType = Number;
+  } else if (typeof defaultValue === 'object' && defaultValue !== null) {
+    inferredType = Object;
+  }
+
+  sig[PROPERTY_SIGNAL] = { type: inferredType, ...options };
   return sig as unknown as T;
 }
 
@@ -79,7 +90,19 @@ export function initializeProperties(element: ReactiveElement): void {
     const existingInstanceValue = (element as any)[propertyName];
     if (existingInstanceValue !== sig) {
       // Parent set the property to something - migrate that value to the signal
-      sig.set(existingInstanceValue);
+      const oldValue = sig.get();
+      const hasChanged = options?.hasChanged
+        ? options.hasChanged.call(element, existingInstanceValue, oldValue)
+        : existingInstanceValue !== oldValue;
+
+      if (hasChanged) {
+        console.log('[property] value changed (init)', {
+          propertyName,
+          oldValue,
+          newValue: existingInstanceValue,
+        });
+        sig.set(existingInstanceValue);
+      }
     }
 
     // Delete the instance field
@@ -147,10 +170,19 @@ export function initializeProperties(element: ReactiveElement): void {
             return;
           }
           const oldValue = signal.get();
-          signal.set(newValue);
+          const propOptions = signal[PROPERTY_SIGNAL];
+          const hasChanged = propOptions?.hasChanged
+            ? propOptions.hasChanged.call(this, newValue, oldValue)
+            : oldValue !== newValue;
 
-          // Trigger Lit update cycle
-          if (oldValue !== newValue) {
+          if (hasChanged) {
+            console.log('[property] value changed', {
+              propertyName,
+              oldValue,
+              newValue,
+            });
+            signal.set(newValue);
+            // Trigger Lit update cycle
             this.requestUpdate(propertyName, oldValue);
           }
         },
@@ -185,7 +217,20 @@ export function initializeProperties(element: ReactiveElement): void {
                 } else if (propOptions?.type === Number && attrValue !== null) {
                   newVal = Number(attrValue);
                 }
-                signal.set(newVal);
+                const oldVal = signal.get();
+                const shouldUpdate = propOptions?.hasChanged
+                  ? propOptions.hasChanged.call(element, newVal, oldVal)
+                  : oldVal !== newVal;
+
+                if (shouldUpdate) {
+                  console.log('[property] value changed (attribute)', {
+                    propertyName: propName,
+                    oldValue: oldVal,
+                    newValue: newVal,
+                    attributeName: attrName,
+                  });
+                  signal.set(newVal);
+                }
               }
               break;
             }
