@@ -4,14 +4,18 @@ import { ReactiveElement } from 'lit';
 
 const PROPERTY_SIGNAL = Symbol.for('tt-property-signal');
 
+export interface PropertyOptions extends PropertyDeclaration {
+  changed?: (newValue: unknown) => void;
+}
+
 type PropertySignal<T> = ReturnType<typeof signal<T>> & {
-  [PROPERTY_SIGNAL]: PropertyDeclaration;
+  [PROPERTY_SIGNAL]: PropertyOptions;
 };
 
 // Store map of property names to their signal backing keys per element class
 const propertySignalMap = new WeakMap<Function, Map<string, string>>();
 
-export function property<T>(defaultValue: T, options?: PropertyDeclaration): T {
+export function property<T>(defaultValue: T, options?: PropertyOptions): T {
   const sig = signal(defaultValue) as PropertySignal<T>;
 
   // Automatically infer type from default value if not explicitly provided
@@ -102,6 +106,7 @@ export function initializeProperties(element: ReactiveElement): void {
           newValue: existingInstanceValue,
         });
         sig.set(existingInstanceValue);
+        options?.changed?.call(element, existingInstanceValue);
       }
     }
 
@@ -182,6 +187,7 @@ export function initializeProperties(element: ReactiveElement): void {
               newValue,
             });
             signal.set(newValue);
+            propOptions?.changed?.call(this, newValue);
             // Trigger Lit update cycle
             this.requestUpdate(propertyName, oldValue);
           }
@@ -230,6 +236,7 @@ export function initializeProperties(element: ReactiveElement): void {
                     attributeName: attrName,
                   });
                   signal.set(newVal);
+                  propOptions?.changed?.call(element, newVal);
                 }
               }
               break;
