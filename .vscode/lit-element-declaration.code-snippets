@@ -1,0 +1,26 @@
+{
+  "Create LitElement": {
+    "scope": "typescript",
+    "prefix": "litelementdeclaration",
+    "body": [
+      "import { safeDefine } from '@tt/core';",
+      "",
+      "import { ${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g} } from './internal/${TM_FILENAME_BASE}'",
+      "import styles from './internal/${TM_FILENAME_BASE}.css';",
+      "",
+      "export class Tt${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g} extends ${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g} {",
+      "\tstatic override styles = [styles];",
+      "}",
+      "",
+      "safeDefine('${1|app,tt|}-${TM_FILENAME_BASE}', Tt${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g});",
+      "",
+      "declare global {",
+      "\tinterface HTMLElementTagNameMap {",
+      "\t\t'${1|app,rk|}-${TM_FILENAME_BASE}': Tt${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g};",
+      "\t}",
+      "}",
+      ""
+    ],
+    "description": "New LitElement component declaration"
+  }
+}

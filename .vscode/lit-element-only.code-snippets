@@ -1,0 +1,17 @@
+{
+  "Create LitElement": {
+    "scope": "typescript",
+    "prefix": "litelementonly",
+    "body": [
+      "import { html, LitElement } from 'lit';",
+      "",
+      "export class ${TM_FILENAME_BASE/([a-z]*)(-)?/${1:/capitalize}/g} extends LitElement {",
+      "\toverride render() {",
+      "\t\treturn html``;",
+      "\t}",
+      "}",
+      ""
+    ],
+    "description": "New LitElement component"
+  }
+}
