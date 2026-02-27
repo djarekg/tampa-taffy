@@ -114,6 +114,7 @@ export function initializeProperties(element: ReactiveElement): void {
     // Now install our signal-syncing accessor on top of Lit's property
     const proto = Object.getPrototypeOf(element);
     if (
+      // oxlint-disable-next-line typescript/prefer-optional-chain
       !Object.getOwnPropertyDescriptor(proto, propertyName) ||
       Object.getOwnPropertyDescriptor(proto, propertyName)?.configurable
     ) {
@@ -124,6 +125,7 @@ export function initializeProperties(element: ReactiveElement): void {
           if (!signal) {
             return undefined;
           }
+          // oxlint-disable-next-line typescript/no-unsafe-return
           return signal.get();
         },
         set(this: ReactiveElement, newValue: unknown) {
@@ -131,7 +133,11 @@ export function initializeProperties(element: ReactiveElement): void {
 
           // Check if newValue is a signal being assigned from constructor
           // This handles subsequent instances after the accessor is already on the prototype
-          if (newValue && typeof newValue === 'object' && PROPERTY_SIGNAL in newValue) {
+          if (
+            newValue &&
+            typeof newValue === 'object' &&
+            PROPERTY_SIGNAL in newValue
+          ) {
             (this as any)[bk] = newValue;
             return;
           }
@@ -163,6 +169,7 @@ export function initializeProperties(element: ReactiveElement): void {
         const attrName = mutation.attributeName;
 
         // Find the property that corresponds to this attribute
+        // oxlint-disable-next-line typescript/no-unnecessary-condition
         if (propMap) {
           for (const [propName, backingKey] of propMap) {
             const propOptions = (ctor as any).getPropertyOptions?.(propName);
