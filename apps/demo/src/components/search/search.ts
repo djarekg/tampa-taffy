@@ -3,8 +3,8 @@ import '@tt/components/command-palette';
 import '@tt/components/link';
 
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
-import { Task } from '@lit/task';
-import { safeDefine } from '@tt/core';
+import { resource, safeDefine } from '@tt/core';
+import type { SearchResult } from '@tt/db';
 import { LitElement } from 'lit';
 
 import { search } from '@/core/api/search.api';
@@ -16,12 +16,11 @@ export class Search extends SignalWatcher(LitElement) {
 
   #open = signal(false);
   #query = signal('');
-
-  #searchTask = new Task(
-    this,
-    async ([query]) => search(query),
-    () => [this.#query.get()],
-  );
+  #resource = resource({
+    defaultValue: new Array<SearchResult>(),
+    params: () => ({ query: this.#query.get() }),
+    loader: async ({ params }) => search(params.query),
+  });
 
   override connectedCallback() {
     super.connectedCallback();
@@ -38,6 +37,7 @@ export class Search extends SignalWatcher(LitElement) {
       <div class="placeholder"></div>
       <tt-command-palette
         ?open=${this.#open.get()}
+        .items=${this.#resource.value.get()}
         @search=${this.#handleCommandPaletteSearch}
         @close=${this.#handleCommandPaletteClose}></tt-command-palette>
     `;
