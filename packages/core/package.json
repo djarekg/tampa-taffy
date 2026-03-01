@@ -1,7 +1,7 @@
 {
   "name": "@tt/core",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
@@ -13,6 +13,9 @@
     },
     "./reactive": {
       "import": "./src/reactive/index.ts"
+    },
+    "./reactivity": {
+      "import": "./src/reactivity/index.ts"
     },
     "./types": {
       "import": "./src/types/index.ts"

@@ -1,7 +1,8 @@
+import '@/components/search/search';
 import '@/components/settings-nav/settings-nav';
 import '@/layout/header';
-import '@tt/components/styles/index.css';
 import '@m3e/web/theme';
+import '@tt/components/styles/index.css';
 
 import { signal, SignalWatcher } from '@lit-labs/signals';
 import { provide } from '@lit/context';
@@ -64,6 +65,7 @@ export class Index extends SignalWatcher(LitElement) {
             </main>
           </div>
           ${this.#renderSettingsNav()}
+          ${this.#renderSearch()}
         </ui-router>
       </m3e-theme>
     `;
@@ -75,6 +77,16 @@ export class Index extends SignalWatcher(LitElement) {
         <app-settings-nav
           ?opened=${this.#drawerOpen.get()}
           @closed=${this.#handleSettingsNavClosed}></app-settings-nav>
+      `;
+    }
+
+    return nothing;
+  }
+
+  #renderSearch() {
+    if (this._authenticated) {
+      return html`
+        <app-search></app-search>
       `;
     }
 

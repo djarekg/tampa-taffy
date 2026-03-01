@@ -41,7 +41,13 @@ export default defineConfig({
       'signal-utils',
       '@libsql/client',
     ],
-    exclude: ['@prisma/client', '@tt/core', '@tt/components', '@tt/db'],
+    exclude: [
+      '@m3e/web',
+      '@prisma/client',
+      '@tt/core',
+      '@tt/components',
+      '@tt/db',
+    ],
   },
   resolve: {
     alias: {

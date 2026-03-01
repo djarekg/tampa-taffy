@@ -38,7 +38,7 @@ export class Header extends SignalWatcher(LitElement) {
     return html`
       <header>
         <div class="image">
-          <a href="/">
+          <a href="/" tabindex="-1">
             <img
               width="48"
               height="48"

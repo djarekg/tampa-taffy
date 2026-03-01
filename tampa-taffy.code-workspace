@@ -148,12 +148,14 @@
 
     "cSpell.words": [
       "bunx",
+      "closedby",
       "dbaeumer",
       "esbenp",
       "iconbutton",
       "importmap",
       "libsql",
       "litelement",
+      "litelementonly",
       "oxfmt",
       "oxlint",
       "packagejson",
@@ -161,6 +163,8 @@
       "runem",
       "tsgo",
       "tsgolint",
+      "tsquery",
+      "tsvector",
       "typescale",
       "typescriptteam",
       "uirouter",

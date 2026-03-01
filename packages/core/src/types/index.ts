@@ -1,2 +1,2 @@
-export * from './plain-object.ts';
-export * from './type-event.ts';
+export type * from './plain-object';
+export type * from './type-event';

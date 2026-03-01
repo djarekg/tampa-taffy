@@ -1,3 +1,4 @@
+import { TtDesignToken } from '@tt/components';
 import { css } from 'lit';
 
 export default css`
@@ -57,7 +58,7 @@ export default css`
   .title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--m3e-color-on-surface);
+    color: ${TtDesignToken.color.secondary};
   }
 
   .site-menu {

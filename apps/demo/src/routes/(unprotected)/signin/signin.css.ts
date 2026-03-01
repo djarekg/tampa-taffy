@@ -1,3 +1,4 @@
+import { TtDesignToken } from '@tt/components/tokens';
 import { css } from 'lit';
 
 export default css`
@@ -65,6 +66,14 @@ export default css`
     width: 24px;
     height: 24px;
     margin-left: 8px;
-    color: var(--md-sys-color-primary);
+    color: ${TtDesignToken.color.secondary};
+  }
+
+  .gradient-text {
+    -webkit-background-clip: text;
+    background-clip: text !important;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background: ${TtDesignToken.color.brandGradient};
   }
 `;

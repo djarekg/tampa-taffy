@@ -1,7 +1,7 @@
 {
   "name": "@tt/db",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
   "imports": {
     "#app/*": "./src/*",
@@ -13,11 +13,17 @@
     "./client": {
       "import": "./src/client/index.ts"
     },
+    "./constants": {
+      "import": "./src/constants/index.ts"
+    },
     "./enums": {
       "import": "./src/generated/prisma/enums/*"
     },
     "./models": {
       "import": "./src/generated/prisma/models/*"
+    },
+    "./types": {
+      "import": "./src/types/index.ts"
     },
     ".": {
       "import": "./src/index.ts"

@@ -14,6 +14,9 @@ export default css`
   }
 
   a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tt-link-gap, 0.25rem);
     font-size: var(--tt-link-font-size, 0.875rem);
     font-weight: var(--tt-link-font-weight, 400);
     color: var(--tt-link-color, var(--md-sys-color-primary));

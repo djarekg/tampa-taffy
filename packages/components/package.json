@@ -11,6 +11,9 @@
     "./card": {
       "import": "./src/card/index.ts"
     },
+    "./command-palette": {
+      "import": "./src/command-palette/index.ts"
+    },
     "./link": {
       "import": "./src/link/index.ts"
     },
@@ -25,6 +28,9 @@
     },
     "./styles/index.css": {
       "import": "./src/styles/index.css"
+    },
+    "./tokens": {
+      "import": "./src/tokens/index.ts"
     },
     ".": {
       "import": "./src/index.ts"

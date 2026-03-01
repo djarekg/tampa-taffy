@@ -2,10 +2,6 @@ import { css } from 'lit';
 
 export default css`
   aside {
-    --_background-color: var(
-      --tt-navigation-drawer-background-color,
-      var(--md-sys-color-surface-container)
-    );
     --_inline-size: var(--tt-navigation-drawer-inline-size, 260px);
     --_padding: var(--tt-navigation-drawer-padding, 2rem 1rem);
 
@@ -21,7 +17,10 @@ export default css`
     inset-block: 0;
     inset-inline-end: 0;
     padding: var(--_padding);
-    background: var(--_background-color);
+    background: var(
+      --tt-navigation-drawer-background-color,
+      var(--md-sys-color-surface-container)
+    );
     box-shadow: var(--tt-elevation-level2);
     border-inline-end: 1px solid var(--tt-border-color);
     border-start-start-radius: var(--md-sys-shape-corner-extra-large);

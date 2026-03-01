@@ -1,7 +1,9 @@
 :root {
-  --tt-color-on-surface-label: rgb(153 140 159);
-  --tt-color-secondary: #297eff; /* customized */
-  --tt-color-primary: #bb5fff; /* customized */
+  --tt-color-on-surface-label: hsl(281, 9%, 59%);
+  --tt-color-secondary: hsl(216, 80%, 57%);
+  /* --tt-color-secondary: #3a80e9; */
+  /* --tt-color-primary: #8300e0; */
+  --tt-color-primary: hsl(275, 100%, 44%);
   --tt-color-label-info: hsl(240, 3%, 60%);
   --tt-color-icon-secondary: hsl(240, 3%, 80%);
   --tt-color-pink: hsl(300, 70%, 70%);

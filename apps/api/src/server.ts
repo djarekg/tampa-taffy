@@ -1,6 +1,8 @@
 import { IS_DEV, PORT } from '#app/config.ts';
 import { authRoutes } from '#app/routes/auth.ts';
 import { userRoutes } from '#app/routes/user.ts';
+
+import { searchRoutes } from './routes/search';
 import { createCorsPreflightResponse, getCorsHeaders } from './utils/cors.ts';
 
 export const server = Bun.serve({
@@ -9,6 +11,7 @@ export const server = Bun.serve({
   routes: {
     ...authRoutes,
     ...userRoutes,
+    ...searchRoutes,
   },
   async fetch(request: Request) {
     // Handle CORS preflight

@@ -7,11 +7,12 @@ import { consume } from '@lit/context';
 import { throwIfEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
-import { LitElement, nothing } from 'lit';
+import { LitElement, nothing, unsafeCSS } from 'lit';
 import type { UIRouterLit } from 'lit-ui-router';
 
 import { signin } from '@/core/auth';
 import { routerContext } from '@/router';
+import colorStyles from '@/styles/colors.css?url';
 
 import styles from './signin.css';
 
@@ -42,31 +43,12 @@ const extractCredentials = (form: HTMLFormElement) => {
  * on successful sign-in.
  */
 export class SignIn extends SignalWatcher(LitElement) {
-  static override styles = [styles];
+  static override styles = [unsafeCSS(colorStyles), styles];
 
   #invalidCredentials = signal(false);
 
   @consume({ context: routerContext, subscribe: true })
   private _router = state<UIRouterLit | undefined>(undefined);
-
-  override connectedCallback() {
-    super.connectedCallback();
-
-    const passwordInput = this.renderRoot.querySelector(
-      '#password',
-    ) as HTMLInputElement;
-    const capsLockMessage = this.renderRoot.querySelector(
-      '.caps-lock-message',
-    ) as HTMLElement;
-    passwordInput.addEventListener('keyup', function (event) {
-      const isCapsLockOn = event.getModifierState('CapsLock');
-      if (isCapsLockOn) {
-        capsLockMessage.style.display = 'block';
-      } else {
-        capsLockMessage.style.display = 'none';
-      }
-    });
-  }
 
   override render() {
     return html`
@@ -108,6 +90,7 @@ export class SignIn extends SignalWatcher(LitElement) {
             class="password-hint"
             slot="hint">
             <tt-link
+              class="gradient-text"
               href="/change-password"
               color="secondary">
               Forgot password?
@@ -124,7 +107,9 @@ export class SignIn extends SignalWatcher(LitElement) {
         ${this.#renderError()}
 
         <div class="account-actions">
-          <tt-link href="/signup">Don't have an account? Sign Up</tt-link>
+          <tt-link
+            class="gradient-text"
+            href="/signup">Don't have an account? Sign Up</tt-link>
           <img
             class="ghost-icon"
             width="24"

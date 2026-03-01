@@ -1,5 +1,10 @@
 import { client } from './client.ts';
-import { getUserToken, setUserId, setUserRole, setUserToken } from './profile.api.ts';
+import {
+  getUserToken,
+  setUserId,
+  setUserRole,
+  setUserToken,
+} from './profile.api.ts';
 
 type SigninResponse = {
   success: boolean;
@@ -20,7 +25,10 @@ type SigninResponse = {
  */
 export const signin = async (email: string, password: string) => {
   const { post } = client;
-  const { success, ...profile } = await post<SigninResponse>('/auth/signin', { email, password });
+  const { success, ...profile } = await post<SigninResponse>('/auth/signin', {
+    email,
+    password,
+  });
 
   // Store user profile data in cookies
   if (success) {
@@ -54,7 +62,7 @@ export const signout = async () => {
  * @returns A promise that resolves to a boolean indicating
  * whether the user is authenticated.
  */
-export const isAuthenticated = () => {
+export const isAuthenticated = async () => {
   const token = getUserToken();
 
   // If no token exists, user is not authenticated

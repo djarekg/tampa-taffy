@@ -24,6 +24,8 @@ export function property<T>(defaultValue: T, options?: PropertyOptions): T {
     inferredType = Boolean;
   } else if (typeof defaultValue === 'number') {
     inferredType = Number;
+  } else if (Array.isArray(defaultValue)) {
+    inferredType = Array;
   } else if (typeof defaultValue === 'object' && defaultValue !== null) {
     inferredType = Object;
   }
