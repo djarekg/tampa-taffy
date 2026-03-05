@@ -24,6 +24,8 @@
       "name": "Attach to Edge",
       "type": "msedge",
       "request": "launch",
+      "cleanUp": "wholeBrowser",
+      "cascadeTerminateToConfigurations": ["Launch api", "Launch Dev Server"],
       "url": "http://localhost:3006",
       "webRoot": "${workspaceFolder}",
       "pathMapping": {
