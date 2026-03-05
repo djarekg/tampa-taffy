@@ -107,8 +107,6 @@ export default css`
 
   slot[name='start']::slotted(m3e-icon),
   slot[name='end']::slotted(m3e-icon) {
-    --m3e-icon-fill: var(--tt-list-item-icon-fill, 0);
-    --_icon-fill: 1;
     color: var(--tt-list-item-icon-color, var(--md-sys-color-on-surface));
   }
 

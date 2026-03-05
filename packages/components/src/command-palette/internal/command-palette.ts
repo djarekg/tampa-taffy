@@ -87,7 +87,9 @@ export class CommandPalette extends SignalWatcher(LitElement) {
         indicator="none"
         .href=${item.href}
         .headline=${item.headline}
-        .supportingText=${ifDefined(item.supportingText)}>
+        .supportingText=${ifDefined(item.supportingText)}
+        @mouseenter=${this.#handleMouseenter}
+        @mouseleave=${this.#handleMouseleave}>
         ${isNotEmpty(item.icon) ? html`<m3e-icon name=${item.icon} slot="end"></m3e-icon>` : nothing}
       </tt-list-item-link>
     `;
@@ -142,5 +144,18 @@ export class CommandPalette extends SignalWatcher(LitElement) {
         composed: true,
       }),
     );
+  }
+
+  #handleMouseenter(e: TypedEvent<MouseEvent, HTMLElement>) {
+    // Set the "filled" attribute on the icon to change icon to filled variant on hover
+    e.target
+      .querySelector<HTMLElement>('m3e-icon')
+      ?.setAttribute('filled', '1');
+  }
+
+  #handleMouseleave(e: TypedEvent<MouseEvent, HTMLElement>) {
+    // Remove the "filled" attribute from the icon to change it
+    // back to the default variant (outline)
+    e.target.querySelector<HTMLElement>('m3e-icon')?.removeAttribute('filled');
   }
 }
