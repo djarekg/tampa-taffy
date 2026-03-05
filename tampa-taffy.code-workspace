@@ -135,6 +135,8 @@
     "terminal.integrated.scrollback": 10000,
 
     "workbench.editor.labelFormat": "medium",
+    "workbench.browser.enableChatTools": true,
+    "workbench.browser.openLocalhostLinks": true,
 
     "explorer.fileNesting.patterns": {
       "*.ts": "${capture}.js",
