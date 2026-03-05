@@ -7,4 +7,5 @@
   --tt-color-label-info: hsl(240, 3%, 60%);
   --tt-color-icon-secondary: hsl(240, 3%, 80%);
   --tt-color-pink: hsl(300, 70%, 70%);
+  --tt-color-highlight-background: hsla(216, 80%, 57% / 0.7);
 }

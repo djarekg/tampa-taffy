@@ -6,10 +6,10 @@ export const ColorToken = {
   onSurfaceLabel: unsafeCSS(`rgb(153 140 159)`),
 
   /** Color for interactive elements */
-  secondary: unsafeCSS(`#297eff`) /* customized */,
+  secondary: unsafeCSS(`hsl(216, 80%, 57%)`),
 
   /** Color for primary elements */
-  primary: unsafeCSS(`#bb5fff`) /* customized */,
+  primary: unsafeCSS(`#bb5fff`),
 
   /** Color for informational elements */
   labelInfo: unsafeCSS(`hsl(240, 3%, 60%)`),
@@ -19,6 +19,9 @@ export const ColorToken = {
 
   /** Colors for accents */
   pink: unsafeCSS(`hsl(300, 70%, 70%)`),
+
+  /** Background color for highlighted elements */
+  highlightBackground: unsafeCSS(`hsla(216, 80%, 57%, 0.2)`),
 
   /** Brand gradient for text and backgrounds */
   brandGradient: unsafeCSS(`

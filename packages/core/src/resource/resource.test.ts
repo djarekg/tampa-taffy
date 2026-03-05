@@ -69,4 +69,38 @@ describe('resource()', () => {
     expect(users.status.get()).toBe('resolved');
     expect(users.value.get()).toBe(3);
   });
+
+  it('does not reload when params object value is unchanged', async () => {
+    const querySignal = signal('test');
+    const calls: Array<string> = [];
+
+    const results = resource({
+      params: () => ({ query: querySignal.get() }),
+      loader: async ({ params }) => {
+        calls.push(params.query);
+        return [params.query];
+      },
+      defaultValue: [],
+    });
+
+    await flushMicrotasks();
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toBe('test');
+
+    // Trigger effect multiple times with same value
+    querySignal.set('test');
+    await flushMicrotasks();
+    querySignal.set('test');
+    await flushMicrotasks();
+
+    // Should not trigger additional loads
+    expect(calls).toHaveLength(1);
+
+    // Change the value
+    querySignal.set('changed');
+    await flushMicrotasks();
+
+    expect(calls).toHaveLength(2);
+    expect(calls[1]).toBe('changed');
+  });
 });

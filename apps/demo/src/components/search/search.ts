@@ -1,14 +1,14 @@
 import '@m3e/web/icon';
 import '@tt/components/command-palette';
-import '@tt/components/link';
 
-import { html, signal, SignalWatcher } from '@lit-labs/signals';
-import { resource, safeDefine } from '@tt/core';
+import { computed, html, signal, SignalWatcher } from '@lit-labs/signals';
+import { isNotEmpty, resource, safeDefine } from '@tt/core';
 import type { SearchResult } from '@tt/db';
-import { LitElement } from 'lit';
+import { LitElement, nothing } from 'lit';
 
 import { search } from '@/core/api/search.api';
 
+import { parseSearchResults } from './parse-utils';
 import styles from './search.css';
 
 export class Search extends SignalWatcher(LitElement) {
@@ -20,6 +20,16 @@ export class Search extends SignalWatcher(LitElement) {
     defaultValue: new Array<SearchResult>(),
     params: () => ({ query: this.#query.get() }),
     loader: async ({ params }) => search(params.query),
+  });
+  #items = computed(() => {
+    const results = this.#resource.value.get();
+
+    if (isNotEmpty(results)) {
+      const parsedResults = parseSearchResults(results);
+      return parsedResults;
+    }
+
+    return nothing;
   });
 
   override connectedCallback() {
@@ -37,9 +47,10 @@ export class Search extends SignalWatcher(LitElement) {
       <div class="placeholder"></div>
       <tt-command-palette
         ?open=${this.#open.get()}
-        .items=${this.#resource.value.get()}
+        .items=${this.#items.get()}
         @search=${this.#handleCommandPaletteSearch}
-        @close=${this.#handleCommandPaletteClose}></tt-command-palette>
+        @close=${this.#handleCommandPaletteClose}>
+      </tt-command-palette>
     `;
   }
 

@@ -127,6 +127,22 @@ const toStopFn = (effectResult: unknown): (() => void) => {
   return () => undefined;
 };
 
+const paramsEqual = <R>(a: R | undefined, b: R | undefined): boolean => {
+  if (a === b) return true;
+  if (a === undefined || b === undefined) return false;
+
+  // For objects, use JSON comparison (works for plain objects and arrays)
+  if (typeof a === 'object' && typeof b === 'object') {
+    try {
+      return JSON.stringify(a) === JSON.stringify(b);
+    } catch {
+      return false;
+    }
+  }
+
+  return false;
+};
+
 export function resource<T, R>(
   options: ResourceOptions<T, R> & { defaultValue: T },
 ): ResourceRef<T>;
@@ -171,8 +187,6 @@ export function resource<T, R>(
     return { status: currentStatus, value: value.get() };
   });
 
-  const request = computed(() => paramsFn());
-
   let pendingController: AbortController | undefined;
   let stopStreamEffect: (() => void) | undefined;
   let activeLoadId = 0;
@@ -215,10 +229,10 @@ export function resource<T, R>(
   };
 
   effect(() => {
-    const requestValue = request.get();
+    const requestValue = paramsFn();
     const reloadValue = reloadTick.get();
 
-    const requestChanged = requestValue !== lastRequest;
+    const requestChanged = !paramsEqual(requestValue, lastRequest);
     const reloadChanged = reloadValue !== lastReload;
 
     lastRequest = requestValue as R | undefined;
@@ -236,6 +250,9 @@ export function resource<T, R>(
 
     if (requestChanged || reloadChanged) {
       abortInProgressLoad();
+    } else {
+      // Nothing changed, don't trigger a new load
+      return;
     }
 
     const nextStatus: ResourceStatus =

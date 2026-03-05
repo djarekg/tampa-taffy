@@ -78,7 +78,7 @@ CREATE TABLE "Product" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" TEXT NOT NULL,
-    "genderId" TEXT NOT NULL,
+    "gender" TEXT NOT NULL,
     "productType" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT false,
     "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

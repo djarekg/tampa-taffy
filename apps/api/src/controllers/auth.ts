@@ -39,7 +39,7 @@ export const signin = async (req: Request) => {
     throw new ApiError(ApiStatus.notFound, 'User not found');
   }
 
-  // Validate password against stored hash
+  // Validate password against stored has
   const hashPassword = user.userCredential?.password ?? '';
   const isValid = compareHash(password, hashPassword);
 
@@ -50,7 +50,7 @@ export const signin = async (req: Request) => {
 
   // Credentials are valid, so return a JWT
   const token = jwt.sign({ username: email }, TOKEN_SECRET, {
-    expiresIn: '1h',
+    expiresIn: '24h',
   });
 
   return Response.json({

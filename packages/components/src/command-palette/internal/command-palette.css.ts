@@ -11,8 +11,10 @@ export default css`
   }
 
   dialog {
-    position: fixed;
-    inset-block-start: calc(-100% + var(--app-header-height) * 2);
+    position: absolute;
+    inset-block-start: var(--app-header-height);
+    margin-inline: auto;
+    margin-block: 0;
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -25,12 +27,6 @@ export default css`
     overflow: hidden;
     opacity: 0;
     transition: opacity 0.7s ease-out;
-    /* transform: scaleY(0);
-    transition:
-      opacity 0.7s ease-out,
-      transform 0.7s ease-out,
-      overlay 0.7s ease-out allow-discrete,
-      display 0.7s ease-out allow-discrete; */
 
     &:open {
       opacity: 1;
@@ -90,5 +86,39 @@ export default css`
 
   .default-content {
     padding: 1rem;
+  }
+
+  .results {
+    visibility: hidden;
+    content-visibility: hidden;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-block-size: 60vh;
+
+    &.has-results {
+      visibility: visible;
+      content-visibility: visible;
+      display: flex;
+    }
+  }
+
+  tt-list {
+    --tt-list-gap: 0.5rem;
+
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  tt-list-item-link {
+    --tt-list-item-border: 2px solid ${DesignToken.color.outline};
+    --tt-list-item-border-radius: ${DesignToken.shape.corner.small};
+    --tt-list-item-background-color: ${DesignToken.color.surface};
+
+    &:is(:hover, :focus-visible) {
+      --tt-list-item-border: 2px solid ${TtDesignToken.color.primary};
+      --tt-list-item-icon-color: ${TtDesignToken.color.primary};
+      --tt-list-item-icon-fill: 1;
+    }
   }
 `;

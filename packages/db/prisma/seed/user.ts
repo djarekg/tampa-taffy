@@ -1,6 +1,7 @@
 import type { PrismaClient } from '#app/generated/prisma/client.ts';
 import { Gender } from '#app/generated/prisma/enums.ts';
 import type { UserCreateManyInput } from '#app/index.js';
+
 import { faker } from './faker-context.ts';
 import { getState } from './state.ts';
 
@@ -45,7 +46,7 @@ export const createUsers = async (prisma: PrismaClient) => {
       phone: faker.phone.number({ style: 'national' }),
       imageId: faker.number.int({ min: 1, max: 99 }),
       jobTitle: faker.helpers.fake(
-        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}'
+        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}',
       ),
       isActive: faker.datatype.boolean(0.8),
     });
@@ -65,7 +66,7 @@ export const createUsers = async (prisma: PrismaClient) => {
       zip: faker.location.zipCode({ format: '#####' }),
       phone: faker.phone.number({ style: 'national' }),
       jobTitle: faker.helpers.fake(
-        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}'
+        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}',
       ),
       imageId: faker.number.int({ min: 1, max: 99 }),
       isActive: faker.datatype.boolean(0.8),
@@ -85,7 +86,7 @@ export const createUsers = async (prisma: PrismaClient) => {
       zip: faker.location.zipCode({ format: '#####' }),
       phone: faker.phone.number({ style: 'national' }),
       jobTitle: faker.helpers.fake(
-        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}'
+        '{{person.jobDescriptor}} {{person.jobArea}} {{person.jobType}}',
       ),
       imageId: faker.number.int({ min: 1, max: 99 }),
       isActive: faker.datatype.boolean(0.8),

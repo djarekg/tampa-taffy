@@ -1,8 +1,19 @@
 import '@m3e/web/icon';
+import '../../list';
 
-import { html, SignalWatcher } from '@lit-labs/signals';
-import { debounce, property, query, type TypedEvent } from '@tt/core';
+import { html, signal, SignalWatcher } from '@lit-labs/signals';
+import {
+  debounce,
+  isNotEmpty,
+  property,
+  query,
+  type TypedEvent,
+} from '@tt/core';
 import { LitElement, nothing } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+
+import type { CommandPaletteResultItem } from './command-palette-result-item';
 
 const INPUT_DEBOUNCE_DELAY = 300;
 /**
@@ -10,6 +21,8 @@ const INPUT_DEBOUNCE_DELAY = 300;
  * allow the user to execute them.
  */
 export class CommandPalette extends SignalWatcher(LitElement) {
+  #hasResults = signal(false);
+
   #debounceInput = debounce(
     this.#handleInputDebounced.bind(this),
     INPUT_DEBOUNCE_DELAY,
@@ -26,13 +39,14 @@ export class CommandPalette extends SignalWatcher(LitElement) {
     reflect: true,
     changed: value => this.#handleOpenChange(value as boolean),
   });
-
   /**
    * The list of command items to display in the palette. Each item should have a
    * `label` and an optional `icon` and `action` callback.
    * @default []
    */
-  items = property([]);
+  items = property<CommandPaletteResultItem[] | undefined>(undefined, {
+    changed: value => this.#hasResults.set(!!value?.length),
+  });
 
   override render() {
     return html`
@@ -51,7 +65,33 @@ export class CommandPalette extends SignalWatcher(LitElement) {
   }
 
   #renderResults() {
+    const { items } = this;
+
+    if (isNotEmpty(items)) {
+      return html`
+      <tt-list
+        ariaRole="navigation"
+        class=${classMap(this.#getResultsClasses())}>
+        ${this.#renderListItems(items)}
+      </tt-list>
+    `;
+    }
+
     return nothing;
+  }
+
+  #renderListItems(items: CommandPaletteResultItem[]) {
+    return items.map(item => {
+      return html`
+      <tt-list-item-link
+        indicator="none"
+        .href=${item.href}
+        .headline=${item.headline}
+        .supportingText=${ifDefined(item.supportingText)}>
+        ${isNotEmpty(item.icon) ? html`<m3e-icon name=${item.icon} slot="end"></m3e-icon>` : nothing}
+      </tt-list-item-link>
+    `;
+    });
   }
 
   show() {
@@ -60,6 +100,13 @@ export class CommandPalette extends SignalWatcher(LitElement) {
 
   hide() {
     this._dialog?.close();
+  }
+
+  #getResultsClasses() {
+    return {
+      results: true,
+      'has-results': this.#hasResults.get(),
+    };
   }
 
   #handleInputInput(event: TypedEvent<Event, HTMLInputElement>) {

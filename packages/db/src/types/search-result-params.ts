@@ -1,5 +1,5 @@
 export type SearchResultParams = {
   query: string;
-  highlightPreTag: string;
-  highlightPostTag: string;
+  highlightStartTag: string;
+  highlightEndTag: string;
 };

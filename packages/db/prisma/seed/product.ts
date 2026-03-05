@@ -1,4 +1,8 @@
-import { Gender, PrismaClient, ProductType } from '#app/generated/prisma/client.ts';
+import {
+  Gender,
+  PrismaClient,
+  ProductType,
+} from '#app/generated/prisma/client.ts';
 import type { ProductCreateManyInput } from '#app/index.ts';
 import { faker } from '@faker-js/faker';
 
@@ -14,7 +18,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} dress`,
       price: faker.commerce.price({ min: 10, max: 100 }),
       productType: ProductType.DRESS,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -25,7 +29,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} hat`,
       price: faker.commerce.price({ min: 10, max: 50 }),
       productType: ProductType.HAT,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -36,7 +40,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} hoodie`,
       price: faker.commerce.price({ min: 20, max: 80 }),
       productType: ProductType.HOODIE,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -47,7 +51,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} jacket`,
       price: faker.commerce.price({ min: 30, max: 120 }),
       productType: ProductType.JACKET,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -58,7 +62,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} pants`,
       price: faker.commerce.price({ min: 15, max: 90 }),
       productType: ProductType.PANTS,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -69,7 +73,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} shirt`,
       price: faker.commerce.price({ min: 10, max: 70 }),
       productType: ProductType.SHIRT,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -80,7 +84,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} shoes`,
       price: faker.commerce.price({ min: 25, max: 150 }),
       productType: ProductType.SHOES,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -91,7 +95,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} shorts`,
       price: faker.commerce.price({ min: 15, max: 80 }),
       productType: ProductType.SHORTS,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -102,7 +106,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} socks`,
       price: faker.commerce.price({ min: 5, max: 30 }),
       productType: ProductType.SOCKS,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -113,7 +117,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} sweater`,
       price: faker.commerce.price({ min: 20, max: 100 }),
       productType: ProductType.SWEATER,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 
@@ -124,7 +128,7 @@ export const createProducts = async (prisma: PrismaClient) => {
       description: `${faker.commerce.productDescription()} underwear`,
       price: faker.commerce.price({ min: 5, max: 50 }),
       productType: ProductType.UNDERWEAR,
-      genderId: gender,
+      gender: gender,
       isActive: true,
     });
 

@@ -1,6 +1,12 @@
 import { css } from 'lit';
 
 export default css`
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   :host([indicator='underline']) {
     --_text-decoration: none;
 
@@ -19,6 +25,7 @@ export default css`
     display: flex;
     align-items: center;
     text-decoration: var(--_text-decoration);
+    inline-size: 100%;
     padding: var(--tt-list-item-block-padding, 0.6rem)
       var(--tt-list-item-inline-padding, 1rem);
     color: inherit;

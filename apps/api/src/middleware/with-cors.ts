@@ -11,8 +11,10 @@ import { executeHandler } from '#app/utils/handler.ts';
  *
  * @param handler - The route handler to execute after processing CORS
  */
-export const withCors = (handler: (request: Request, context: any) => Promise<Response>) => {
-  return async (request: Request, context: any): Promise<Response> => {
+export const withCors = (
+  handler: (request: Request, context: unknown) => Promise<Response>,
+) => {
+  return async (request: Request, context: unknown): Promise<Response> => {
     // Handle CORS preflight requests
     if (request.method === 'OPTIONS') {
       return createCorsPreflightResponse();

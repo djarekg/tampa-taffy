@@ -31,7 +31,7 @@
   },
   "scripts": {
     "db:clean": "bunx rimraf dev.db prisma/migrations",
-    "db:migrate": "bunx prisma migrate dev",
+    "db:migrate": "bunx prisma migrate dev --name init",
     "db:generate": "bunx prisma generate",
     "db:seed": "bun prisma/seed/seed.ts",
     "db": "bun run db:clean && bun run db:generate && bun run db:migrate && bun run db:seed"

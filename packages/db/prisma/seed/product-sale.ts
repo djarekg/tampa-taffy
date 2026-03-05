@@ -25,9 +25,12 @@ export const createProductSales = async (prisma: PrismaClient) => {
     });
 
     for (const _ of Array.from({ length: 1000 })) {
-      const { id: productId, price } = products[Math.floor(Math.random() * products.length)];
-      const customerId = customerIds[Math.floor(Math.random() * customerIds.length)];
-      const userId = salesUserIds[Math.floor(Math.random() * salesUserIds.length)];
+      const { id: productId, price } =
+        products[Math.floor(Math.random() * products.length)];
+      const customerId =
+        customerIds[Math.floor(Math.random() * customerIds.length)];
+      const userId =
+        salesUserIds[Math.floor(Math.random() * salesUserIds.length)];
       const quantity = Math.floor(Math.random() * 10) + 1;
 
       newProductSales.push({

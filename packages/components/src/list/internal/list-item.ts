@@ -1,24 +1,22 @@
 import { html, SignalWatcher } from '@lit-labs/signals';
 import { property } from '@tt/core/reactive';
 import { LitElement, nothing } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { when } from 'lit/directives/when.js';
 
 export class ListItem extends SignalWatcher(LitElement) {
   /**
    * The ARIA checked attribute for the list item.
-   *
    * @default false
    */
-  ariaCheckedOverride = property<'true' | 'false'>('false');
+  ariaCheckedOverride = property<'true' | 'false' | undefined>('false');
   /**
    * The ARIA selected attribute for the list item.
-   *
    * @default false
    */
-  ariaCSelected = property<'true' | 'false'>('false');
+  ariaCSelected = property<'true' | 'false' | undefined>('false');
   /**
    * The ARIA role attribute for the list item.
-   *
    * @default listitem
    */
   ariaRole = property('listitem');
@@ -27,20 +25,17 @@ export class ListItem extends SignalWatcher(LitElement) {
    * and its position in the tab order. By default, list items are not focusable (tabindex=-1)
    * to prevent them from being focusable by screen readers, but they can be made focusable
    * by setting itemTabIndex to 0 or a positive value.
-   *
    * @default -1
    */
   itemTabIndex = property(-1, { type: Number });
   /**
    * Whether the list item is active. An active list item is typically styled
    * differently to indicate that it is currently selected or highlighted.
-   *
    * @default false
    */
   active = property(false, { type: Boolean });
   /**
    * Whether the list item is disabled. A disabled list item cannot be interacted with.
-   *
    * @default false
    */
   disabled = property(false, { type: Boolean });
@@ -59,7 +54,6 @@ export class ListItem extends SignalWatcher(LitElement) {
    * 'background' indicator displays a background color behind the list item, while
    * the 'underline' indicator displays a line underneath the headline. The 'none' option
    * disables the indicator.
-   *
    * @default 'background'
    */
   indicator = property<'background' | 'underline' | 'none'>('background');
@@ -100,7 +94,7 @@ export class ListItem extends SignalWatcher(LitElement) {
   #renderBody() {
     return html`
       <div class="body">
-        <span class="headline">${this.headline}</span>
+        <span class="headline">${unsafeHTML(this.headline)}</span>
         ${when(this.supportingText, () => this.#renderSupportingText(this.supportingText))}
       </div>
     `;
@@ -108,7 +102,7 @@ export class ListItem extends SignalWatcher(LitElement) {
 
   #renderSupportingText(supportingText: string) {
     return html`
-      <span class="supporting-text">${supportingText}</span>
+      <span class="supporting-text">${unsafeHTML(supportingText)}</span>
     `;
   }
 
@@ -123,7 +117,7 @@ export class ListItem extends SignalWatcher(LitElement) {
       indicator === 'background',
       () => html`
         <div class="indicator"></div>
-      `
+      `,
     );
   }
 }

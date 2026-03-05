@@ -1,25 +1,38 @@
 import { signal } from '@lit-labs/signals';
 import type { PropertyDeclaration } from 'lit';
 import { ReactiveElement } from 'lit';
+import { SignalArray } from 'signal-utils/array';
+import { SignalObject } from 'signal-utils/object';
 
 const PROPERTY_SIGNAL = Symbol.for('tt-property-signal');
 
-export interface PropertyOptions extends PropertyDeclaration {
-  changed?: (newValue: unknown) => void;
+export interface PropertyOptions<T = unknown> extends PropertyDeclaration {
+  changed?: (newValue: T) => void;
 }
 
 type PropertySignal<T> = ReturnType<typeof signal<T>> & {
-  [PROPERTY_SIGNAL]: PropertyOptions;
+  [PROPERTY_SIGNAL]: PropertyOptions<T>;
 };
 
 // Store map of property names to their signal backing keys per element class
 const propertySignalMap = new WeakMap<Function, Map<string, string>>();
 
-export function property<T>(defaultValue: T, options?: PropertyOptions): T {
-  const sig = signal(defaultValue) as PropertySignal<T>;
+export function property<T>(defaultValue: T, options?: PropertyOptions<T>): T {
+  let sig: unknown;
+
+  // Use appropriate signal type based on value type
+  if (Array.isArray(defaultValue)) {
+    sig = new SignalArray(defaultValue);
+  } else if (typeof defaultValue === 'object' && defaultValue !== null) {
+    sig = new SignalObject(defaultValue as Record<PropertyKey, unknown>);
+  } else {
+    sig = signal(defaultValue);
+  }
+
+  const propSig = sig as unknown as PropertySignal<T>;
 
   // Automatically infer type from default value if not explicitly provided
-  let inferredType = String;
+  let inferredType: PropertyDeclaration['type'] = String;
   if (typeof defaultValue === 'boolean') {
     inferredType = Boolean;
   } else if (typeof defaultValue === 'number') {
@@ -30,8 +43,8 @@ export function property<T>(defaultValue: T, options?: PropertyOptions): T {
     inferredType = Object;
   }
 
-  sig[PROPERTY_SIGNAL] = { type: inferredType, ...options };
-  return sig as unknown as T;
+  propSig[PROPERTY_SIGNAL] = { type: inferredType, ...options };
+  return propSig as unknown as T;
 }
 
 export function initializeProperties(element: ReactiveElement): void {
@@ -97,18 +110,13 @@ export function initializeProperties(element: ReactiveElement): void {
     if (existingInstanceValue !== sig) {
       // Parent set the property to something - migrate that value to the signal
       const oldValue = sig.get();
-      const hasChanged = options?.hasChanged
+      const hasChanged = options.hasChanged
         ? options.hasChanged.call(element, existingInstanceValue, oldValue)
         : existingInstanceValue !== oldValue;
 
       if (hasChanged) {
-        console.log('[property] value changed (init)', {
-          propertyName,
-          oldValue,
-          newValue: existingInstanceValue,
-        });
         sig.set(existingInstanceValue);
-        options?.changed?.call(element, existingInstanceValue);
+        options.changed?.call(element, existingInstanceValue);
       }
     }
 
@@ -151,12 +159,12 @@ export function initializeProperties(element: ReactiveElement): void {
       Object.defineProperty(proto, propertyName, {
         get(this: ReactiveElement) {
           const bk = `__${propertyName}_signal__`;
-          const signal = (this as any)[bk];
-          if (!signal) {
+          const backedSignal = (this as any)[bk];
+          if (!backedSignal) {
             return undefined;
           }
           // oxlint-disable-next-line typescript/no-unsafe-return
-          return signal.get();
+          return backedSignal.get();
         },
         set(this: ReactiveElement, newValue: unknown) {
           const bk = `__${propertyName}_signal__`;
@@ -172,24 +180,19 @@ export function initializeProperties(element: ReactiveElement): void {
             return;
           }
 
-          const signal = (this as any)[bk];
-          if (!signal) {
+          const backedSignal = (this as any)[bk];
+          if (!backedSignal) {
             return;
           }
-          const oldValue = signal.get();
-          const propOptions = signal[PROPERTY_SIGNAL];
-          const hasChanged = propOptions?.hasChanged
+          const oldValue = backedSignal.get();
+          const propOptions = backedSignal[PROPERTY_SIGNAL];
+          const hasChanged = propOptions.hasChanged
             ? propOptions.hasChanged.call(this, newValue, oldValue)
             : oldValue !== newValue;
 
           if (hasChanged) {
-            console.log('[property] value changed', {
-              propertyName,
-              oldValue,
-              newValue,
-            });
-            signal.set(newValue);
-            propOptions?.changed?.call(this, newValue);
+            backedSignal.set(newValue);
+            propOptions.changed?.call(this, newValue);
             // Trigger Lit update cycle
             this.requestUpdate(propertyName, oldValue);
           }
@@ -216,8 +219,8 @@ export function initializeProperties(element: ReactiveElement): void {
             // Check if this attribute name matches this property's attribute name
             if (propOptions?.attribute === attrName || propName === attrName) {
               const attrValue = (element as any).getAttribute(attrName);
-              const signal = (element as any)[backingKey];
-              if (signal) {
+              const backedSignal = (element as any)[backingKey];
+              if (backedSignal) {
                 // Convert string attribute to the correct type
                 let newVal: unknown = attrValue;
                 if (propOptions?.type === Boolean) {
@@ -225,19 +228,13 @@ export function initializeProperties(element: ReactiveElement): void {
                 } else if (propOptions?.type === Number && attrValue !== null) {
                   newVal = Number(attrValue);
                 }
-                const oldVal = signal.get();
+                const oldVal = backedSignal.get();
                 const shouldUpdate = propOptions?.hasChanged
                   ? propOptions.hasChanged.call(element, newVal, oldVal)
                   : oldVal !== newVal;
 
                 if (shouldUpdate) {
-                  console.log('[property] value changed (attribute)', {
-                    propertyName: propName,
-                    oldValue: oldVal,
-                    newValue: newVal,
-                    attributeName: attrName,
-                  });
-                  signal.set(newVal);
+                  backedSignal.set(newVal);
                   propOptions?.changed?.call(element, newVal);
                 }
               }
