@@ -71,6 +71,10 @@ export class Header extends SignalWatcher(LitElement) {
             href="/users"
             headline="Users"
             indicator="underline"></tt-list-item-link>
+          <tt-list-item-link
+            href="/products"
+            headline="Products"
+            indicator="underline"></tt-list-item-link>
         </tt-list>
       `;
     }

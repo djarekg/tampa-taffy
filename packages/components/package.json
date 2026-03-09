@@ -14,6 +14,9 @@
     "./command-palette": {
       "import": "./src/command-palette/index.ts"
     },
+    "./form": {
+      "import": "./src/form/index.ts"
+    },
     "./link": {
       "import": "./src/link/index.ts"
     },

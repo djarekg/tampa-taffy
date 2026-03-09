@@ -1,5 +1,6 @@
 export * from './breadcrumbs';
 export * from './command-palette';
+export * from './form';
 export * from './link';
 export * from './list';
 export * from './navigation';

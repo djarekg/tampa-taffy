@@ -8,9 +8,12 @@ import { isEmpty, isNullOrUndefined } from '../utils';
  * @throws {Error} Throws an error if the value is empty.
  * @asserts value is T - Asserts that the value is of type T if it is not empty.
  */
-export function throwIfEmpty<T>(value: T | null | undefined, message: string): asserts value is T {
+export function assertIsNotEmpty<T>(
+  value: T | null | undefined,
+  message: string,
+): asserts value is T {
   if (isEmpty(value)) {
-    console.error('throwIfEmpty', arguments);
+    console.error('assertIsNotEmpty', arguments);
     throw new Error(message, { cause: { code: 'IsEmpty' } });
   }
 }
@@ -23,9 +26,12 @@ export function throwIfEmpty<T>(value: T | null | undefined, message: string): a
  * @throws {Error} Throws an error if the value is null or undefined.
  * @asserts value is T - Asserts that the value is of type T if it is not null or undefined.
  */
-export function throwIfNull<T>(value: T | null | undefined, message: string): asserts value is T {
+export function assertIsNotNull<T>(
+  value: T | null | undefined,
+  message: string,
+): asserts value is T {
   if (isNullOrUndefined(value)) {
-    console.error('throwIfEmpty', arguments);
+    console.error('assertIsNotNull', arguments);
     throw new Error(message, { cause: { code: 'IsNull' } });
   }
 }

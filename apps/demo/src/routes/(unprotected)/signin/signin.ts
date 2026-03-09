@@ -4,7 +4,7 @@ import '@tt/components/link';
 
 import { html, signal, SignalWatcher } from '@lit-labs/signals';
 import { consume } from '@lit/context';
-import { throwIfEmpty, type TypeEvent } from '@tt/core';
+import { assertIsNotEmpty, type TypeEvent } from '@tt/core';
 import { state } from '@tt/core/reactive';
 import { safeDefine } from '@tt/core/utils';
 import { LitElement, nothing, unsafeCSS } from 'lit';
@@ -28,8 +28,8 @@ const extractCredentials = (form: HTMLFormElement) => {
   const email = formData.get('email') as string | null;
   const password = formData.get('password') as string | null;
 
-  throwIfEmpty(email, 'Email is required');
-  throwIfEmpty(password, 'Password is required');
+  assertIsNotEmpty(email, 'Email is required');
+  assertIsNotEmpty(password, 'Password is required');
 
   return { email, password };
 };
