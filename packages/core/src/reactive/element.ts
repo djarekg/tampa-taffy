@@ -1,6 +1,8 @@
 import { ReactiveElement } from 'lit';
+
 import { initializeProperties } from './property';
 import { initializeQueries } from './query';
+import { initializeQueryAssignedElements } from './query-assigned-elements';
 import { initializeStates } from './state';
 
 // Track which elements have been initialized to avoid duplicate initialization
@@ -20,6 +22,7 @@ export function ensureInitialized(element: ReactiveElement): void {
   initializeProperties(element);
   initializeStates(element);
   initializeQueries(element);
+  initializeQueryAssignedElements(element);
   initializedElements.add(element);
 }
 

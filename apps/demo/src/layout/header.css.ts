@@ -10,6 +10,7 @@ export default css`
     position: sticky;
     inset-block-start: 0;
     z-index: 100;
+    backdrop-filter: blur(4px);
   }
 
   header {
@@ -18,7 +19,6 @@ export default css`
     grid-template-areas: 'a b c';
     block-size: var(--_header-height);
     padding-inline: 1rem;
-    backdrop-filter: blur(4px);
   }
 
   .breadcrumbs-gutter {

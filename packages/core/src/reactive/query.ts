@@ -5,6 +5,7 @@ const QUERY_DESCRIPTORS = Symbol('tt-query-descriptors');
 interface QueryDescriptor {
   key: string | symbol;
   selector: string;
+  cache: boolean;
 }
 
 /**
@@ -13,12 +14,14 @@ interface QueryDescriptor {
  * that queries the renderRoot.
  *
  * @param selector - CSS selector to query
+ * @param cache - Optional boolean that when true performs the DOM query only once and caches the result
  * @returns The query descriptor (converted to getter during initialization)
  *
  * @example
  * ```ts
  * class MyElement extends LitElement {
  *   readonly drawerRoot = query<HTMLElement>('#drawer');
+ *   readonly cachedInput = query<HTMLInputElement>('input', true);
  *
  *   override firstUpdated() {
  *     console.log(this.drawerRoot?.tagName);
@@ -26,9 +29,12 @@ interface QueryDescriptor {
  * }
  * ```
  */
-export function query<T extends Element = Element>(selector: string): T | null {
+export function query<T extends Element = Element>(
+  selector: string,
+  cache = false,
+): T | null {
   // Return a sentinel object that marks this as a query
-  return { __querySelector: selector } as unknown as T | null;
+  return { __querySelector: selector, __cache: cache } as unknown as T | null;
 }
 
 /**
@@ -45,13 +51,20 @@ export function initializeQueries(element: ReactiveElement): void {
   const keys = Object.getOwnPropertyNames(element);
 
   for (const key of keys) {
-    const value = (element as any)[key];
+    const descriptor = Object.getOwnPropertyDescriptor(element, key);
+    const value = descriptor?.value;
 
     // Check if this is a query descriptor (has __querySelector)
-    if (value && typeof value === 'object' && '__querySelector' in value) {
+    if (
+      value &&
+      typeof value === 'object' &&
+      '__querySelector' in value &&
+      typeof (value as Record<string, unknown>).__querySelector === 'string'
+    ) {
       queries.push({
         key,
-        selector: value.__querySelector,
+        selector: (value as Record<string, string>).__querySelector,
+        cache: (value as Record<string, unknown>).__cache === true,
       });
     }
   }
@@ -61,17 +74,36 @@ export function initializeQueries(element: ReactiveElement): void {
   }
 
   // Store queries for later reference
-  (element as any)[QUERY_DESCRIPTORS] = queries;
+  (element as unknown as Record<symbol, QueryDescriptor[]>)[QUERY_DESCRIPTORS] =
+    queries;
+
+  // Create a map to track cached values per instance
+  const cacheMap = new Map<symbol, Element | null>();
 
   // Install getters for each query
-  for (const { key, selector } of queries) {
+  for (const { key, selector, cache } of queries) {
     // Delete the placeholder value
-    delete (element as any)[key];
+    delete (element as unknown as Record<string | symbol, unknown>)[key];
 
-    // Install a simple getter that queries the renderRoot
+    // Create a cache key for this property
+    const cacheKey = Symbol(`${String(key)}.cache`);
+
+    // Install a getter that queries the renderRoot
     Object.defineProperty(element, key, {
-      get(this: ReactiveElement) {
-        return this.renderRoot?.querySelector(selector) ?? null;
+      get(this: ReactiveElement): Element | null {
+        // Return cached value if caching is enabled
+        if (cache) {
+          if (cacheMap.has(cacheKey)) {
+            return cacheMap.get(cacheKey) ?? null;
+          }
+
+          const result = this.renderRoot.querySelector(selector);
+          cacheMap.set(cacheKey, result);
+          return result;
+        }
+
+        // Query on every access if not caching
+        return this.renderRoot.querySelector(selector);
       },
       enumerable: true,
       configurable: true,
